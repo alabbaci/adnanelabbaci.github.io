@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dakhla 3D Heat Traps &amp; Pedestrian Exposure</title>
+<script src="vendor/deck.gl-9.1.14.min.js"></script>
+<style>
+  :root {
+    --surface: #1a1a19;
+    --panel: rgba(26, 26, 25, 0.92);
+    --ink-primary: #ffffff;
+    --ink-secondary: #c3c2b7;
+    --ink-muted: #898781;
+    --hairline: rgba(255, 255, 255, 0.10);
+    --accent-walk: #34d3c8;
+  }
+  html, body { margin: 0; height: 100%; background: var(--surface); overflow: hidden; }
+  body { font: 13px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--ink-primary); }
+  #map { position: absolute; inset: 0; }
+  .panel {
+    position: absolute; top: 16px; left: 16px; z-index: 10;
+    width: 300px; max-width: calc(100vw - 32px);
+    max-height: calc(100vh - 32px); overflow-y: auto;
+    background: var(--panel); border: 1px solid var(--hairline);
+    border-radius: 10px; padding: 16px 18px; backdrop-filter: blur(6px);
+  }
+  .panel h1 { font-size: 15px; margin: 0 0 4px; }
+  .panel p.sub { margin: 0 0 12px; color: var(--ink-secondary); font-size: 12px; }
+  .legend-title { font-size: 11px; color: var(--ink-muted); text-transform: uppercase;
+    letter-spacing: 0.06em; margin: 12px 0 6px; }
+  .ramp { height: 10px; border-radius: 5px; border: 1px solid var(--hairline);
+    background: linear-gradient(90deg, #3987e5, #6da7ec, #383835, #e66767, #d03b3b); }
+  .ramp-labels { display: flex; justify-content: space-between; color: var(--ink-muted);
+    font-size: 11px; margin-top: 3px; font-variant-numeric: tabular-nums; }
+  label.layer { display: flex; align-items: center; gap: 8px; margin: 6px 0; cursor: pointer;
+    color: var(--ink-secondary); }
+  label.layer input { accent-color: #3987e5; }
+  .swatch { width: 12px; height: 12px; border-radius: 3px; border: 1px solid var(--hairline);
+    flex: none; }
+  .footer { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--hairline);
+    color: var(--ink-muted); font-size: 11px; }
+  .footer a { color: var(--ink-secondary); }
+  #tooltip { position: absolute; z-index: 20; pointer-events: none; display: none;
+    background: var(--panel); border: 1px solid var(--hairline); border-radius: 8px;
+    padding: 8px 10px; font-size: 12px; max-width: 240px; }
+  #tooltip .k { color: var(--ink-muted); }
+  #tooltip .v { font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div class="panel">
+  <h1>Dakhla — 3D Heat Traps &amp; Pedestrian Exposure</h1>
+  <p class="sub">Are Dakhla's residents forced to navigate the densest,
+  most heat-prone blocks on foot? Buildings extruded ×4; drag to rotate,
+  right-drag / ctrl-drag to tilt.</p>
+
+  <div class="legend-title">Temperature proxy (°C)</div>
+  <div class="ramp"></div>
+  <div class="ramp-labels"><span>26.1</span><span>28.0</span><span>29.9</span></div>
+
+  <div class="legend-title">Layers</div>
+  <label class="layer"><input type="checkbox" id="lyr-heat" checked>
+    <span class="swatch" style="background:linear-gradient(90deg,#3987e5,#e66767)"></span>
+    Heat grid (200 m, density proxy)</label>
+  <label class="layer"><input type="checkbox" id="lyr-bld" checked>
+    <span class="swatch" style="background:#4a4a48"></span>
+    Buildings (3D, Overture heights)</label>
+  <label class="layer"><input type="checkbox" id="lyr-walk" checked>
+    <span class="swatch" style="background:var(--accent-walk)"></span>
+    Walkable street network</label>
+  <label class="layer"><input type="checkbox" id="lyr-pop">
+    <span class="swatch" style="background:linear-gradient(90deg,#cde2fb,#0d366b)"></span>
+    Population estimate (dasymetric)</label>
+
+  <div class="footer">
+    Density-based temperature proxy — not measured temperature.
+    Population modelled from RGPH&nbsp;2024 total + building volume.<br>
+    Data © <a href="https://overturemaps.org">Overture Maps</a> /
+    © OpenStreetMap contributors · Basemap © <a href="https://carto.com/attributions">CARTO</a> ·
+    <a href="https://github.com/alabbaci/adnanelabbaci.github.io">Pipeline source</a>, adapted from
+    <a href="https://github.com/fereshtehsabeghi/Torino-3d-heat-mapping">Torino-3d-heat-mapping</a>.
+  </div>
+</div>
+<div id="tooltip"></div>
+
+<script>
+const {DeckGL, GeoJsonLayer, TileLayer, BitmapLayer} = deck;
+
+const TEMP_MIN = 26.1, TEMP_MID = 28.0, TEMP_MAX = 29.9;
+
+// Diverging blue <-> neutral <-> red (validated reference pair, dark steps)
+const DIVERGING = [
+  [57, 135, 229],   // #3987e5
+  [109, 167, 236],  // #6da7ec
+  [56, 56, 53],     // #383835 neutral midpoint
+  [230, 103, 103],  // #e66767
+  [208, 59, 59],    // #d03b3b
+];
+function tempColor(t) {
+  const x = Math.max(0, Math.min(1, (t - TEMP_MIN) / (TEMP_MAX - TEMP_MIN)));
+  const pos = x * (DIVERGING.length - 1);
+  const i = Math.min(DIVERGING.length - 2, Math.floor(pos));
+  const f = pos - i;
+  return DIVERGING[i].map((c, k) => Math.round(c + f * (DIVERGING[i + 1][k] - c)));
+}
+
+// Sequential blue ramp for population (reference steps 100 -> 700)
+const SEQ = [[205,226,251],[158,197,244],[87,152,231],[37,106,191],[13,54,107]];
+function popColor(p, pMax) {
+  const x = Math.max(0, Math.min(1, p / pMax));
+  const pos = x * (SEQ.length - 1);
+  const i = Math.min(SEQ.length - 2, Math.floor(pos));
+  const f = pos - i;
+  return SEQ[i].map((c, k) => Math.round(c + f * (SEQ[i + 1][k] - c)));
+}
+
+const DATA = "data/processed/";
+const state = {heat: true, bld: true, walk: true, pop: false};
+let heatGrid, buildings, network, demoGrid, popMax = 1;
+
+const basemap = new TileLayer({
+  id: "basemap",
+  data: "https://basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png",
+  minZoom: 0, maxZoom: 19, tileSize: 256,
+  renderSubLayers: p => new BitmapLayer(p, {
+    data: null, image: p.data,
+    bounds: [p.tile.bbox.west, p.tile.bbox.south, p.tile.bbox.east, p.tile.bbox.north],
+  }),
+});
+
+function layers() {
+  const out = [basemap];
+  if (state.heat && heatGrid) out.push(new GeoJsonLayer({
+    id: "heat", data: heatGrid,
+    getFillColor: f => [...tempColor(f.properties.temperature_proxy), 115],
+    stroked: false, pickable: true,
+  }));
+  if (state.pop && demoGrid) out.push(new GeoJsonLayer({
+    id: "pop", data: demoGrid,
+    extruded: true, wireframe: false,
+    getElevation: f => f.properties.population_estimate * 0.35,
+    getFillColor: f => [...popColor(f.properties.population_estimate, popMax), 200],
+    pickable: true,
+  }));
+  if (state.bld && buildings) out.push(new GeoJsonLayer({
+    id: "buildings", data: buildings,
+    extruded: true, wireframe: false,
+    getElevation: f => f.properties.calculated_height * 4,
+    getFillColor: [74, 74, 72, 255],
+    material: {ambient: 0.45, diffuse: 0.7, shininess: 24},
+    pickable: true,
+  }));
+  if (state.walk && network) out.push(new GeoJsonLayer({
+    id: "walk", data: network,
+    getLineColor: [52, 211, 200, 190],
+    getLineWidth: 2, lineWidthUnits: "meters", lineWidthMinPixels: 0.6,
+    pickable: true,
+  }));
+  return out;
+}
+
+const tooltip = document.getElementById("tooltip");
+function onHover(info) {
+  if (!info.object) { tooltip.style.display = "none"; return; }
+  const p = info.object.properties, rows = [];
+  const add = (k, v) => rows.push(`<span class="k">${k}</span> <span class="v">${v}</span>`);
+  if (info.layer.id === "heat") {
+    add("temp proxy", p.temperature_proxy.toFixed(1) + " °C");
+    add("urban density", (p.urban_density * 100).toFixed(0) + " %");
+  } else if (info.layer.id === "buildings") {
+    add("height", p.calculated_height.toFixed(1) + " m");
+    add("class", p.building || "–");
+  } else if (info.layer.id === "walk") {
+    add("street", p.name || "unnamed");
+    add("class", p.highway || "–");
+  } else if (info.layer.id === "pop") {
+    add("population est.", Math.round(p.population_estimate).toLocaleString());
+    add("temp proxy", p.temperature_proxy.toFixed(1) + " °C");
+  }
+  tooltip.innerHTML = rows.join("<br>");
+  tooltip.style.display = "block";
+  tooltip.style.left = info.x + 14 + "px";
+  tooltip.style.top = info.y + 14 + "px";
+}
+
+const deckgl = new DeckGL({
+  container: "map",
+  initialViewState: {longitude: -15.9405, latitude: 23.6935, zoom: 13.4, pitch: 55, bearing: 24},
+  controller: true,
+  layers: layers(),
+  onHover,
+});
+
+async function load() {
+  const get = f => fetch(DATA + f).then(r => {
+    if (!r.ok) throw new Error(f + ": HTTP " + r.status);
+    return r.json();
+  });
+  [heatGrid, buildings, network, demoGrid] = await Promise.all([
+    get("dakhla_heat_grid.geojson"),
+    get("dakhla_buildings_3d.geojson"),
+    get("dakhla_pedestrian_network.geojson"),
+    get("dakhla_demographics_grid.geojson"),
+  ]);
+  popMax = Math.max(...demoGrid.features.map(f => f.properties.population_estimate));
+  deckgl.setProps({layers: layers()});
+}
+load().catch(e => {
+  tooltip.style.display = "block";
+  tooltip.style.left = "16px"; tooltip.style.bottom = "16px"; tooltip.style.top = "auto";
+  tooltip.textContent = "Failed to load data (serve over HTTP, e.g. python -m http.server): " + e.message;
+});
+
+for (const key of ["heat", "bld", "walk", "pop"]) {
+  document.getElementById("lyr-" + key).addEventListener("change", ev => {
+    state[key] = ev.target.checked;
+    deckgl.setProps({layers: layers()});
+  });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# Raw inputs (user-supplied census layers etc.)
+data/raw/
+
+# Large Kepler exports
+kepler_gl.html
+kepler_config.json
+
+# OS noise
+.DS_Store
