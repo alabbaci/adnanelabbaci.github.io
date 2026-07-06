@@ -40,12 +40,16 @@ def earcut_patched():
     return src
 
 
-HTML_HEAD = """<!DOCTYPE html>
+DOC_HEAD = """<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Casablanca // night grid</title>
+</head>
+<body>
+"""
+
+HTML_HEAD = """<title>Casablanca // night grid</title>
 <style>
   html, body { margin: 0; padding: 0; height: 100%; overflow: hidden;
                background: #07090c; }
@@ -90,10 +94,11 @@ HTML_HEAD = """<!DOCTYPE html>
   <label><input type="checkbox" id="cbScan" checked> Floor scanlines</label>
   <label><input type="checkbox" id="cbPulse" checked> City pulse</label>
   <div id="hint">drag rotate &middot; right-drag pan &middot; scroll zoom</div>
+  <div id="status" class="muted" style="margin-top:10px">loading&hellip;</div>
 </div>
 """
 
-HTML_TAIL = """</body>
+DOC_TAIL = """</body>
 </html>
 """
 
@@ -112,13 +117,20 @@ def main():
                  f"{earcut_patched()}\n</script>\n")
     parts.append(f"<script>\nconst P = {payload};\n</script>\n")
     parts.append(f"<script>\n{read(os.path.join(HERE, 'app.js'))}\n</script>\n")
-    parts.append(HTML_TAIL)
+    inner = "".join(parts)
 
-    html = "".join(parts)
+    # standalone file (open locally in any browser)
+    html = DOC_HEAD + inner + DOC_TAIL
     with open(OUT, "w", encoding="utf-8") as f:
         f.write(html)
     print(f"✓ {OUT}: {len(html) / 1e6:.2f} MB, "
           f"{meta['nBld']} buildings, {meta['nRoad']} road polylines")
+
+    # artifact variant: page content only, host supplies the document skeleton
+    art = os.path.join(HERE, "casablanca-night-grid-artifact.html")
+    with open(art, "w", encoding="utf-8") as f:
+        f.write(inner)
+    print(f"✓ {art}: {len(inner) / 1e6:.2f} MB")
 
 
 if __name__ == "__main__":
