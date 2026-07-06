@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dakhla 3D Heat Traps &amp; Pedestrian Exposure</title>
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+  <script src="https://unpkg.com/deck.gl@9.0.36/dist.min.js"></script>
+  <style>
+    :root {
+      --panel-bg: rgba(16, 18, 22, 0.88);
+      --ink: #e8eaed;
+      --ink-secondary: #9aa0a6;
+      --accent: #4dd7e6;
+    }
+    html, body { margin: 0; height: 100%; background: #101216; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+    #map { position: absolute; inset: 0; }
+    .panel {
+      position: absolute; z-index: 10; background: var(--panel-bg); color: var(--ink);
+      border-radius: 10px; padding: 14px 16px; backdrop-filter: blur(6px);
+      box-shadow: 0 2px 12px rgba(0,0,0,.4); max-width: 320px;
+    }
+    #info { top: 16px; left: 16px; }
+    #info h1 { margin: 0 0 6px; font-size: 16px; font-weight: 650; }
+    #info p { margin: 0 0 10px; font-size: 12.5px; line-height: 1.45; color: var(--ink-secondary); }
+    #info label { display: flex; align-items: center; gap: 8px; font-size: 13px; margin: 4px 0; cursor: pointer; }
+    #info .swatch { width: 12px; height: 12px; border-radius: 3px; flex: none; }
+    #legend { bottom: 28px; left: 16px; padding-bottom: 10px; }
+    #legend .title { font-size: 12px; margin-bottom: 6px; color: var(--ink-secondary); }
+    #legend .bar { width: 220px; height: 10px; border-radius: 5px;
+      background: linear-gradient(90deg, #250c3f, #781c6d, #cc4248, #f6911e, #fcffa4); }
+    #legend .ticks { display: flex; justify-content: space-between; font-size: 11px; color: var(--ink-secondary); margin-top: 4px; width: 220px; }
+    #tooltip {
+      position: absolute; z-index: 20; pointer-events: none; display: none;
+      background: var(--panel-bg); color: var(--ink); font-size: 12px; line-height: 1.5;
+      padding: 8px 10px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,.5);
+    }
+    #attribution { position: absolute; right: 6px; bottom: 4px; z-index: 10; font-size: 10px; color: var(--ink-secondary); }
+    #attribution a { color: var(--ink-secondary); }
+    @media (max-width: 640px) { #info { max-width: calc(100vw - 60px); } }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <div id="info" class="panel">
+    <h1>Dakhla — 3D Heat Traps &amp; Pedestrian Exposure</h1>
+    <p>
+      Building density drives a street-level heat proxy across the Dakhla
+      peninsula. Extruded buildings show where narrow, dense blocks trap heat;
+      cyan lines are the walkable street network. Drag to rotate, right-drag /
+      ctrl-drag to tilt, hover a cell for values.
+    </p>
+    <label><input type="checkbox" id="toggle-heat" checked />
+      <span class="swatch" style="background:linear-gradient(90deg,#781c6d,#f6911e)"></span> Heat proxy grid</label>
+    <label><input type="checkbox" id="toggle-buildings" checked />
+      <span class="swatch" style="background:#3a3f4a"></span> Buildings (extruded ×3)</label>
+    <label><input type="checkbox" id="toggle-network" checked />
+      <span class="swatch" style="background:var(--accent)"></span> Pedestrian network</label>
+  </div>
+
+  <div id="legend" class="panel">
+    <div class="title">Temperature proxy (density-based, °C)</div>
+    <div class="bar"></div>
+    <div class="ticks"><span>26.0</span><span>29.3</span><span>32.5</span></div>
+  </div>
+
+  <div id="tooltip"></div>
+  <div id="attribution">
+    Data © <a href="https://overturemaps.org">Overture Maps</a> /
+    © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors ·
+    Basemap © <a href="https://carto.com/attributions">CARTO</a>
+  </div>
+
+  <script>
+    const TEMP_MIN = 26.0, TEMP_MAX = 32.5;
+
+    // Inferno-style perceptually-uniform sequential ramp (CVD-safe by construction)
+    const RAMP = [
+      [0.00, [37, 12, 63]],
+      [0.25, [120, 28, 109]],
+      [0.50, [204, 66, 72]],
+      [0.75, [246, 145, 30]],
+      [1.00, [252, 255, 164]],
+    ];
+    function heatColor(t) {
+      const x = Math.max(0, Math.min(1, (t - TEMP_MIN) / (TEMP_MAX - TEMP_MIN)));
+      for (let i = 1; i < RAMP.length; i++) {
+        if (x <= RAMP[i][0]) {
+          const [x0, c0] = RAMP[i - 1], [x1, c1] = RAMP[i];
+          const f = (x - x0) / (x1 - x0);
+          return c0.map((v, k) => Math.round(v + f * (c1[k] - v)));
+        }
+      }
+      return RAMP[RAMP.length - 1][1];
+    }
+
+    const tooltip = document.getElementById("tooltip");
+    function onHover({ object, x, y, layer }) {
+      if (!object) { tooltip.style.display = "none"; return; }
+      const p = object.properties || {};
+      let html = "";
+      if (layer.id === "heat-grid") {
+        html = `<b>${p.temperature_proxy.toFixed(1)} °C</b> (proxy)<br>` +
+               `Urban density: ${(p.urban_density * 100).toFixed(0)}%`;
+      } else if (layer.id === "buildings") {
+        html = `<b>Building</b> · ${p.calculated_height.toFixed(1)} m` +
+               (p.building && p.building !== "unknown" ? `<br>${p.building}` : "");
+      } else {
+        html = `<b>${p.name || "Unnamed street"}</b><br>${p.highway}`;
+      }
+      tooltip.innerHTML = html;
+      tooltip.style.display = "block";
+      tooltip.style.left = x + 12 + "px";
+      tooltip.style.top = y + 12 + "px";
+    }
+
+    const visible = { heat: true, buildings: true, network: true };
+
+    function makeLayers() {
+      return [
+        new deck.GeoJsonLayer({
+          id: "heat-grid",
+          data: "data/processed/dakhla_heat_grid.geojson",
+          visible: visible.heat,
+          stroked: false,
+          filled: true,
+          getFillColor: f => [...heatColor(f.properties.temperature_proxy), 115],
+          pickable: true,
+          onHover,
+        }),
+        new deck.GeoJsonLayer({
+          id: "buildings",
+          data: "data/processed/dakhla_buildings_3d.geojson",
+          visible: visible.buildings,
+          extruded: true,
+          wireframe: false,
+          // Dakhla is low-rise; a 3x vertical exaggeration keeps the canyon
+          // geometry legible at city scale.
+          getElevation: f => f.properties.calculated_height * 3,
+          getFillColor: [52, 57, 68, 255],
+          material: { ambient: 0.35, diffuse: 0.45, shininess: 24 },
+          pickable: true,
+          onHover,
+        }),
+        new deck.GeoJsonLayer({
+          id: "pedestrian-network",
+          data: "data/processed/dakhla_pedestrian_network.geojson",
+          visible: visible.network,
+          stroked: true,
+          filled: false,
+          getLineColor: [77, 215, 230, 165],
+          getLineWidth: 2.2,
+          lineWidthUnits: "meters",
+          lineWidthMinPixels: 0.4,
+          pickable: true,
+          onHover,
+        }),
+      ];
+    }
+
+    const deckgl = new deck.DeckGL({
+      container: "map",
+      map: typeof maplibregl !== "undefined" ? maplibregl : undefined,
+      mapStyle: "https://basemaps.cartocdn.com/gl/dark-matter-nolabels-gl-style/style.json",
+      initialViewState: {
+        longitude: -15.926,
+        latitude: 23.706,
+        zoom: 13.5,
+        pitch: 55,
+        bearing: -30,
+      },
+      controller: true,
+      layers: makeLayers(),
+      effects: [
+        new deck.LightingEffect({
+          ambient: new deck.AmbientLight({ color: [255, 255, 255], intensity: 0.9 }),
+          sun: new deck._SunLight({ timestamp: Date.UTC(2026, 6, 15, 15, 0), color: [255, 245, 235], intensity: 1.2 }),
+        }),
+      ],
+    });
+
+    for (const [id, key] of [["toggle-heat", "heat"], ["toggle-buildings", "buildings"], ["toggle-network", "network"]]) {
+      document.getElementById(id).addEventListener("change", e => {
+        visible[key] = e.target.checked;
+        deckgl.setProps({ layers: makeLayers() });
+      });
+    }
+  </script>
+</body>
+</html>

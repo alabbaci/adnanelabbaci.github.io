@@ -1,0 +1,12 @@
+# Raw inputs are sourced manually (see docs/) and not committed;
+# data/processed/ IS committed because index.html serves it on GitHub Pages.
+data/raw/
+
+.venv/
+__pycache__/
+*.pyc
+node_modules/
+
+# Large manual Kepler exports
+kepler_gl.html
+kepler_config.json

@@ -1,0 +1,9 @@
+duckdb>=1.1
+geopandas>=1.0
+pandas>=2.0
+numpy>=1.26
+shapely>=2.0
+# Offline/proxied environments where DuckDB cannot reach
+# extensions.duckdb.org can install the extensions from PyPI instead:
+duckdb-extension-httpfs
+duckdb-extension-spatial
