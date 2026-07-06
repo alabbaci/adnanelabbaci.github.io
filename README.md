@@ -148,6 +148,13 @@ committed, so the GitHub Pages map works without running anything.
   back to the 4.5m low-rise default, so the extrusion layer shows form more
   than measured height.
 
+## Also in this repo
+
+**[Casablanca // night grid](casablanca/README.md)** — a self-contained
+sci-fi 3D visualization of central Casablanca (51k extruded buildings over
+a neon street grid, three.js + bloom, all data inlined in
+[one HTML file](casablanca-night-grid.html)).
+
 ## License
 
 MIT — see [LICENSE](LICENSE). Overture Maps data is licensed under
