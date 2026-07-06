@@ -1,17 +1,20 @@
 """
-01_fetch_osm_geometry.py  (Dakhla edition)
+01_fetch_osm_geometry.py
 
-Pulls Dakhla's 3D building geometry and pedestrian-accessible street network
+Pulls a city's 3D building geometry and pedestrian-accessible street network
 and exports two GeoJSONs:
 
-    data/processed/dakhla_buildings_3d.geojson
-    data/processed/dakhla_pedestrian_network.geojson
+    data/processed/<city>_buildings_3d.geojson
+    data/processed/<city>_pedestrian_network.geojson
+
+Usage:
+    python scripts/01_fetch_osm_geometry.py [dakhla|rabat]
 
 Data source: Overture Maps (https://overturemaps.org/), which merges
-OpenStreetMap geometry with ML-derived building footprints — important for
-Dakhla, where raw OSM building coverage is sparse. The data is queried
-directly from Overture's public GeoParquet release on S3 via DuckDB, so no
-OSM API access (Nominatim/Overpass) is required.
+OpenStreetMap geometry with ML-derived building footprints — important in
+Morocco/Western Sahara, where raw OSM building coverage is sparse. The data
+is queried directly from Overture's public GeoParquet release on S3 via
+DuckDB, so no OSM API access (Nominatim/Overpass) is required.
 
 Requirements: duckdb>=1.1, geopandas, pandas, shapely
               plus the DuckDB httpfs + spatial extensions (installed on
@@ -26,29 +29,16 @@ import geopandas as gpd
 import pandas as pd
 from shapely import wkb
 
+from city_config import METERS_PER_LEVEL, get_city
+
 OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "processed")
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 OVERTURE_RELEASE = "2026-06-17.0"
 OVERTURE_S3 = f"s3://overturemaps-us-west-2/release/{OVERTURE_RELEASE}"
 
-# Bounding box for the Dakhla peninsula (Rio de Oro), Western Sahara / Morocco:
-# covers the historic city at the southwestern tip, the port, the airport and
-# the newer developments stretching northeast along the isthmus.
-BBOX = {
-    "xmin": -16.00,
-    "ymin": 23.62,
-    "xmax": -15.72,
-    "ymax": 23.90,
-}
-
-# Dakhla is overwhelmingly low-rise (1-2 storeys); a Torino-style 15m default
-# would badly overstate the skyline, so fall back to a modest 4.5m.
-METERS_PER_LEVEL = 3.2
-DEFAULT_HEIGHT_M = 4.5
-
-# Overture road classes a pedestrian can use. Everything in the bbox except
-# limited-access roads — mirrors OSMnx's network_type="walk" behaviour.
+# Overture road classes a pedestrian cannot use. Everything else in the bbox
+# is kept — mirrors OSMnx's network_type="walk" behaviour.
 NON_WALKABLE_CLASSES = ("motorway", "trunk")
 
 
@@ -74,10 +64,10 @@ def connect_duckdb() -> duckdb.DuckDBPyConnection:
     return con
 
 
-def bbox_filter() -> str:
+def bbox_filter(bbox: dict) -> str:
     return (
-        f"bbox.xmin > {BBOX['xmin']} AND bbox.xmax < {BBOX['xmax']} "
-        f"AND bbox.ymin > {BBOX['ymin']} AND bbox.ymax < {BBOX['ymax']}"
+        f"bbox.xmin > {bbox['xmin']} AND bbox.xmax < {bbox['xmax']} "
+        f"AND bbox.ymin > {bbox['ymin']} AND bbox.ymax < {bbox['ymax']}"
     )
 
 
@@ -86,7 +76,7 @@ def to_gdf(df: pd.DataFrame) -> gpd.GeoDataFrame:
     return gpd.GeoDataFrame(df, geometry=geometry, crs="EPSG:4326")
 
 
-def fetch_buildings_3d(con: duckdb.DuckDBPyConnection) -> gpd.GeoDataFrame:
+def fetch_buildings_3d(con: duckdb.DuckDBPyConnection, city: dict) -> gpd.GeoDataFrame:
     print("↳ Downloading building footprints (Overture buildings theme)...")
     df = con.execute(
         f"""
@@ -96,7 +86,7 @@ def fetch_buildings_3d(con: duckdb.DuckDBPyConnection) -> gpd.GeoDataFrame:
             COALESCE(subtype, 'unknown') AS building,
             ST_AsWKB(geometry) AS geometry_wkb
         FROM read_parquet('{OVERTURE_S3}/theme=buildings/type=building/*')
-        WHERE {bbox_filter()}
+        WHERE {bbox_filter(city["bbox"])}
           AND NOT COALESCE(is_underground, false)
         """
     ).fetchdf()
@@ -106,7 +96,7 @@ def fetch_buildings_3d(con: duckdb.DuckDBPyConnection) -> gpd.GeoDataFrame:
     gdf["calculated_height"] = (
         gdf["height"]
         .fillna(gdf["num_floors"] * METERS_PER_LEVEL)
-        .fillna(DEFAULT_HEIGHT_M)
+        .fillna(city["default_height_m"])
         .astype(float)
     )
 
@@ -114,7 +104,7 @@ def fetch_buildings_3d(con: duckdb.DuckDBPyConnection) -> gpd.GeoDataFrame:
     return gdf[["geometry", "calculated_height", "building"]]
 
 
-def fetch_pedestrian_network(con: duckdb.DuckDBPyConnection) -> gpd.GeoDataFrame:
+def fetch_pedestrian_network(con: duckdb.DuckDBPyConnection, city: dict) -> gpd.GeoDataFrame:
     print("↳ Downloading walkable street network (Overture transportation theme)...")
     placeholders = ", ".join(f"'{c}'" for c in NON_WALKABLE_CLASSES)
     df = con.execute(
@@ -124,7 +114,7 @@ def fetch_pedestrian_network(con: duckdb.DuckDBPyConnection) -> gpd.GeoDataFrame
             class AS highway,
             ST_AsWKB(geometry) AS geometry_wkb
         FROM read_parquet('{OVERTURE_S3}/theme=transportation/type=segment/*')
-        WHERE {bbox_filter()}
+        WHERE {bbox_filter(city["bbox"])}
           AND subtype = 'road'
           AND class NOT IN ({placeholders})
         """
@@ -135,18 +125,19 @@ def fetch_pedestrian_network(con: duckdb.DuckDBPyConnection) -> gpd.GeoDataFrame
 
 
 def main():
-    print(f"🔄 Fetching data for Dakhla (Overture release {OVERTURE_RELEASE})...")
+    slug, city = get_city()
+    print(f"🔄 Fetching data for {city['label']} (Overture release {OVERTURE_RELEASE})...")
     con = connect_duckdb()
 
-    buildings_final = fetch_buildings_3d(con)
-    pedestrian_cleaned = fetch_pedestrian_network(con)
+    buildings_final = fetch_buildings_3d(con, city)
+    pedestrian_cleaned = fetch_pedestrian_network(con, city)
 
     print("💾 Saving files to disk...")
-    buildings_path = os.path.join(OUTPUT_DIR, "dakhla_buildings_3d.geojson")
-    pedestrian_path = os.path.join(OUTPUT_DIR, "dakhla_pedestrian_network.geojson")
+    buildings_path = os.path.join(OUTPUT_DIR, f"{slug}_buildings_3d.geojson")
+    pedestrian_path = os.path.join(OUTPUT_DIR, f"{slug}_pedestrian_network.geojson")
 
-    buildings_final.to_file(buildings_path, driver="GeoJSON")
-    pedestrian_cleaned.to_file(pedestrian_path, driver="GeoJSON")
+    buildings_final.to_file(buildings_path, driver="GeoJSON", COORDINATE_PRECISION=6)
+    pedestrian_cleaned.to_file(pedestrian_path, driver="GeoJSON", COORDINATE_PRECISION=6)
 
     print(f"✅ Success! {len(buildings_final)} buildings, {len(pedestrian_cleaned)} street segments:")
     print(f"   - {buildings_path}")

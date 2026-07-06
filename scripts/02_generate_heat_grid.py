@@ -1,22 +1,26 @@
 """
-02_generate_heat_grid.py  (Dakhla edition)
+02_generate_heat_grid.py
 
-Builds a uniform 200m x 200m spatial grid over Dakhla, intersects it with the
-3D building footprints to compute urban density per cell, and derives a
+Builds a uniform 200m x 200m spatial grid over the city, intersects it with
+the 3D building footprints to compute urban density per cell, and derives a
 temperature_proxy attribute (a density-driven stand-in for true LST/MRT).
 
+Usage:
+    python scripts/02_generate_heat_grid.py [dakhla|rabat]
+
 Input:
-    data/processed/dakhla_buildings_3d.geojson  (from 01_fetch_osm_geometry.py)
+    data/processed/<city>_buildings_3d.geojson  (from 01_fetch_osm_geometry.py)
 
 Output:
-    data/processed/dakhla_heat_grid.geojson
+    data/processed/<city>_heat_grid.geojson
 
 Note: this density-based proxy is a placeholder. For a research-grade
 analysis, replace temperature_proxy with actual Land Surface Temperature
 (Landsat 8/9 or Sentinel-3, see docs/heat_data_sources.md) or a SOLWEIG
-Mean Radiant Temperature simulation. In Dakhla the ocean moderates ambient
-temperature, but dense mineral urban fabric with no vegetation still traps
-heat locally — which is exactly what the density proxy expresses.
+Mean Radiant Temperature simulation. On the Moroccan Atlantic coast the
+ocean moderates ambient temperature, but dense mineral urban fabric with
+little vegetation still traps heat locally — which is exactly what the
+density proxy expresses.
 
 Requirements: geopandas, numpy, shapely
 """
@@ -27,19 +31,15 @@ import geopandas as gpd
 import numpy as np
 from shapely.geometry import box
 
+from city_config import (
+    GEOGRAPHIC_CRS,
+    GRID_SIZE_METERS,
+    MAX_DENSITY_BONUS_C,
+    get_city,
+)
+
 INPUT_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "processed")
-BUILDINGS_PATH = os.path.join(INPUT_DIR, "dakhla_buildings_3d.geojson")
-OUTPUT_PATH = os.path.join(INPUT_DIR, "dakhla_heat_grid.geojson")
 
-GRID_SIZE_METERS = 200
-METRIC_CRS = "EPSG:32628"  # UTM Zone 28N, appropriate for Dakhla
-GEOGRAPHIC_CRS = "EPSG:4326"  # required by Kepler.gl / deck.gl
-
-# Dakhla's coastal-desert baseline: ocean-moderated summer ambient (~26-27C),
-# with the density bonus expressing heat trapped by the unvegetated built
-# fabric of the dense old town.
-BASELINE_TEMP_C = 26.0
-MAX_DENSITY_BONUS_C = 6.5
 MIN_DENSITY_THRESHOLD = 0.01
 
 
@@ -61,11 +61,15 @@ def build_grid(bounds, grid_size: int, crs) -> gpd.GeoDataFrame:
 
 
 def main():
-    print("📖 Loading Dakhla buildings data...")
-    buildings = gpd.read_file(BUILDINGS_PATH)
+    slug, city = get_city()
+    buildings_path = os.path.join(INPUT_DIR, f"{slug}_buildings_3d.geojson")
+    output_path = os.path.join(INPUT_DIR, f"{slug}_heat_grid.geojson")
 
-    print(f"🌐 Reprojecting data to metric CRS ({METRIC_CRS})...")
-    buildings_metric = buildings.to_crs(METRIC_CRS)
+    print(f"📖 Loading {city['label']} buildings data...")
+    buildings = gpd.read_file(buildings_path)
+
+    print(f"🌐 Reprojecting data to metric CRS ({city['metric_crs']})...")
+    buildings_metric = buildings.to_crs(city["metric_crs"])
 
     print(f"📐 Creating a uniform spatial grid mesh ({GRID_SIZE_METERS}m cells)...")
     grid = build_grid(buildings_metric.total_bounds, GRID_SIZE_METERS, buildings_metric.crs)
@@ -79,7 +83,7 @@ def main():
     grid["cell_area"] = grid.geometry.area
     grid["urban_density"] = grid["total_building_area"] / grid["cell_area"]
 
-    grid["temperature_proxy"] = BASELINE_TEMP_C + (
+    grid["temperature_proxy"] = city["baseline_temp_c"] + (
         grid["urban_density"] * MAX_DENSITY_BONUS_C
     )
 
@@ -88,9 +92,9 @@ def main():
     print("💾 Converting back to WGS84 and saving...")
     grid_final = grid_filtered.to_crs(GEOGRAPHIC_CRS)
     grid_final = grid_final[["geometry", "urban_density", "temperature_proxy"]]
-    grid_final.to_file(OUTPUT_PATH, driver="GeoJSON")
+    grid_final.to_file(output_path, driver="GeoJSON", COORDINATE_PRECISION=6)
 
-    print(f"✅ Success! Created {len(grid_final)} grid cells: {OUTPUT_PATH}")
+    print(f"✅ Success! Created {len(grid_final)} grid cells: {output_path}")
 
 
 if __name__ == "__main__":

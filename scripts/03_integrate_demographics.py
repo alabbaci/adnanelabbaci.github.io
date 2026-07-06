@@ -1,21 +1,23 @@
 """
-03_integrate_demographics.py  (Dakhla edition)
+03_integrate_demographics.py
 
 Joins census-district demographic data (population, elderly share) onto the
 same 200m grid used for the heat proxy, so the final scene can answer: do
 the most vulnerable residents live in the most severe heat traps?
 
+Usage:
+    python scripts/03_integrate_demographics.py [dakhla|rabat]
+
 Expected input:
-    data/raw/hcp_census_districts.geojson
+    data/raw/hcp_census_districts_<city>.geojson
         - a polygon layer of census districts ("districts de recensement")
-          for the Dakhla-Oued Ed-Dahab region from Morocco's HCP
-          (Haut-Commissariat au Plan) RGPH 2024 census, containing at least
-          a total-population column and a 60+/65+ population column
-          (adjust COLUMN_MAP below to your extract's column names).
-          See docs/demographic_data_sources.md.
+          from Morocco's HCP (Haut-Commissariat au Plan) RGPH 2024 census,
+          containing at least a total-population column and a 60+/65+
+          population column (adjust COLUMN_MAP below to your extract's
+          column names). See docs/demographic_data_sources.md.
 
 Output:
-    data/processed/dakhla_demographics_grid.geojson
+    data/processed/<city>_demographics_grid.geojson
         grid cells carrying population_count, elderly_share
 
 This step is OPTIONAL: HCP census geodata is not openly downloadable at
@@ -32,15 +34,10 @@ import sys
 import geopandas as gpd
 import pandas as pd
 
+from city_config import GEOGRAPHIC_CRS, get_city
+
 RAW_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "raw")
 PROCESSED_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "processed")
-
-CENSUS_PATH = os.path.join(RAW_DIR, "hcp_census_districts.geojson")
-HEAT_GRID_PATH = os.path.join(PROCESSED_DIR, "dakhla_heat_grid.geojson")
-OUTPUT_PATH = os.path.join(PROCESSED_DIR, "dakhla_demographics_grid.geojson")
-
-METRIC_CRS = "EPSG:32628"
-GEOGRAPHIC_CRS = "EPSG:4326"
 
 # Map the raw census column names to readable names used downstream.
 # Update these to match the actual columns in your HCP extract.
@@ -58,21 +55,26 @@ def load_census(path: str) -> gpd.GeoDataFrame:
 
 
 def main():
-    if not os.path.exists(CENSUS_PATH):
+    slug, city = get_city()
+    census_path = os.path.join(RAW_DIR, f"hcp_census_districts_{slug}.geojson")
+    heat_grid_path = os.path.join(PROCESSED_DIR, f"{slug}_heat_grid.geojson")
+    output_path = os.path.join(PROCESSED_DIR, f"{slug}_demographics_grid.geojson")
+
+    if not os.path.exists(census_path):
         print(
-            f"⏭️  Skipping demographics: no census layer found at {CENSUS_PATH}.\n"
-            "   Place an HCP RGPH census-district polygon layer for Dakhla there\n"
+            f"⏭️  Skipping demographics: no census layer found at {census_path}.\n"
+            f"   Place an HCP RGPH census-district polygon layer for {city['label']} there\n"
             "   (see docs/demographic_data_sources.md) and re-run this script.\n"
             "   Steps 1-2 outputs and the visualization work without it."
         )
         sys.exit(0)
 
     print("📖 Loading HCP demographic data and the heat grid...")
-    census = load_census(CENSUS_PATH)
-    heat_grid = gpd.read_file(HEAT_GRID_PATH)
+    census = load_census(census_path)
+    heat_grid = gpd.read_file(heat_grid_path)
 
-    census_metric = census.to_crs(METRIC_CRS)
-    grid_metric = heat_grid.to_crs(METRIC_CRS)
+    census_metric = census.to_crs(city["metric_crs"])
+    grid_metric = heat_grid.to_crs(city["metric_crs"])
     grid_metric["grid_id"] = range(len(grid_metric))
 
     print("🔬 Apportioning population onto the heat grid by area overlap...")
@@ -98,9 +100,9 @@ def main():
 
     print("💾 Converting back to WGS84 and saving...")
     grid_final = grid_metric.to_crs(GEOGRAPHIC_CRS)
-    grid_final.to_file(OUTPUT_PATH, driver="GeoJSON")
+    grid_final.to_file(output_path, driver="GeoJSON")
 
-    print(f"✅ Success! Created: {OUTPUT_PATH}")
+    print(f"✅ Success! Created: {output_path}")
 
 
 if __name__ == "__main__":
