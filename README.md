@@ -17,6 +17,12 @@ rebuilt on [Overture Maps](https://overturemaps.org/) GeoParquet +
 **▶ Interactive map: [`index.html`](index.html)** — served by GitHub Pages
 at the site root once this branch is merged.
 
+> **Also in this repo:**
+> [`casablanca-night-grid/`](casablanca-night-grid/) — a self-contained 3D
+> neon night-grid viewer of central Casablanca (old medina · downtown ·
+> Hassan II Mosque), adapted from
+> [amyxqc/auckland-night-grid](https://github.com/amyxqc/auckland-night-grid).
+
 ![Dakhla city 3D heat scene](images/01_city_3d_overview.jpg)
 
 ## Why this approach

@@ -6,6 +6,9 @@ __pycache__/
 # Raw inputs (user-supplied census layers etc.)
 data/raw/
 
+# Casablanca night grid raw fetches (re-fetch with build/fetch_casablanca.py)
+casablanca-night-grid/datasets/
+
 # Large Kepler exports
 kepler_gl.html
 kepler_config.json
