@@ -17,6 +17,11 @@ rebuilt on [Overture Maps](https://overturemaps.org/) GeoParquet +
 **▶ Interactive map: [`index.html`](index.html)** — served by GitHub Pages
 at the site root once this branch is merged.
 
+**▶ ArcGIS Pro route:** the same three-stage analysis rebuilt on `arcpy`
+geoprocessing lives in [`arcgis_pro/`](arcgis_pro/README.md) — a File
+Geodatabase pipeline plus a Python Toolbox and a 3D Local Scene, for anyone
+who'd rather run this in ArcGIS Pro than in the open-source stack below.
+
 ![Dakhla city 3D heat scene](images/01_city_3d_overview.jpg)
 
 ## Why this approach
