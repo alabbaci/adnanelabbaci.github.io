@@ -10,10 +10,14 @@ model both rest on is *which polygons exist*.
 
 MARS (Map Auto-Regressor) is Microsoft's foundation model for turning
 high-resolution RGB satellite imagery into production-ready vector layers.
-Where Overture gives you somebody else's extraction of somebody else's
-imagery, MARS lets you run the extraction yourself against imagery you
-choose — a specific date, a specific sensor, a specific part of the
-peninsula.
+It extracts four categories: **Building** and **Water** as polygons, **Road**
+and **Railway** as lines. Where Overture gives you somebody else's extraction
+of somebody else's imagery, MARS lets you run the extraction yourself against
+imagery you choose — a specific date, a specific sensor, a specific part of
+the peninsula.
+
+`scripts/01b_fetch_mars_footprints.py` in this repo drives it end to end and
+writes the buildings layer in the pipeline's own schema.
 
 ## Whether it is worth it here
 
@@ -52,13 +56,56 @@ before reaching for MARS.
    be RGB, with STAC metadata specifying `gsd`, projection (`proj:epsg`),
    band information (`eo:bands`), and accurate `bbox` and `geometry` fields.
 4. **Run inference** with the
-   [GeoAI SDK](https://azure.github.io/microsoft-planetary-computer-pro/geoai/geoai-sdk/README.html)
-   against that collection. Tile at 512 × 512 pixels.
-5. **Export the vector layer** and fold it into this pipeline (below).
+   [GeoAI SDK](https://azure.github.io/microsoft-planetary-computer-pro/geoai/geoai-sdk/README.html),
+   which is what `scripts/01b_fetch_mars_footprints.py` wraps. The SDK is not
+   on PyPI — install it from a release wheel or from a clone of the
+   [Planetary Computer Pro repo](https://github.com/Azure/microsoft-planetary-computer-pro):
 
-The bbox to cover is the one at the top of
+   ```bash
+   pip install ./microsoft-planetary-computer-pro/tools/geoai-sdk
+   ```
+
+   Note that the SDK only enforces its `naip` collection restriction against
+   the *public* Planetary Computer. A private GeoCatalog may use any
+   collection name, which is what makes Dakhla possible at all — NAIP is
+   United States imagery.
+
+5. **Point the script at your resources** and price the job before spending a
+   GPU hour:
+
+   ```bash
+   export MARS_ENDPOINT="https://<name>.<region>.inference.ml.azure.com/score"
+   export MARS_API_KEY="..."                      # or use Azure AD
+   export PCPRO_GEOCATALOG_URI="https://<your-geocatalog>/stac"
+   export PCPRO_IMAGERY_COLLECTION="<your-imagery-collection>"
+   export PCPRO_STORAGE_URL="https://<account>.blob.core.windows.net"
+   export PCPRO_BLOB_CONTAINER="mars-results"
+
+   python scripts/01b_fetch_mars_footprints.py --estimate-only
+   ```
+
+   `--estimate-only` reports chip count, imagery found, and estimated
+   duration without calling the model. If it finds zero STAC items, your
+   collection does not cover the bbox at the requested date range and ground
+   sample distance — fix that before running inference.
+
+6. **Run it for real**, carrying heights and building classes over from the
+   existing Overture layer:
+
+   ```bash
+   python scripts/01b_fetch_mars_footprints.py \
+       --heights-from data/processed/dakhla_buildings_3d.geojson
+   ```
+
+   Output goes to `data/processed/dakhla_buildings_mars.geojson`. Compare it
+   against the Overture layer, then re-run with `--replace-overture` to make
+   steps 02 and 03 use it.
+
+The default bbox is the one at the top of
 `scripts/01_fetch_overture_geometry.py`:
-`(-16.02, 23.62, -15.86, 23.80)`.
+`(-16.02, 23.62, -15.86, 23.80)`. Override it with `--bbox W S E N` to run
+only the dense old-town blocks, which is the cheaper and more defensible
+option.
 
 ## Folding the output back in
 
@@ -80,10 +127,23 @@ labels every polygon identically will push population into warehouses and
 port buildings, so either carry a class attribute through from the model or
 spatially join Overture's classes onto the new footprints.
 
-The cleanest way to add this is a sibling script — `01b_fetch_mars_footprints.py`
-— that writes the same two output files, rather than an Azure branch inside
-the Overture script. Then step 2 and step 3 run unchanged on whichever
-source produced the layer.
+`scripts/01b_fetch_mars_footprints.py` does this transfer with
+`--heights-from`: it intersects each MARS footprint against the Overture
+layer in UTM 28N and takes the attributes of the building it overlaps most,
+falling back to 4.5m and class `yes` for anything unmatched. It prints the
+match rate, which is worth reading — a low one means the two layers disagree
+about where buildings are, which is either the point of running MARS or a
+sign your imagery is misregistered.
+
+The script is deliberately a sibling rather than an Azure branch inside the
+Overture script, so steps 02 and 03 run unchanged on whichever source
+produced the layer.
+
+`--include-roads` saves MARS road and railway centrelines to
+`dakhla_mars_roads.geojson` in the same run. They do **not** drop into the
+walkable network layer as-is: the pipeline filters on Overture's `class`
+attribute to exclude motorways and trunk roads, and MARS returns geometry
+with no road classification at all.
 
 ## References
 

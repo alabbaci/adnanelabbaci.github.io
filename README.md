@@ -44,6 +44,7 @@ during episodic *chergui* (Saharan wind) events when temperatures spike.
 
 ```
 scripts/01_fetch_overture_geometry.py → buildings (with height) + walkable network
+scripts/01b_fetch_mars_footprints.py  → optional: footprints from MARS on Azure
 scripts/02_generate_heat_grid.py      → 200m grid, urban density, temperature_proxy
 scripts/03_integrate_demographics.py  → RGPH 2024 population distributed onto the grid
                                        ↓
@@ -65,10 +66,11 @@ every walkable road class.
 > European city.
 
 For a higher-fidelity footprint layer extracted from your own
-high-resolution satellite imagery, see
-[`docs/mars_building_footprints.md`](docs/mars_building_footprints.md) —
-it covers running Microsoft's MARS model on Foundry and folding the result
-back into this pipeline's schema.
+high-resolution satellite imagery, `scripts/01b_fetch_mars_footprints.py`
+runs Microsoft's MARS model against a Planetary Computer Pro collection and
+writes the result in this same schema. It needs an Azure deployment and
+commercial imagery, so it is optional and off the default path — see
+[`docs/mars_building_footprints.md`](docs/mars_building_footprints.md).
 
 ```bash
 python scripts/01_fetch_overture_geometry.py
