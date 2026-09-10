@@ -64,6 +64,12 @@ every walkable road class.
 > matters in Dakhla where hand-mapped OSM coverage is thinner than in a
 > European city.
 
+For a higher-fidelity footprint layer extracted from your own
+high-resolution satellite imagery, see
+[`docs/mars_building_footprints.md`](docs/mars_building_footprints.md) —
+it covers running Microsoft's MARS model on Foundry and folding the result
+back into this pipeline's schema.
+
 ```bash
 python scripts/01_fetch_overture_geometry.py
 ```
@@ -146,7 +152,9 @@ committed, so the GitHub Pages map works without running anything.
   volume share), not counts; per-cell accuracy is unvalidated.
 - Building heights are sparse in Overture for Dakhla; most buildings fall
   back to the 4.5m low-rise default, so the extrusion layer shows form more
-  than measured height.
+  than measured height. Footprint *coverage* is uneven too, especially in
+  the informal fabric — `docs/mars_building_footprints.md` weighs a
+  commercial-imagery alternative.
 
 ## License
 
