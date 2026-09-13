@@ -154,3 +154,25 @@ MIT — see [LICENSE](LICENSE). Overture Maps data is licensed under
 [ODbL](https://opendatacommons.org/licenses/odbl/) / CDLA-Permissive-2.0
 depending on theme and includes OpenStreetMap data © OpenStreetMap
 contributors. RGPH 2024 population figure © HCP Morocco.
+
+---
+
+## Aussi dans ce dépôt — Chajra, diagnostic des arbres fruitiers
+
+Une seconde application, indépendante de la carte Dakhla, est servie par le même
+site : **[`app/`](app/)** — une PWA mobile qui diagnostique les maladies et
+ravageurs de l'**olivier**, de l'**oranger**, du **citronnier** et de
+l'**avocatier** à partir d'une photo ou d'une courte vidéo, via Gemini, en
+français, en arabe et en anglais.
+
+- **Plan de développement** — [`docs/agri_app_plan.md`](docs/agri_app_plan.md)
+- **Dossier Gemini : choix du modèle et protocole de benchmark** — [`docs/gemini_benchmark.md`](docs/gemini_benchmark.md)
+- **Harnais de benchmark exécutable** — [`scripts/benchmark_gemini.py`](scripts/benchmark_gemini.py) (bibliothèque standard uniquement)
+- **L'application** — [`app/README.md`](app/README.md)
+
+```bash
+python -m http.server 8000    # puis http://localhost:8000/app/
+```
+
+Sans clé API, l'application tourne en mode démonstration et reste entièrement
+parcourable.

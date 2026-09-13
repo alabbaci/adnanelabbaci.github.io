@@ -1,0 +1,459 @@
+{
+  "id": "olive",
+  "emoji": "🫒",
+  "latin": "Olea europaea",
+  "name": {
+    "fr": "Olivier",
+    "ar": "زيتون",
+    "en": "Olive"
+  },
+  "note": {
+    "fr": "Première espèce fruitière du Maroc. Rustique, mais la mouche de l'olive et l'œil de paon décident du rendement et de l'acidité de l'huile.",
+    "ar": "أول شجرة مثمرة في المغرب. قوية التحمل، لكن ذبابة الزيتون وعين الطاووس هما اللذان يحددان المردود وحموضة الزيت.",
+    "en": "Morocco's leading fruit species. Hardy, but olive fly and peacock spot decide both yield and oil acidity."
+  },
+  "calendar": [
+    {
+      "months": "11-01",
+      "fr": "Récolte puis taille d'aération. Traitement cuivre post-récolte.",
+      "ar": "الجني ثم تقليم التهوية. معالجة بالنحاس بعد الجني.",
+      "en": "Harvest, then aeration pruning. Post-harvest copper spray."
+    },
+    {
+      "months": "02-03",
+      "fr": "Fertilisation de fond, désherbage, contrôle de l'œil de paon avant la reprise.",
+      "ar": "التسميد القاعدي، إزالة الأعشاب، مراقبة عين الطاووس قبل انطلاق النمو.",
+      "en": "Base fertilisation, weeding, peacock-spot check before growth resumes."
+    },
+    {
+      "months": "04-05",
+      "fr": "Floraison : ne jamais traiter en pleine fleur. Surveillance du psylle.",
+      "ar": "الإزهار: لا تعالج أبداً أثناء تفتح الأزهار. مراقبة بسيلا الزيتون.",
+      "en": "Flowering: never spray at full bloom. Watch for olive psyllid."
+    },
+    {
+      "months": "06-09",
+      "fr": "Nouaison et grossissement. Piégeage mouche obligatoire dès durcissement du noyau.",
+      "ar": "العقد وتضخم الثمار. نصب المصائد إجباري منذ تصلب النواة.",
+      "en": "Fruit set and sizing. Fly trapping is mandatory from pit hardening."
+    }
+  ],
+  "issues": [
+    {
+      "id": "peacock_spot",
+      "type": "fungal",
+      "severity": "high",
+      "latin": "Venturia oleaginea (Spilocaea oleagina)",
+      "name": {
+        "fr": "Œil de paon",
+        "ar": "عين الطاووس",
+        "en": "Peacock spot"
+      },
+      "signs": {
+        "fr": [
+          "Taches rondes brun-vert sur la face supérieure des feuilles, cerclées d'un halo jaune",
+          "Défoliation massive partant du bas et de l'intérieur de l'arbre",
+          "Rameaux dégarnis, floraison de l'année suivante effondrée"
+        ],
+        "ar": [
+          "بقع دائرية بنية-خضراء على الوجه العلوي للأوراق، محاطة بهالة صفراء",
+          "تساقط كثيف للأوراق يبدأ من أسفل وداخل الشجرة",
+          "أغصان عارية، وانهيار إزهار السنة الموالية"
+        ],
+        "en": [
+          "Round brown-green spots on the upper leaf surface, ringed by a yellow halo",
+          "Heavy defoliation starting low and inside the canopy",
+          "Bare twigs and a collapsed bloom the following year"
+        ]
+      },
+      "confusion": [
+        "cercosporiose (taches grises en face inférieure)",
+        "carence en azote (jaunissement uniforme, sans halo)"
+      ],
+      "organic": {
+        "fr": "Cuivre (bouillie bordelaise ou hydroxyde) en deux passages : après récolte et à la reprise de végétation. Taille d'aération pour sécher le cœur de l'arbre.",
+        "ar": "النحاس (ماء بوردو أو هيدروكسيد) في مرتين: بعد الجني وعند انطلاق النمو. تقليم التهوية لتجفيف قلب الشجرة.",
+        "en": "Copper (Bordeaux mixture or hydroxide) twice: after harvest and at bud break. Aeration pruning to dry the canopy core."
+      },
+      "conventional": {
+        "fr": "Fongicide de contact homologué olivier en relais du cuivre si la pression persiste après deux saisons humides.",
+        "ar": "مبيد فطري ملامس مرخص للزيتون كتناوب مع النحاس إذا استمر الضغط بعد موسمين رطبين.",
+        "en": "A registered contact fungicide alternating with copper if pressure persists after two wet seasons."
+      },
+      "prevention": {
+        "fr": "Aération par la taille, évitez l'irrigation par aspersion sur frondaison, ramassez les feuilles tombées.",
+        "ar": "التهوية بالتقليم، تجنب الري بالرش على المجموع الخضري، اجمع الأوراق المتساقطة.",
+        "en": "Open the canopy by pruning, avoid overhead irrigation, rake up fallen leaves."
+      },
+      "guide": [
+        {
+          "s": 8,
+          "fr": "Test de dépistage : plongez 100 feuilles dans une solution de soude à 5 % pendant 3 minutes. Les taches latentes apparaissent en noir.",
+          "ar": "اختبار الكشف: اغمر 100 ورقة في محلول الصودا 5% لمدة 3 دقائق. تظهر البقع الكامنة باللون الأسود.",
+          "en": "Screening test: soak 100 leaves in 5% caustic soda for 3 minutes. Latent spots show up black."
+        },
+        {
+          "s": 8,
+          "fr": "Si plus de 10 feuilles sur 100 sont touchées, le traitement est justifié.",
+          "ar": "إذا أصيبت أكثر من 10 أوراق من 100، فالعلاج مبرر.",
+          "en": "If more than 10 leaves out of 100 are infected, treatment is justified."
+        },
+        {
+          "s": 10,
+          "fr": "Taillez d'abord : supprimez les gourmands et les branches du centre pour faire entrer lumière et vent.",
+          "ar": "قلّم أولاً: أزل السرطانات والأغصان الداخلية لإدخال الضوء والهواء.",
+          "en": "Prune first: remove suckers and inner branches so light and wind get in."
+        },
+        {
+          "s": 10,
+          "fr": "Pulvérisez le cuivre par temps sec, sans vent, en mouillant bien la face supérieure des feuilles.",
+          "ar": "رش النحاس في جو جاف، بدون رياح، مع ترطيب جيد للوجه العلوي للأوراق.",
+          "en": "Spray copper in dry, windless weather, wetting the upper leaf surface thoroughly."
+        }
+      ]
+    },
+    {
+      "id": "olive_fly",
+      "type": "pest",
+      "severity": "high",
+      "latin": "Bactrocera oleae",
+      "name": {
+        "fr": "Mouche de l'olive",
+        "ar": "ذبابة الزيتون",
+        "en": "Olive fruit fly"
+      },
+      "signs": {
+        "fr": [
+          "Piqûre en forme de petit triangle brun sur l'olive",
+          "Galerie sinueuse dans la pulpe, noyau atteint",
+          "Chute prématurée des fruits, acidité de l'huile qui monte"
+        ],
+        "ar": [
+          "وخزة على شكل مثلث صغير بني على حبة الزيتون",
+          "نفق متعرج داخل اللب يصل إلى النواة",
+          "تساقط مبكر للثمار وارتفاع حموضة الزيت"
+        ],
+        "en": [
+          "A small brown triangular sting on the fruit",
+          "A winding gallery through the flesh reaching the pit",
+          "Early fruit drop and rising oil acidity"
+        ]
+      },
+      "confusion": [
+        "teigne de l'olivier (galerie plus fine, sans piqûre triangulaire)"
+      ],
+      "organic": {
+        "fr": "Piégeage massif (McPhail, pièges chromatiques jaunes) dès le durcissement du noyau, appâts protéiques + spinosad en taches, argile kaolinite en barrière.",
+        "ar": "الاصطياد الكثيف (مصائد ماكفيل، المصائد الصفراء) منذ تصلب النواة، طعوم بروتينية + سبينوساد على شكل بقع، طين الكاولين كحاجز.",
+        "en": "Mass trapping (McPhail, yellow sticky traps) from pit hardening, protein bait + spinosad applied as patches, kaolin clay as a barrier."
+      },
+      "conventional": {
+        "fr": "Traitement sur seuil uniquement (≥ 5 % de fruits piqués), avec un insecticide homologué olivier. Respectez impérativement le délai avant récolte indiqué sur l'étiquette.",
+        "ar": "المعالجة عند العتبة فقط (≥ 5% من الثمار موخوزة)، بمبيد مرخص للزيتون. احترم إلزامياً مهلة ما قبل الجني المذكورة على الملصق.",
+        "en": "Threshold-based treatment only (≥ 5% stung fruit) with an olive-registered insecticide. The pre-harvest interval on the label is not optional."
+      },
+      "prevention": {
+        "fr": "Récolte précoce, ramassage et destruction des olives tombées, piégeage coordonné à l'échelle du douar plutôt que parcelle par parcelle.",
+        "ar": "الجني المبكر، جمع وإتلاف الزيتون المتساقط، الاصطياد المنسق على مستوى الدوار وليس قطعة بقطعة.",
+        "en": "Harvest early, collect and destroy dropped fruit, coordinate trapping across the whole village rather than plot by plot."
+      },
+      "guide": [
+        {
+          "s": 8,
+          "fr": "Posez 1 piège McPhail par hectare, à hauteur d'homme, côté sud de l'arbre.",
+          "ar": "ضع مصيدة ماكفيل واحدة لكل هكتار، على ارتفاع الإنسان، في الجهة الجنوبية للشجرة.",
+          "en": "Set one McPhail trap per hectare, at chest height, on the south side of the tree."
+        },
+        {
+          "s": 8,
+          "fr": "Relevez le piège chaque semaine et comptez les mouches. Notez la date.",
+          "ar": "افحص المصيدة كل أسبوع وعد الذباب. سجل التاريخ.",
+          "en": "Check the trap weekly and count the flies. Write down the date."
+        },
+        {
+          "s": 10,
+          "fr": "Prélevez 100 olives au hasard et cherchez la piqûre triangulaire. Au-dessus de 5 fruits piqués, intervenez.",
+          "ar": "خذ 100 حبة زيتون عشوائياً وابحث عن الوخزة المثلثة. فوق 5 ثمار موخوزة، تدخّل.",
+          "en": "Sample 100 olives at random and look for the triangular sting. Above 5 stung fruit, act."
+        },
+        {
+          "s": 10,
+          "fr": "En appât + spinosad, traitez une face sur deux de l'arbre, en taches d'un mètre carré : la mouche vient à l'appât.",
+          "ar": "بالطعم + سبينوساد، عالج جهة واحدة من كل جهتين للشجرة، في بقع بمتر مربع: الذبابة تأتي إلى الطعم.",
+          "en": "With bait + spinosad, treat one side of every other tree in one-square-metre patches — the fly comes to the bait."
+        }
+      ]
+    },
+    {
+      "id": "verticillium",
+      "type": "fungal",
+      "severity": "critical",
+      "latin": "Verticillium dahliae",
+      "name": {
+        "fr": "Verticilliose",
+        "ar": "الذبول الفرتيسيلي",
+        "en": "Verticillium wilt"
+      },
+      "signs": {
+        "fr": [
+          "Dessèchement brutal d'une charpentière entière, souvent d'un seul côté de l'arbre",
+          "Feuilles brunes qui restent accrochées au rameau mort",
+          "Inflorescences momifiées, bois vasculaire brun en coupe"
+        ],
+        "ar": [
+          "جفاف مفاجئ لغصن رئيسي كامل، غالباً في جهة واحدة من الشجرة",
+          "أوراق بنية تبقى ملتصقة بالغصن الميت",
+          "نورات متحنطة، وخشب وعائي بني عند القطع"
+        ],
+        "en": [
+          "Sudden dieback of an entire scaffold limb, often on one side only",
+          "Brown leaves that stay attached to the dead twig",
+          "Mummified flower clusters, brown vascular wood in cross-section"
+        ]
+      },
+      "confusion": [
+        "coup de sec / stress hydrique (feuilles tombent au lieu de rester accrochées)",
+        "tuberculose (galles visibles)"
+      ],
+      "organic": {
+        "fr": "Aucun traitement curatif n'existe. Supprimez et brûlez les branches atteintes en désinfectant la scie entre chaque coupe. Solarisation du sol avant replantation.",
+        "ar": "لا يوجد أي علاج شافٍ. أزل واحرق الأغصان المصابة مع تعقيم المنشار بين كل قطع. تشميس التربة قبل إعادة الغرس.",
+        "en": "No curative treatment exists. Cut out and burn affected limbs, disinfecting the saw between cuts. Solarise the soil before replanting."
+      },
+      "conventional": {
+        "fr": "Pas de fongicide efficace sur arbre installé. La lutte est agronomique.",
+        "ar": "لا يوجد مبيد فطري فعال على شجرة قائمة. المكافحة زراعية.",
+        "en": "No effective fungicide on an established tree. Control is agronomic."
+      },
+      "prevention": {
+        "fr": "Ne plantez jamais d'olivier après une solanacée (tomate, pomme de terre, piment) ou du coton. Évitez l'excès d'eau et d'azote. Choisissez des variétés tolérantes à la plantation.",
+        "ar": "لا تغرس الزيتون أبداً بعد الباذنجانيات (طماطم، بطاطس، فلفل) أو القطن. تجنب فائض الماء والآزوت. اختر أصنافاً متحملة عند الغرس.",
+        "en": "Never plant olive after a solanaceous crop (tomato, potato, pepper) or cotton. Avoid excess water and nitrogen. Choose tolerant varieties at planting."
+      },
+      "guide": [
+        {
+          "s": 8,
+          "fr": "Coupez un rameau atteint et regardez la section : un anneau brun dans le bois confirme la piste vasculaire.",
+          "ar": "اقطع غصناً مصاباً وانظر إلى المقطع: حلقة بنية في الخشب تؤكد المسار الوعائي.",
+          "en": "Cut an affected twig and look at the cross-section: a brown ring in the wood confirms the vascular trail."
+        },
+        {
+          "s": 10,
+          "fr": "Supprimez la branche 20 cm sous la limite du brunissement, par temps sec.",
+          "ar": "أزل الغصن على بعد 20 سم تحت حد الاسمرار، في جو جاف.",
+          "en": "Remove the limb 20 cm below the edge of the browning, in dry weather."
+        },
+        {
+          "s": 8,
+          "fr": "Désinfectez la lame à l'alcool ou à l'eau de Javel avant de passer à l'arbre suivant.",
+          "ar": "عقم النصل بالكحول أو ماء جافيل قبل الانتقال إلى الشجرة الموالية.",
+          "en": "Disinfect the blade with alcohol or bleach before moving to the next tree."
+        },
+        {
+          "s": 10,
+          "fr": "Réduisez l'irrigation et l'azote : un arbre en croissance forcée résiste moins bien.",
+          "ar": "قلل من الري والآزوت: شجرة في نمو مفروض تقاوم أقل.",
+          "en": "Cut back irrigation and nitrogen: a tree pushed into growth resists less well."
+        }
+      ]
+    },
+    {
+      "id": "olive_knot",
+      "type": "bacterial",
+      "severity": "medium",
+      "latin": "Pseudomonas savastanoi pv. savastanoi",
+      "name": {
+        "fr": "Tuberculose de l'olivier",
+        "ar": "سل الزيتون (الدرن)",
+        "en": "Olive knot"
+      },
+      "signs": {
+        "fr": [
+          "Galles ligneuses rugueuses sur rameaux, branches et parfois pétioles",
+          "Rameaux au-dessus de la galle affaiblis, feuilles petites",
+          "Apparition après grêle, gel ou taille en période humide"
+        ],
+        "ar": [
+          "أورام خشبية خشنة على الأغصان والفروع وأحياناً على أعناق الأوراق",
+          "أغصان فوق الورم ضعيفة وأوراق صغيرة",
+          "الظهور بعد البَرَد أو الصقيع أو التقليم في فترة رطبة"
+        ],
+        "en": [
+          "Rough woody galls on twigs, branches and sometimes petioles",
+          "Shoots above the gall weakened, with small leaves",
+          "Appears after hail, frost or pruning in wet weather"
+        ]
+      },
+      "confusion": [
+        "cals de cicatrisation normaux après taille"
+      ],
+      "organic": {
+        "fr": "Cuivre après chaque événement blessant (grêle, gel, récolte mécanique, taille). Supprimez les rameaux les plus galeux.",
+        "ar": "النحاس بعد كل حدث جارح (بَرَد، صقيع، جني آلي، تقليم). أزل الأغصان الأكثر إصابة بالأورام.",
+        "en": "Copper after every wounding event (hail, frost, mechanical harvest, pruning). Remove the most heavily galled shoots."
+      },
+      "conventional": {
+        "fr": "Il n'existe pas de bactéricide curatif. Le cuivre est préventif, appliqué sur plaie fraîche.",
+        "ar": "لا يوجد مبيد بكتيري شافٍ. النحاس وقائي، يوضع على جرح طري.",
+        "en": "There is no curative bactericide. Copper is preventive, applied on fresh wounds."
+      },
+      "prevention": {
+        "fr": "Taillez par temps sec et annoncé sec sur 48 h. Désinfectez les outils. Ne taillez jamais juste avant une pluie.",
+        "ar": "قلّم في جو جاف ومتوقع جفافه لـ48 ساعة. عقّم الأدوات. لا تقلّم أبداً قبل المطر مباشرة.",
+        "en": "Prune in dry weather with 48 h of dry forecast. Disinfect tools. Never prune just before rain."
+      },
+      "guide": [
+        {
+          "s": 8,
+          "fr": "Repérez les galles en hiver, quand l'arbre est le plus lisible.",
+          "ar": "حدد الأورام في الشتاء، عندما تكون الشجرة أوضح للقراءة.",
+          "en": "Spot the galls in winter, when the tree reads most clearly."
+        },
+        {
+          "s": 10,
+          "fr": "Coupez les rameaux porteurs et sortez-les du verger — ne les laissez pas au sol.",
+          "ar": "اقطع الأغصان الحاملة وأخرجها من البستان — لا تتركها على الأرض.",
+          "en": "Cut out the carrier shoots and take them out of the orchard — don't leave them on the ground."
+        },
+        {
+          "s": 8,
+          "fr": "Passez le cuivre dans les 24 h suivant la taille, avant que la bactérie n'entre par les plaies.",
+          "ar": "طبّق النحاس خلال 24 ساعة بعد التقليم، قبل دخول البكتيريا من الجروح.",
+          "en": "Apply copper within 24 h of pruning, before the bacterium enters through the wounds."
+        }
+      ]
+    },
+    {
+      "id": "olive_psyllid",
+      "type": "pest",
+      "severity": "medium",
+      "latin": "Euphyllura olivina",
+      "name": {
+        "fr": "Psylle de l'olivier",
+        "ar": "بسيلا الزيتون",
+        "en": "Olive psyllid"
+      },
+      "signs": {
+        "fr": [
+          "Amas cotonneux blancs sur les inflorescences et les jeunes pousses",
+          "Miellat collant, puis fumagine noire",
+          "Coulure de fleurs, nouaison faible"
+        ],
+        "ar": [
+          "كتل قطنية بيضاء على النورات والبراعم الحديثة",
+          "ندوة عسلية لزجة ثم عفن أسود",
+          "تساقط الأزهار وضعف العقد"
+        ],
+        "en": [
+          "White cottony masses on flower clusters and young shoots",
+          "Sticky honeydew, then black sooty mould",
+          "Flower drop and poor fruit set"
+        ]
+      },
+      "confusion": [
+        "cochenille farineuse (amas plus localisés sur le bois)"
+      ],
+      "organic": {
+        "fr": "Lavage à forte pression d'eau, savon noir, huile de paraffine hors floraison. Les auxiliaires régulent souvent seuls.",
+        "ar": "الغسل بضغط ماء قوي، الصابون الأسود، زيت البارافين خارج فترة الإزهار. الأعداء الطبيعية غالباً تنظمه وحدها.",
+        "en": "High-pressure water wash, black soap, paraffin oil outside flowering. Natural enemies usually keep it in check."
+      },
+      "conventional": {
+        "fr": "Intervention rarement justifiée. Si l'attaque menace la floraison, traitez avant l'ouverture des fleurs, jamais pendant.",
+        "ar": "التدخل نادراً ما يكون مبرراً. إذا هدد الهجوم الإزهار، عالج قبل تفتح الأزهار، وليس أثناءه أبداً.",
+        "en": "Rarely worth treating. If the attack threatens bloom, spray before flowers open, never during."
+      },
+      "prevention": {
+        "fr": "Évitez les excès d'azote qui produisent des pousses tendres, et maintenez une haie fleurie pour les auxiliaires.",
+        "ar": "تجنب فائض الآزوت الذي ينتج براعم طرية، وحافظ على سياج مزهر للأعداء الطبيعية.",
+        "en": "Avoid the nitrogen excess that produces soft shoots, and keep a flowering hedge for beneficials."
+      },
+      "guide": [
+        {
+          "s": 8,
+          "fr": "Écartez l'amas cotonneux du doigt : les larves vertes mobiles en dessous confirment le psylle.",
+          "ar": "أبعد الكتلة القطنية بإصبعك: اليرقات الخضراء المتحركة تحتها تؤكد البسيلا.",
+          "en": "Part the cottony mass with a finger: mobile green nymphs underneath confirm psyllid."
+        },
+        {
+          "s": 10,
+          "fr": "Comptez les inflorescences occupées sur 10 arbres. Sous 10 %, ne traitez pas.",
+          "ar": "عد النورات المصابة على 10 أشجار. تحت 10%، لا تعالج.",
+          "en": "Count occupied flower clusters on 10 trees. Below 10%, don't treat."
+        },
+        {
+          "s": 8,
+          "fr": "Un lavage à l'eau sous pression suffit dans la majorité des cas.",
+          "ar": "الغسل بالماء تحت الضغط يكفي في أغلب الحالات.",
+          "en": "A high-pressure water wash is enough in most cases."
+        }
+      ]
+    },
+    {
+      "id": "olive_boron",
+      "type": "physiological",
+      "severity": "medium",
+      "latin": "Carence en bore",
+      "name": {
+        "fr": "Carence en bore",
+        "ar": "نقص البور",
+        "en": "Boron deficiency"
+      },
+      "signs": {
+        "fr": [
+          "Feuilles apicales déformées, courtes, en cuillère, avec extrémité jaune-orangé",
+          "Rameaux en balai de sorcière, entre-nœuds courts",
+          "Fruits bosselés en « face de singe », chute des jeunes olives"
+        ],
+        "ar": [
+          "أوراق قمية مشوهة، قصيرة، على شكل ملعقة، بطرف أصفر-برتقالي",
+          "أغصان على شكل مكنسة، سلاميات قصيرة",
+          "ثمار متعرجة «وجه القرد»، وتساقط الزيتون الصغير"
+        ],
+        "en": [
+          "Deformed, short, spoon-shaped apical leaves with a yellow-orange tip",
+          "Witches'-broom shoots with short internodes",
+          "Bumpy 'monkey-face' fruit, young olive drop"
+        ]
+      },
+      "confusion": [
+        "dégâts d'herbicide hormonal (déformation similaire mais sur tout l'arbre d'un coup)"
+      ],
+      "organic": {
+        "fr": "Apport foliaire de borate avant floraison, en deux passages espacés. Le bore est très vite toxique en excès : ne doublez jamais la dose.",
+        "ar": "رش ورقي بالبورات قبل الإزهار، في مرتين متباعدتين. البور يصبح ساماً بسرعة عند الإفراط: لا تضاعف الجرعة أبداً.",
+        "en": "Foliar borate before flowering, in two spaced applications. Boron turns toxic very quickly in excess — never double the rate."
+      },
+      "conventional": {
+        "fr": "Correction au sol sur analyse foliaire uniquement. Sans analyse, restez en foliaire.",
+        "ar": "التصحيح في التربة على أساس تحليل الأوراق فقط. بدون تحليل، ابق في الرش الورقي.",
+        "en": "Soil correction only on the basis of a leaf analysis. Without one, stay foliar."
+      },
+      "prevention": {
+        "fr": "Analyse foliaire tous les deux ans en juillet. Les sols sableux et très calcaires du Maroc oriental sont les plus exposés.",
+        "ar": "تحليل الأوراق كل سنتين في يوليوز. التربة الرملية والكلسية جداً بالمغرب الشرقي هي الأكثر عرضة.",
+        "en": "Leaf analysis every two years in July. Sandy and very calcareous soils of eastern Morocco are the most exposed."
+      },
+      "guide": [
+        {
+          "s": 10,
+          "fr": "Prélevez 100 feuilles à mi-pousse de l'année, en juillet, sur 20 arbres différents.",
+          "ar": "خذ 100 ورقة من منتصف نمو السنة، في يوليوز، من 20 شجرة مختلفة.",
+          "en": "Sample 100 leaves from mid-season growth in July, across 20 different trees."
+        },
+        {
+          "s": 8,
+          "fr": "Envoyez au laboratoire : le bore se lit en ppm, la carence est franche sous 14 ppm.",
+          "ar": "أرسلها إلى المختبر: يُقرأ البور بالـppm، والنقص واضح تحت 14 ppm.",
+          "en": "Send to a lab: boron reads in ppm, deficiency is clear below 14 ppm."
+        },
+        {
+          "s": 10,
+          "fr": "Corrigez en foliaire avant floraison. Ne mélangez pas avec du cuivre le même jour.",
+          "ar": "صحح بالرش الورقي قبل الإزهار. لا تخلطه مع النحاس في نفس اليوم.",
+          "en": "Correct foliarly before flowering. Don't tank-mix with copper on the same day."
+        }
+      ]
+    }
+  ]
+}

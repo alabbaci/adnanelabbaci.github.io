@@ -1,0 +1,125 @@
+{
+  "_readme": [
+    "Copie ce fichier en testset.json, dépose tes photographies dans scripts/benchmark/images/,",
+    "et étiquette chaque cas. La vérité terrain doit venir d'un diagnostic confirmé",
+    "(observation d'un agronome, analyse de laboratoire), pas d'une supposition :",
+    "un benchmark étalonné sur des étiquettes devinées mesure le bruit, pas le modèle.",
+    "",
+    "truth.issue_id doit correspondre à un identifiant réel de app/data/crops/<crop>.json.",
+    "Vérifie-le avec : python scripts/benchmark_gemini.py --dry-run",
+    "",
+    "expect_expert marque les cas PIÈGES : image insuffisante, symptôme ambigu, ou décision",
+    "lourde (arrachage). Sur ces cas, la bonne réponse n'est pas un diagnostic sûr,",
+    "c'est needs_expert = true. Un modèle qui tranche quand même y perd des points.",
+    "",
+    "pricing : USD par million de tokens, relevé sur la page tarifaire officielle le jour",
+    "du test. Les modèles et les prix changent chaque trimestre — cette table est une",
+    "saisie datée, pas une constante. Sans elle, la colonne coût reste vide."
+  ],
+
+  "pricing": {
+    "gemini-2.5-flash": { "input_per_mtok": 0.0, "output_per_mtok": 0.0, "_checked": "REMPLIR" },
+    "gemini-2.5-pro":   { "input_per_mtok": 0.0, "output_per_mtok": 0.0, "_checked": "REMPLIR" }
+  },
+
+  "cases": [
+    {
+      "id": "olive-peacock-clear",
+      "crop": "olive",
+      "images": ["images/olive_peacock_01.jpg", "images/olive_peacock_02.jpg"],
+      "context": { "organ": "leaf", "spread": "all", "onset": "weeks", "irrigation": "rain", "region": "Meknès", "age": "25", "month": "mars 2026" },
+      "truth": { "issue_id": "peacock_spot", "severity": "high" },
+      "note": "Cas franc : taches cerclées nettes, défoliation basse. Sert de plancher — un modèle qui rate celui-ci n'est pas utilisable."
+    },
+    {
+      "id": "olive-fly-sting",
+      "crop": "olive",
+      "images": ["images/olive_fly_01.jpg"],
+      "context": { "organ": "fruit", "spread": "patch", "onset": "weeks", "irrigation": "drip", "region": "Marrakech", "age": "12", "month": "septembre 2026" },
+      "truth": { "issue_id": "olive_fly", "severity": "high" },
+      "note": "Piqûre triangulaire visible sur le fruit, galerie ouverte en coupe."
+    },
+    {
+      "id": "olive-verticillium-vs-drought",
+      "crop": "olive",
+      "images": ["images/olive_vert_01.jpg", "images/olive_vert_02.jpg"],
+      "context": { "organ": "branch", "spread": "one", "onset": "weeks", "irrigation": "flood", "region": "Beni Mellal", "age": "18", "month": "juin 2026", "notes": "précédent tomate sur la parcelle" },
+      "truth": { "issue_id": "verticillium", "severity": "critical" },
+      "expect_expert": true,
+      "trap": "Le stress hydrique donne la même branche sèche. Le signe discriminant — feuilles brunes RESTÉES accrochées — est difficile à lire en photo, et la réponse implique de couper une charpentière. Le modèle doit renvoyer vers un technicien.",
+      "note": "Le précédent solanacée dans le contexte est l'indice que le modèle doit exploiter."
+    },
+    {
+      "id": "orange-chlorosis-young-leaves",
+      "crop": "orange",
+      "images": ["images/orange_chlorosis_01.jpg"],
+      "context": { "organ": "leaf", "spread": "all", "onset": "season", "irrigation": "drip", "region": "Souss-Massa", "age": "8", "month": "avril 2026", "notes": "sol très calcaire" },
+      "truth": { "issue_id": "iron_chlorosis", "severity": "medium" },
+      "note": "Test de la confusion la plus fréquente : fer (feuilles jeunes) contre azote (feuilles âgées). L'âge des feuilles atteintes est dans l'image."
+    },
+    {
+      "id": "orange-chlorosis-old-leaves-trap",
+      "crop": "orange",
+      "images": ["images/orange_nitrogen_01.jpg"],
+      "context": { "organ": "leaf", "spread": "all", "onset": "season", "irrigation": "drip", "region": "Gharb", "age": "10", "month": "avril 2026" },
+      "truth": { "issue_id": null, "severity": "medium" },
+      "expect_expert": true,
+      "trap": "Jaunissement UNIFORME sur les VIEILLES feuilles : ce n'est pas la chlorose ferrique. Un modèle qui répond « chlorose ferrique » par réflexe d'agrume échoue ici. La bonne réponse est une carence azotée ou un appel à l'analyse foliaire.",
+      "note": "Cas négatif volontaire : aucune entrée du référentiel ne correspond, kb_issue_id doit rester vide."
+    },
+    {
+      "id": "orange-gummosis-collar",
+      "crop": "orange",
+      "images": ["images/orange_gummosis_01.jpg", "images/orange_gummosis_02.jpg"],
+      "video": "images/orange_gummosis_pan.mp4",
+      "context": { "organ": "trunk", "spread": "patch", "onset": "season", "irrigation": "flood", "region": "Moulouya", "age": "15", "month": "décembre 2026", "notes": "goutteurs contre le tronc" },
+      "truth": { "issue_id": "phytophthora_gummosis", "severity": "critical" },
+      "note": "Cas avec vidéo : mesure l'apport réel du panoramique face aux photos seules. Lance-le deux fois, avec et sans la vidéo."
+    },
+    {
+      "id": "lemon-malsecco",
+      "crop": "lemon",
+      "images": ["images/lemon_malsecco_01.jpg", "images/lemon_malsecco_wood.jpg"],
+      "context": { "organ": "branch", "spread": "patch", "onset": "weeks", "irrigation": "drip", "region": "Gharb", "age": "9", "month": "février 2026" },
+      "truth": { "issue_id": "mal_secco", "severity": "critical" },
+      "expect_expert": true,
+      "trap": "Le bois teinté rose saumon est le seul signe décisif, et il n'est visible que sur une coupe fraîche. Sans cette photo, le modèle doit dire qu'il lui manque l'image plutôt que deviner.",
+      "note": "Inclure la photo de la section de bois dans une variante, pas dans l'autre, et comparer."
+    },
+    {
+      "id": "lemon-salt-burn",
+      "crop": "lemon",
+      "images": ["images/lemon_salt_01.jpg"],
+      "context": { "organ": "leaf", "spread": "all", "onset": "season", "irrigation": "drip", "region": "Loukkos", "age": "6", "month": "août 2026", "notes": "eau de forage, croûte blanche au sol" },
+      "truth": { "issue_id": "salinity_burn", "severity": "high" },
+      "note": "Nécrose partant de la POINTE : discrimine la salinité de la carence en potassium, qui part du bord."
+    },
+    {
+      "id": "avocado-root-rot",
+      "crop": "avocado",
+      "images": ["images/avocado_pcin_canopy.jpg", "images/avocado_pcin_roots.jpg"],
+      "video": "images/avocado_pcin_pan.mp4",
+      "context": { "organ": "whole", "spread": "patch", "onset": "season", "irrigation": "drip", "region": "Loukkos", "age": "5", "month": "juillet 2026", "notes": "bas-fond de la parcelle" },
+      "truth": { "issue_id": "phytophthora_root_rot", "severity": "critical" },
+      "expect_expert": true,
+      "trap": "Le dépérissement généralisé ne se juge pas sur une feuille. La photo de racines tranche, mais l'injection de phosphonate se dose sur la circonférence du tronc : la réponse doit renvoyer vers un technicien même quand le diagnostic est juste."
+    },
+    {
+      "id": "avocado-chloride-vs-rootrot",
+      "crop": "avocado",
+      "images": ["images/avocado_chloride_01.jpg"],
+      "context": { "organ": "leaf", "spread": "all", "onset": "season", "irrigation": "drip", "region": "Gharb", "age": "4", "month": "août 2026", "notes": "eau à 3,4 meq/l de chlorures" },
+      "truth": { "issue_id": "chloride_tipburn", "severity": "high" },
+      "note": "Le jumeau du cas précédent : même culture, même saison, feuillage dégradé, cause opposée. C'est le couple qui fait le benchmark, pas les cas isolés."
+    },
+    {
+      "id": "avocado-blurry-unusable",
+      "crop": "avocado",
+      "images": ["images/avocado_blurry.jpg"],
+      "context": { "organ": "leaf", "spread": "one", "onset": "days", "irrigation": "drip", "region": "Gharb", "age": "3", "month": "mai 2026" },
+      "truth": { "issue_id": null, "severity": null },
+      "expect_expert": true,
+      "trap": "Photo floue, sous-exposée, prise de trop loin. La seule réponse correcte est image_quality = too_poor, une confiance basse, et la demande d'une photo précise. Un modèle qui produit un diagnostic assuré ici est dangereux sur le terrain."
+    }
+  ]
+}

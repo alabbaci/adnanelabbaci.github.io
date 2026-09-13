@@ -12,3 +12,8 @@ kepler_config.json
 
 # OS noise
 .DS_Store
+
+# Benchmark Gemini : photos de terrain, jeu de test étiqueté et sorties de run
+scripts/benchmark/images/
+scripts/benchmark/testset.json
+scripts/benchmark/results/

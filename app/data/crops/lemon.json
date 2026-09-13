@@ -1,0 +1,153 @@
+{
+  "id": "lemon",
+  "emoji": "🍋",
+  "latin": "Citrus limon",
+  "name": { "fr": "Citronnier", "ar": "ليمون", "en": "Lemon" },
+  "note": {
+    "fr": "Le citronnier partage la plupart des problèmes de l'oranger, mais il est le seul agrume gravement exposé au mal secco, et son écorce fine encaisse mal le soleil et le sel.",
+    "ar": "الليمون يشارك البرتقال أغلب مشاكله، لكنه الحمضية الوحيدة المعرضة بشدة للمرض الجاف، ولحاؤه الرقيق يتحمل بصعوبة الشمس والملح.",
+    "en": "Lemon shares most of orange's problems, but it is the one citrus badly exposed to mal secco, and its thin bark takes sun and salt poorly."
+  },
+  "calendar": [
+    { "months": "01-03", "fr": "Période à risque mal secco : ne taillez pas en temps humide. Blanchiment des troncs exposés.", "ar": "فترة خطر المرض الجاف: لا تقلّم في جو رطب. تبييض الجذوع المعرضة.", "en": "Mal secco risk window: don't prune in wet weather. Whitewash exposed trunks." },
+    { "months": "04-06", "fr": "Floraison principale et nouaison. Surveillance de l'acarien des bourgeons.", "ar": "الإزهار الرئيسي والعقد. مراقبة أكاروس البراعم.", "en": "Main bloom and fruit set. Watch for bud mite." },
+    { "months": "07-09", "fr": "Chaleur : risque de brûlure des fruits et d'accumulation de sel. Lessivage des sols salés.", "ar": "الحرارة: خطر حروق الثمار وتراكم الملح. غسل التربة المالحة.", "en": "Heat: fruit sunburn and salt build-up risk. Leach saline soils." },
+    { "months": "10-12", "fr": "Récolte échelonnée, contrôle du collet avant les pluies.", "ar": "جني متدرج، ومراقبة الطوق قبل الأمطار.", "en": "Staggered harvest, collar check before the rains." }
+  ],
+  "issues": [
+    {
+      "id": "mal_secco",
+      "type": "fungal",
+      "severity": "critical",
+      "latin": "Plenodomus tracheiphilus (Phoma tracheiphila)",
+      "name": { "fr": "Mal secco", "ar": "المرض الجاف", "en": "Mal secco" },
+      "signs": {
+        "fr": ["Dessèchement descendant : la pointe du rameau meurt d'abord, puis la branche", "Nervures des jeunes feuilles éclaircies avant le flétrissement", "Bois teinté rose saumon à orangé en coupe — signe décisif", "Rejets qui repartent du porte-greffe pendant que la charpente meurt"],
+        "ar": ["جفاف نازل: طرف الغصن يموت أولاً ثم الفرع", "عروق الأوراق الحديثة تفتح لونها قبل الذبول", "الخشب متلون بالوردي السلموني إلى البرتقالي عند القطع — علامة حاسمة", "نموات تنطلق من الأصل بينما يموت الهيكل"],
+        "en": ["Dieback from the top down: the shoot tip dies first, then the branch", "Veins of young leaves clearing before wilt", "Wood stained salmon-pink to orange in cross-section — the decisive sign", "Suckers pushing from the rootstock while the scaffold dies"]
+      },
+      "confusion": ["verticilliose (bois brun, pas rose saumon)", "gel hivernal (dégâts uniformes sur tout le verger, pas arbre par arbre)"],
+      "organic": {
+        "fr": "Pas de curatif. Coupez 40 à 50 cm sous la dernière trace de coloration du bois, désinfectez la scie à chaque coupe, brûlez les rémanents hors du verger.",
+        "ar": "لا علاج شافٍ. اقطع 40 إلى 50 سم تحت آخر أثر لتلوّن الخشب، عقّم المنشار عند كل قطع، واحرق البقايا خارج البستان.",
+        "en": "No cure. Cut 40–50 cm below the last trace of stained wood, disinfect the saw at every cut, and burn the prunings away from the orchard."
+      },
+      "conventional": {
+        "fr": "Le cuivre en protection des plaies limite les nouvelles contaminations, sans soigner l'arbre atteint. En zone infestée, plantez des variétés tolérantes.",
+        "ar": "النحاس لحماية الجروح يحد من الإصابات الجديدة، دون علاج الشجرة المصابة. في المناطق الموبوءة، اغرس أصنافاً متحملة.",
+        "en": "Copper protecting wounds limits new infection but does not heal an affected tree. In infested areas, plant tolerant varieties."
+      },
+      "prevention": {
+        "fr": "Tout est dans la plaie : ne taillez jamais par temps humide ou venteux, protégez du vent et de la grêle, éliminez les arbres foyers sans attendre.",
+        "ar": "كل شيء في الجرح: لا تقلّم أبداً في جو رطب أو عاصف، احمِ من الريح والبَرَد، وأزل الأشجار البؤرية دون انتظار.",
+        "en": "It all happens through wounds: never prune in wet or windy weather, shelter from wind and hail, and remove source trees without delay."
+      },
+      "guide": [
+        { "s": 10, "fr": "Coupez un rameau atteint en biais et regardez la couleur du bois : rose saumon oriente vers le mal secco.", "ar": "اقطع غصناً مصاباً بشكل مائل وانظر إلى لون الخشب: الوردي السلموني يوجّه نحو المرض الجاف.", "en": "Cut an affected shoot at an angle and look at the wood colour: salmon pink points to mal secco." },
+        { "s": 10, "fr": "Remontez vers le tronc en recoupant jusqu'à trouver du bois entièrement blanc, puis descendez encore 40 cm.", "ar": "اصعد نحو الجذع بإعادة القطع حتى تجد خشباً أبيض بالكامل، ثم انزل 40 سم إضافية.", "en": "Work back toward the trunk, re-cutting until the wood is entirely white, then take another 40 cm." },
+        { "s": 8, "fr": "Trempez la lame dans l'eau de Javel entre chaque arbre. L'outil est le premier vecteur.", "ar": "اغمس النصل في ماء جافيل بين كل شجرة. الأداة هي الناقل الأول.", "en": "Dip the blade in bleach between every tree. The tool is the number-one vector." },
+        { "s": 10, "fr": "Brûlez les bois coupés. Laissés au sol, ils libèrent des spores tout l'hiver.", "ar": "احرق الأخشاب المقطوعة. إذا تُركت على الأرض، تطلق الأبواغ طوال الشتاء.", "en": "Burn the cut wood. Left on the ground it releases spores all winter." }
+      ]
+    },
+    {
+      "id": "salinity_burn",
+      "type": "physiological",
+      "severity": "high",
+      "latin": "Toxicité chlorure / sodium",
+      "name": { "fr": "Brûlure saline", "ar": "الحرق الملحي", "en": "Salt burn" },
+      "signs": {
+        "fr": ["Nécrose brune sèche à la POINTE puis au bord de la feuille, avec liseré jaune de transition", "Symptôme d'abord sur les feuilles les plus âgées", "Croûte blanchâtre en surface du sol autour des goutteurs", "Arbre entier terne, croissance ralentie sans ravageur visible"],
+        "ar": ["تنخر بني جاف في طرف الورقة ثم حافتها، مع شريط أصفر انتقالي", "العرض يظهر أولاً على الأوراق الأكبر سناً", "قشرة بيضاء على سطح التربة حول النقاطات", "الشجرة كاملة باهتة، نمو بطيء بدون حشرة ظاهرة"],
+        "en": ["Dry brown necrosis at the leaf TIP then the margin, with a yellow transition band", "Symptoms show first on the oldest leaves", "A whitish crust on the soil surface around the drippers", "The whole tree dull and slow-growing with no pest in sight"]
+      },
+      "confusion": ["carence en potassium (nécrose du bord sans pointe atteinte en premier)", "coup de sec (brûlure d'un seul côté, exposé au vent)"],
+      "organic": {
+        "fr": "Lessivage : irriguez au-delà du besoin de la plante pour repousser le sel sous la zone racinaire. Apport de matière organique et paillage pour limiter la remontée capillaire.",
+        "ar": "الغسل: اسقِ فوق حاجة النبتة لدفع الملح تحت منطقة الجذور. أضف المادة العضوية والتغطية للحد من الصعود الشعري.",
+        "en": "Leaching: irrigate beyond crop need to push salt below the root zone. Add organic matter and mulch to limit capillary rise."
+      },
+      "conventional": {
+        "fr": "Analysez l'eau (CE, chlorures, SAR) avant tout. Sur eau salée, le gypse corrige le sodium mais pas le chlorure : seul le lessivage évacue le chlorure.",
+        "ar": "حلل الماء (الناقلية، الكلوريدات، SAR) قبل كل شيء. مع الماء المالح، الجبس يصحح الصوديوم لا الكلوريد: الغسل وحده يخرج الكلوريد.",
+        "en": "Test the water first (EC, chloride, SAR). On saline water, gypsum corrects sodium but not chloride — only leaching removes chloride."
+      },
+      "prevention": {
+        "fr": "Porte-greffe tolérant au chlorure à la plantation. Irrigation fréquente et courte plutôt que rare et longue. Jamais d'irrigation par aspersion sur feuillage avec une eau chargée.",
+        "ar": "أصل متحمل للكلوريد عند الغرس. ري متكرر وقصير بدل نادر وطويل. لا ري بالرش على الأوراق أبداً بماء محمّل.",
+        "en": "A chloride-tolerant rootstock at planting. Frequent short irrigations rather than rare long ones. Never sprinkle loaded water onto foliage."
+      },
+      "guide": [
+        { "s": 10, "fr": "Regardez où commence la nécrose : la pointe d'abord oriente vers le chlorure, le bord seul vers le potassium.", "ar": "انظر أين يبدأ التنخر: الطرف أولاً يوجّه نحو الكلوريد، والحافة وحدها نحو البوتاسيوم.", "en": "Look at where the necrosis starts: tip-first points to chloride, margin-only points to potassium." },
+        { "s": 10, "fr": "Mesurez la conductivité de votre eau d'irrigation. Au-dessus de 1,5 dS/m, les agrumes décrochent.", "ar": "قس ناقلية ماء الري. فوق 1.5 dS/m، تتراجع الحوامض.", "en": "Measure your irrigation water's conductivity. Above 1.5 dS/m, citrus starts to suffer." },
+        { "s": 10, "fr": "Programmez une irrigation de lessivage : 15 à 20 % d'eau en plus sur un cycle, pas un arrosage ponctuel.", "ar": "برمج رية غسل: 15 إلى 20% ماء إضافي على دورة كاملة، وليس سقية عابرة.", "en": "Schedule a leaching irrigation: 15–20% extra water over a full cycle, not a one-off soak." },
+        { "s": 8, "fr": "Éloignez le goutteur du tronc et croisez deux goutteurs pour élargir le bulbe humide.", "ar": "أبعد النقاط عن الجذع وقاطع بين نقاطتين لتوسيع البصلة الرطبة.", "en": "Move the dripper off the trunk and overlap two emitters to widen the wetted bulb." }
+      ]
+    },
+    {
+      "id": "bud_mite",
+      "type": "pest",
+      "severity": "medium",
+      "latin": "Aceria sheldoni",
+      "name": { "fr": "Acarien des bourgeons", "ar": "أكاروس البراعم", "en": "Citrus bud mite" },
+      "signs": {
+        "fr": ["Fruits difformes, en doigt de gant, bosselés ou fendus", "Bourgeons avortés, pousses en éventail multiples", "Fleurs déformées avec pétales soudés"],
+        "ar": ["ثمار مشوهة، على شكل إصبع قفاز، متعرجة أو متشققة", "براعم مجهضة، ونموات متعددة على شكل مروحة", "أزهار مشوهة بتويجات ملتحمة"],
+        "en": ["Misshapen fruit — finger-like, lumpy or split", "Aborted buds and multiple fan-shaped shoots", "Distorted flowers with fused petals"]
+      },
+      "confusion": ["dégâts d'herbicide hormonal", "carence en bore (déformation des feuilles plus que des fruits)"],
+      "organic": {
+        "fr": "Soufre mouillable hors des fortes chaleurs, ou huile de paraffine. L'acarien vit caché sous les écailles du bourgeon : il faut mouiller à refus.",
+        "ar": "الكبريت القابل للبلل خارج فترات الحر الشديد، أو زيت البارافين. الأكاروس يعيش مختبئاً تحت حراشف البرعم: يجب الترطيب حتى السيلان.",
+        "en": "Wettable sulphur outside hot spells, or paraffin oil. The mite hides under bud scales, so spray to run-off."
+      },
+      "conventional": {
+        "fr": "Acaricide homologué agrumes, positionné avant la floraison, quand les bourgeons sont encore accessibles.",
+        "ar": "مبيد أكاروسي مرخص للحوامض، يُوضع قبل الإزهار حين تكون البراعم لا تزال متاحة.",
+        "en": "A citrus-registered acaricide, timed before bloom while the buds are still reachable."
+      },
+      "prevention": {
+        "fr": "Ne jamais appliquer soufre et huile à moins de trois semaines d'intervalle, ni l'un ni l'autre au-dessus de 30 °C : la brûlure du feuillage est garantie.",
+        "ar": "لا تطبق أبداً الكبريت والزيت بفارق أقل من ثلاثة أسابيع، ولا أياً منهما فوق 30 °م: حرق الأوراق مضمون.",
+        "en": "Never apply sulphur and oil less than three weeks apart, and neither above 30 °C — leaf scorch is guaranteed."
+      },
+      "guide": [
+        { "s": 10, "fr": "Prenez un fruit difforme : si la déformation est présente mais l'écorce saine, pensez acarien plutôt que maladie.", "ar": "خذ ثمرة مشوهة: إذا كان التشوه موجوداً واللحاء سليماً، فكر في الأكاروس لا المرض.", "en": "Take a misshapen fruit: if it's deformed but the rind is healthy, think mite rather than disease." },
+        { "s": 8, "fr": "Ouvrez un bourgeon à la loupe : les acariens sont fusiformes, minuscules, à peine mobiles.", "ar": "افتح برعماً بالعدسة: الأكاروسات مغزلية، دقيقة جداً، بالكاد متحركة.", "en": "Open a bud under a hand lens: the mites are spindle-shaped, tiny and barely mobile." },
+        { "s": 10, "fr": "Traitez avant floraison, au soufre, un matin frais. Après nouaison, le fruit difforme ne se corrige plus.", "ar": "عالج قبل الإزهار بالكبريت في صباح بارد. بعد العقد، الثمرة المشوهة لا تُصحح.", "en": "Treat before bloom with sulphur on a cool morning. After fruit set, a deformed fruit can't be fixed." }
+      ]
+    },
+    {
+      "id": "citrus_sooty_mould",
+      "type": "fungal",
+      "severity": "low",
+      "latin": "Capnodium spp. (fumagine)",
+      "name": { "fr": "Fumagine", "ar": "العفن الأسود (الفوماجين)", "en": "Sooty mould" },
+      "signs": {
+        "fr": ["Dépôt noir poudreux qui s'essuie au doigt, sur feuilles et fruits", "Surface collante sous le dépôt", "Photosynthèse réduite, fruits sales et déclassés"],
+        "ar": ["ترسب أسود مسحوقي يُمسح بالإصبع، على الأوراق والثمار", "سطح لزج تحت الترسب", "تقلص التمثيل الضوئي، وثمار متسخة ومرفوضة"],
+        "en": ["A black powdery deposit that wipes off with a finger, on leaves and fruit", "A sticky surface underneath the deposit", "Reduced photosynthesis, dirty and downgraded fruit"]
+      },
+      "confusion": ["poussière et pollution (ne colle pas, pas de miellat dessous)"],
+      "organic": {
+        "fr": "La fumagine n'est pas le problème : c'est le symptôme. Traitez l'insecte qui produit le miellat — cochenille, aleurode ou puceron — et le noir partira au lavage.",
+        "ar": "العفن الأسود ليس المشكلة: إنه العَرَض. عالج الحشرة المنتجة للندوة العسلية — قشرية أو ذبابة بيضاء أو منّ — وسيزول السواد بالغسل.",
+        "en": "Sooty mould is not the problem — it's the symptom. Treat the honeydew producer (scale, whitefly or aphid) and the black will wash off."
+      },
+      "conventional": {
+        "fr": "Aucun fongicide n'est justifié. Un lavage à l'eau savonneuse nettoie les fruits avant récolte.",
+        "ar": "لا مبرر لأي مبيد فطري. غسل بماء وصابون ينظف الثمار قبل الجني.",
+        "en": "No fungicide is warranted. A soapy-water wash cleans the fruit before harvest."
+      },
+      "prevention": {
+        "fr": "Contrôlez les fourmis et aérez la frondaison. Sans miellat, pas de fumagine.",
+        "ar": "راقب النمل وهوّئ المجموع الخضري. بدون ندوة عسلية، لا عفن أسود.",
+        "en": "Control ants and open the canopy. No honeydew, no sooty mould."
+      },
+      "guide": [
+        { "s": 8, "fr": "Essuyez le dépôt noir : s'il part et laisse une surface collante, cherchez l'insecte au-dessus.", "ar": "امسح الترسب الأسود: إذا زال وترك سطحاً لزجاً، ابحث عن الحشرة في الأعلى.", "en": "Wipe the black deposit: if it comes away over a sticky surface, look for the insect above." },
+        { "s": 10, "fr": "Retournez les feuilles du niveau supérieur : la colonie productrice de miellat est toujours plus haut que le dépôt.", "ar": "اقلب أوراق المستوى الأعلى: المستعمرة المنتجة للندوة دائماً أعلى من الترسب.", "en": "Turn over leaves one level up: the honeydew colony is always above the deposit." },
+        { "s": 8, "fr": "Traitez l'insecte, pas le champignon. Le noir disparaît de lui-même aux pluies suivantes.", "ar": "عالج الحشرة لا الفطر. السواد يختفي وحده مع الأمطار الموالية.", "en": "Treat the insect, not the fungus. The black clears on its own with the next rains." }
+      ]
+    }
+  ]
+}

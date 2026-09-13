@@ -1,0 +1,188 @@
+{
+  "id": "avocado",
+  "emoji": "🥑",
+  "latin": "Persea americana",
+  "name": { "fr": "Avocatier", "ar": "أفوكادو", "en": "Avocado" },
+  "note": {
+    "fr": "Culture en forte expansion sur le Loukkos et le Gharb. Deux facteurs décident de la réussite : la qualité de l'eau (chlorures) et le drainage (Phytophthora). Tout le reste est secondaire.",
+    "ar": "زراعة في توسع كبير باللوكوس والغرب. عاملان يحددان النجاح: جودة الماء (الكلوريدات) والصرف (فيتوفتورا). وكل ما عداهما ثانوي.",
+    "en": "A fast-expanding crop on the Loukkos and Gharb. Two factors decide success: water quality (chloride) and drainage (Phytophthora). Everything else is secondary."
+  },
+  "calendar": [
+    { "months": "01-02", "fr": "Repos relatif. Vérifiez le drainage avant les grosses pluies, rechargez le paillage.", "ar": "راحة نسبية. تحقق من الصرف قبل الأمطار الغزيرة، وجدّد التغطية.", "en": "Relative rest. Check drainage before heavy rain, top up the mulch." },
+    { "months": "03-05", "fr": "Floraison et nouaison, stade le plus sensible au stress hydrique. Pas de coup de sec, pas d'excès non plus.", "ar": "الإزهار والعقد، أكثر مرحلة حساسية للإجهاد المائي. لا جفاف مفاجئ ولا إفراط أيضاً.", "en": "Bloom and set, the stage most sensitive to water stress. No drought shock — and no flooding either." },
+    { "months": "06-09", "fr": "Grossissement des fruits. Irrigation précise, lessivage des chlorures, surveillance des thrips.", "ar": "تضخم الثمار. ري دقيق، غسل الكلوريدات، مراقبة التربس.", "en": "Fruit sizing. Precise irrigation, chloride leaching, thrips monitoring." },
+    { "months": "10-12", "fr": "Récolte (Hass). Injection de phosphonate post-récolte sur vergers à antécédents Phytophthora.", "ar": "الجني (هاس). حقن الفوسفونات بعد الجني في البساتين ذات سوابق فيتوفتورا.", "en": "Harvest (Hass). Post-harvest phosphonate injection on orchards with a Phytophthora history." }
+  ],
+  "issues": [
+    {
+      "id": "phytophthora_root_rot",
+      "type": "fungal",
+      "severity": "critical",
+      "latin": "Phytophthora cinnamomi",
+      "name": { "fr": "Pourriture racinaire à Phytophthora", "ar": "تعفن الجذور (فيتوفتورا)", "en": "Phytophthora root rot" },
+      "signs": {
+        "fr": ["Feuilles petites, pâles, peu nombreuses ; l'arbre semble « transparent »", "Aucune nouvelle pousse malgré l'irrigation et la fertilisation", "Dépérissement des extrémités, puis charpentières nues", "Radicelles noires et cassantes au lieu de blanches et souples", "Fructification anormalement forte de petits fruits — l'arbre se vide"],
+        "ar": ["أوراق صغيرة، شاحبة، قليلة؛ الشجرة تبدو «شفافة»", "لا نموات جديدة رغم الري والتسميد", "تدهور الأطراف ثم فروع رئيسية عارية", "جذيرات سوداء وهشة بدل بيضاء وطرية", "إثمار قوي بشكل غير طبيعي لثمار صغيرة — الشجرة تُفرغ نفسها"],
+        "en": ["Small, pale, sparse leaves — the tree looks 'see-through'", "No new growth despite irrigation and fertilisation", "Tip dieback, then bare scaffold limbs", "Black, brittle feeder roots instead of white and flexible ones", "An abnormally heavy set of small fruit — the tree is emptying itself"]
+      },
+      "confusion": ["salinité (nécrose de la pointe des feuilles, radicelles restées blanches)", "asphyxie racinaire pure (mêmes symptômes, mais racines brunes sans odeur ni progression)"],
+      "organic": {
+        "fr": "Le drainage passe avant tout traitement. Paillage épais de bois raméal, apport de gypse et de matière organique pour relancer l'antagonisme microbien. Arrêtez de sur-irriguer : l'excès d'eau est le carburant du parasite.",
+        "ar": "الصرف قبل أي علاج. تغطية سميكة بالخشب المجروش، إضافة الجبس والمادة العضوية لإعادة إطلاق التضاد الميكروبي. توقف عن الإفراط في الري: فائض الماء هو وقود الطفيل.",
+        "en": "Drainage comes before any treatment. A thick woody mulch, plus gypsum and organic matter to restart microbial antagonism. Stop over-irrigating — excess water is the pathogen's fuel."
+      },
+      "conventional": {
+        "fr": "Injection de phosphonate dans le tronc ou application foliaire, positionnée sur les flux de sève (post-floraison et post-récolte). C'est un traitement de conservation, pas de guérison : sans drainage, l'arbre redescend.",
+        "ar": "حقن الفوسفونات في الجذع أو تطبيق ورقي، يُوضع على تدفقات النسغ (بعد الإزهار وبعد الجني). إنه علاج حفظ لا شفاء: بدون صرف، تتراجع الشجرة.",
+        "en": "Phosphonate trunk injection or foliar application, timed to sap flows (post-bloom and post-harvest). This is holding treatment, not a cure — without drainage the tree slides back."
+      },
+      "prevention": {
+        "fr": "Plantez sur butte, sur porte-greffe tolérant, avec des plants certifiés d'une pépinière indexée. Ne faites jamais circuler d'eau de ruissellement d'une parcelle atteinte vers une parcelle saine, et désinfectez les roues d'engins.",
+        "ar": "اغرس على مصطبة، على أصل متحمل، بأشتال معتمدة من مشتل مفحوص. لا تمرر أبداً مياه الجريان من قطعة مصابة إلى قطعة سليمة، وعقّم عجلات الآليات.",
+        "en": "Plant on a mound, on a tolerant rootstock, with certified trees from an indexed nursery. Never let run-off travel from an infected block to a clean one, and disinfect machinery wheels."
+      },
+      "guide": [
+        { "s": 10, "fr": "Creusez à 20-30 cm sous la couronne et sortez une poignée de radicelles.", "ar": "احفر على عمق 20-30 سم تحت التاج وأخرج حفنة من الجذيرات.", "en": "Dig 20–30 cm under the canopy edge and lift a handful of feeder roots." },
+        { "s": 10, "fr": "Des radicelles saines sont blanches et souples. Noires, cassantes comme des allumettes : c'est Phytophthora.", "ar": "الجذيرات السليمة بيضاء وطرية. السوداء الهشة كأعواد الثقاب: إنها فيتوفتورا.", "en": "Healthy feeder roots are white and flexible. Black and snapping like matchsticks means Phytophthora." },
+        { "s": 10, "fr": "Réduisez immédiatement l'irrigation d'un tiers et vérifiez qu'aucune eau ne stagne au pied.", "ar": "قلل الري فوراً بالثلث وتأكد من عدم ركود أي ماء عند القدم.", "en": "Cut irrigation by a third immediately and make sure no water is standing at the base." },
+        { "s": 10, "fr": "Étalez 15 cm de paillage grossier sous la couronne, sans toucher le tronc, puis apportez du gypse.", "ar": "افرش 15 سم من التغطية الخشنة تحت التاج، دون ملامسة الجذع، ثم أضف الجبس.", "en": "Spread 15 cm of coarse mulch under the canopy, clear of the trunk, then apply gypsum." },
+        { "s": 8, "fr": "Programmez l'injection de phosphonate avec un technicien : le dosage dépend de la circonférence du tronc.", "ar": "برمج حقن الفوسفونات مع تقني: الجرعة تعتمد على محيط الجذع.", "en": "Plan the phosphonate injection with a technician — the dose depends on trunk circumference." }
+      ]
+    },
+    {
+      "id": "chloride_tipburn",
+      "type": "physiological",
+      "severity": "high",
+      "latin": "Toxicité chlorure",
+      "name": { "fr": "Brûlure des feuilles par les chlorures", "ar": "حرق الأوراق بالكلوريدات", "en": "Chloride leaf burn" },
+      "signs": {
+        "fr": ["Pointe de la feuille brunie et sèche, nettement délimitée, sur feuilles âgées d'abord", "Progression du bord vers l'intérieur en cas d'aggravation", "Défoliation partielle en été, fruits exposés au soleil", "Aucun ravageur ni lésion sur le bois"],
+        "ar": ["طرف الورقة بني وجاف، محدد بوضوح، على الأوراق الأكبر سناً أولاً", "التقدم من الحافة نحو الداخل عند التفاقم", "تساقط جزئي للأوراق صيفاً وتعرض الثمار للشمس", "لا حشرة ولا آفة على الخشب"],
+        "en": ["A browned, dry, sharply defined leaf tip, on older leaves first", "Progressing inward from the margin as it worsens", "Partial summer defoliation leaving fruit sun-exposed", "No pest and no lesion on the wood"]
+      },
+      "confusion": ["Phytophthora (feuilles petites et pâles, mais pointes intactes ; racines noires)", "coup de chaleur (un seul côté de l'arbre, exposé)"],
+      "organic": {
+        "fr": "Lessivage programmé : un cycle d'irrigation avec 20 % d'eau en plus pour repousser les chlorures sous le bulbe racinaire. Paillage permanent pour limiter l'évaporation et la concentration des sels.",
+        "ar": "غسل مبرمج: دورة ري بـ20% ماء إضافي لدفع الكلوريدات تحت البصلة الجذرية. تغطية دائمة للحد من التبخر وتركيز الأملاح.",
+        "en": "Scheduled leaching: one irrigation cycle with 20% extra water to push chloride below the root bulb. Permanent mulch to limit evaporation and salt concentration."
+      },
+      "conventional": {
+        "fr": "L'avocatier est l'un des arbres fruitiers les plus sensibles au chlorure. Au-dessus de 3 meq/l dans l'eau d'irrigation, le problème est structurel : il faut changer de ressource en eau ou de porte-greffe, pas ajouter un produit.",
+        "ar": "الأفوكادو من أكثر الأشجار المثمرة حساسية للكلوريد. فوق 3 meq/l في ماء الري، المشكل بنيوي: يجب تغيير مصدر الماء أو الأصل، لا إضافة منتج.",
+        "en": "Avocado is among the most chloride-sensitive fruit trees. Above 3 meq/l in irrigation water the problem is structural — change the water source or the rootstock, don't add a product."
+      },
+      "prevention": {
+        "fr": "Analyse d'eau avant plantation, c'est non négociable. Porte-greffe de race mexicaine ou antillaise selon la tolérance recherchée. Fractionnez l'irrigation plutôt que d'apporter de grosses doses espacées.",
+        "ar": "تحليل الماء قبل الغرس، غير قابل للتفاوض. أصل من العرق المكسيكي أو الأنتيلي حسب التحمل المطلوب. جزّئ الري بدل جرعات كبيرة متباعدة.",
+        "en": "A water analysis before planting is non-negotiable. Mexican- or West-Indian-race rootstock depending on the tolerance you need. Split irrigations rather than large, spaced doses."
+      },
+      "guide": [
+        { "s": 10, "fr": "Comparez feuilles jeunes et âgées : la brûlure chlorure commence toujours par les plus âgées.", "ar": "قارن بين الأوراق الحديثة والقديمة: حرق الكلوريد يبدأ دائماً بالأقدم.", "en": "Compare young and old leaves: chloride burn always starts on the oldest." },
+        { "s": 10, "fr": "Vérifiez les racines avant de conclure : si elles sont blanches, ce n'est pas Phytophthora, c'est le sel.", "ar": "تحقق من الجذور قبل الاستنتاج: إذا كانت بيضاء، فليست فيتوفتورا بل الملح.", "en": "Check the roots before concluding: if they're white it isn't Phytophthora, it's salt." },
+        { "s": 10, "fr": "Faites analyser l'eau : demandez explicitement les chlorures, pas seulement la conductivité.", "ar": "حلل الماء: اطلب صراحة الكلوريدات، لا الناقلية فقط.", "en": "Get the water tested: ask explicitly for chloride, not just conductivity." },
+        { "s": 8, "fr": "Lancez un cycle de lessivage et maintenez le paillage. La feuille brûlée ne reverdira pas, mais la suivante sortira saine.", "ar": "أطلق دورة غسل وحافظ على التغطية. الورقة المحروقة لن تخضّر، لكن الموالية ستخرج سليمة.", "en": "Run a leaching cycle and keep the mulch. The burnt leaf won't recover, but the next one will come out clean." }
+      ]
+    },
+    {
+      "id": "anthracnose",
+      "type": "fungal",
+      "severity": "medium",
+      "latin": "Colletotrichum gloeosporioides",
+      "name": { "fr": "Anthracnose", "ar": "الأنثراكنوز", "en": "Anthracnose" },
+      "signs": {
+        "fr": ["Taches brun-noir rondes et légèrement creusées sur le fruit, surtout à maturation", "Lésion qui s'étend en pourriture après la récolte, pendant le mûrissement", "Chair brune sous la tache, jusqu'au noyau dans les cas avancés", "Sur feuilles : taches anguleuses brunes, chute des feuilles basses"],
+        "ar": ["بقع بنية-سوداء مستديرة وغائرة قليلاً على الثمرة، خاصة عند النضج", "آفة تتوسع إلى تعفن بعد الجني أثناء الإنضاج", "لب بني تحت البقعة، حتى النواة في الحالات المتقدمة", "على الأوراق: بقع زاويّة بنية وتساقط الأوراق السفلى"],
+        "en": ["Round, slightly sunken brown-black spots on fruit, mostly at maturity", "Lesions spreading into rot after harvest, during ripening", "Brown flesh under the spot, reaching the seed in advanced cases", "On leaves: angular brown spots and drop of the lower foliage"]
+      },
+      "confusion": ["dégâts de thrips (liège superficiel, chair saine dessous)", "cercosporiose (taches plus petites et plus nombreuses)"],
+      "organic": {
+        "fr": "Cuivre en préventif pendant les périodes humides, taille d'aération, et surtout suppression des fruits momifiés et du bois mort qui portent l'inoculum d'une saison à l'autre.",
+        "ar": "النحاس وقائياً خلال الفترات الرطبة، تقليم التهوية، وخاصة إزالة الثمار المتحنطة والخشب الميت الحاملين للعدوى من موسم لآخر.",
+        "en": "Preventive copper during wet spells, aeration pruning, and above all removal of mummified fruit and dead wood, which carry inoculum from season to season."
+      },
+      "conventional": {
+        "fr": "L'essentiel se joue à la récolte et après : cueillez avec le pédoncule, sans blesser l'épiderme, et refroidissez rapidement. La plupart des pertes par anthracnose se décident dans les heures qui suivent la cueillette.",
+        "ar": "الأساسي يُلعب عند الجني وبعده: اقطف مع العنق، دون جرح البشرة، وبرّد بسرعة. أغلب خسائر الأنثراكنوز تتحدد في الساعات التي تلي القطف.",
+        "en": "Most of it is decided at and after harvest: pick with the pedicel attached, don't bruise the skin, and cool fast. Most anthracnose losses are decided in the hours after picking."
+      },
+      "prevention": {
+        "fr": "Évitez l'irrigation par aspersion sur frondaison, récoltez par temps sec, et ne laissez jamais les fruits au soleil sur le sol après cueillette.",
+        "ar": "تجنب الري بالرش على المجموع الخضري، اجنِ في جو جاف، ولا تترك الثمار أبداً في الشمس على الأرض بعد القطف.",
+        "en": "Avoid overhead irrigation, harvest in dry weather, and never leave picked fruit sitting in the sun on the ground."
+      },
+      "guide": [
+        { "s": 8, "fr": "Coupez un fruit taché : si la chair est brune juste sous la tache, c'est l'anthracnose.", "ar": "اقطع ثمرة مبقعة: إذا كان اللب بنياً تحت البقعة مباشرة، فهو الأنثراكنوز.", "en": "Cut a spotted fruit: if the flesh is brown directly under the spot, it's anthracnose." },
+        { "s": 10, "fr": "Faites le tour de l'arbre et enlevez tous les fruits momifiés et le bois mort : c'est là que le champignon passe l'hiver.", "ar": "درْ حول الشجرة وأزل كل الثمار المتحنطة والخشب الميت: هناك يقضي الفطر الشتاء.", "en": "Walk the tree and strip every mummified fruit and dead branch — that's where the fungus overwinters." },
+        { "s": 10, "fr": "À la récolte, coupez au sécateur en laissant le pédoncule. Un fruit arraché ouvre une porte d'entrée.", "ar": "عند الجني، اقطع بالمقص مع ترك العنق. الثمرة المنزوعة تفتح باب دخول.", "en": "At harvest, cut with secateurs leaving the pedicel on. A pulled fruit opens a doorway." },
+        { "s": 8, "fr": "Mettez les fruits à l'ombre puis au frais dans l'heure. La chaleur au champ accélère la pourriture.", "ar": "ضع الثمار في الظل ثم في البرودة خلال ساعة. الحرارة في الحقل تسرّع التعفن.", "en": "Get fruit into shade, then into the cold, within the hour. Field heat accelerates the rot." }
+      ]
+    },
+    {
+      "id": "persea_mite_thrips",
+      "type": "pest",
+      "severity": "medium",
+      "latin": "Oligonychus perseae / Scirtothrips spp.",
+      "name": { "fr": "Acarien du persea et thrips", "ar": "أكاروس الأفوكادو والتربس", "en": "Persea mite and thrips" },
+      "signs": {
+        "fr": ["Taches circulaires décolorées le long des nervures, en face inférieure, avec une fine toile", "Feuillage bronzé, chute prématurée exposant les fruits au soleil", "Thrips : liège argenté-brun en surface du fruit, aspect « peau de crocodile », chair intacte dessous"],
+        "ar": ["بقع دائرية باهتة على طول العروق في الوجه السفلي، مع نسيج عنكبوتي رقيق", "أوراق برونزية وتساقط مبكر يعرض الثمار للشمس", "التربس: تفلّن فضي-بني على سطح الثمرة، مظهر «جلد التمساح»، واللب سليم تحته"],
+        "en": ["Circular discoloured patches along the veins on the underside, with fine webbing", "Bronzed foliage dropping early and exposing fruit to sun", "Thrips: silvery-brown corky scarring on the fruit skin, 'alligator skin' look, sound flesh underneath"]
+      },
+      "confusion": ["brûlure saline (pointe de feuille, pas de taches le long des nervures)", "anthracnose (lésion creusée, chair atteinte)"],
+      "organic": {
+        "fr": "Acariens prédateurs, soufre en poudrage hors fortes chaleurs, et maintien d'une couverture végétale : le sol nu et la poussière font exploser les populations d'acariens.",
+        "ar": "أكاروسات مفترسة، تعفير بالكبريت خارج فترات الحر، والحفاظ على غطاء نباتي: التربة العارية والغبار يفجّران ساكنة الأكاروس.",
+        "en": "Predatory mites, sulphur dusting outside hot spells, and keeping a cover crop — bare dusty soil makes mite populations explode."
+      },
+      "conventional": {
+        "fr": "Sur thrips, le dégât est cosmétique : la chair reste saine. L'intervention ne se justifie que sur verger d'export où le calibre visuel est payé. Sur acarien, traitez au seuil, pas au calendrier.",
+        "ar": "بالنسبة للتربس، الضرر تجميلي: اللب يبقى سليماً. التدخل يُبرَّر فقط في بستان تصدير حيث يُدفع المظهر. بالنسبة للأكاروس، عالج عند العتبة لا بالتقويم.",
+        "en": "For thrips the damage is cosmetic — the flesh stays sound. Treatment is only justified on export orchards where appearance is paid for. For mites, treat on threshold, not on a calendar."
+      },
+      "prevention": {
+        "fr": "Arrosez les pistes pour rabattre la poussière, gardez un enherbement, et évitez les insecticides à large spectre qui détruisent les prédateurs et provoquent les pullulations suivantes.",
+        "ar": "رشّ المسالك لإسقاط الغبار، حافظ على تعشيب، وتجنب المبيدات واسعة الطيف التي تدمر المفترسات وتسبب التكاثرات الموالية.",
+        "en": "Damp down the tracks to kill dust, keep a grass cover, and avoid broad-spectrum insecticides, which wipe out predators and cause the next outbreak."
+      },
+      "guide": [
+        { "s": 10, "fr": "Retournez une feuille bronzée et regardez à la loupe le long des nervures : les colonies s'installent sous une toile fine.", "ar": "اقلب ورقة برونزية وانظر بالعدسة على طول العروق: المستعمرات تستقر تحت نسيج رقيق.", "en": "Turn over a bronzed leaf and look along the veins with a hand lens: colonies sit under fine webbing." },
+        { "s": 10, "fr": "Cherchez aussi les prédateurs : s'il y a des acariens prédateurs mobiles, ne traitez pas, laissez faire.", "ar": "ابحث أيضاً عن المفترسات: إذا وُجدت أكاروسات مفترسة متحركة، لا تعالج ودعها تعمل.", "en": "Look for the predators too: if mobile predatory mites are present, don't spray — let them work." },
+        { "s": 8, "fr": "Sur fruit liégeux, grattez la surface : si la chair dessous est saine, le dégât est cosmétique.", "ar": "على ثمرة متفلّنة، اكشط السطح: إذا كان اللب تحته سليماً، فالضرر تجميلي.", "en": "On corky fruit, scratch the surface: if the flesh underneath is sound, the damage is cosmetic." }
+      ]
+    },
+    {
+      "id": "zinc_deficiency",
+      "type": "physiological",
+      "severity": "medium",
+      "latin": "Carence en zinc",
+      "name": { "fr": "Carence en zinc", "ar": "نقص الزنك", "en": "Zinc deficiency" },
+      "signs": {
+        "fr": ["Feuilles terminales petites, étroites, groupées en rosette", "Marbrure jaune entre les nervures sur les jeunes feuilles", "Entre-nœuds très courts, pousses en touffe", "Fruits ronds et courts au lieu d'être piriformes"],
+        "ar": ["أوراق طرفية صغيرة وضيقة مجتمعة على شكل وردة", "تبرقش أصفر بين العروق على الأوراق الحديثة", "سلاميات قصيرة جداً، ونموات على شكل خصلة", "ثمار مستديرة وقصيرة بدل الشكل الكمثري"],
+        "en": ["Small, narrow terminal leaves bunched into a rosette", "Yellow interveinal mottling on young leaves", "Very short internodes and tufted shoots", "Round, short fruit instead of pear-shaped"]
+      },
+      "confusion": ["chlorose ferrique (motif internervaire plus net, sans rosette ni entre-nœuds courts)"],
+      "organic": {
+        "fr": "Apport foliaire de sulfate de zinc sur pousse tendre, en deux passages au printemps. Le zinc migre mal : le foliaire reste le moyen le plus sûr sur sol calcaire.",
+        "ar": "رش ورقي بكبريتات الزنك على نمو طري، في مرتين ربيعاً. الزنك ينتقل بصعوبة: الرش الورقي يبقى الوسيلة الأضمن في التربة الكلسية.",
+        "en": "Foliar zinc sulphate on soft growth, twice in spring. Zinc moves poorly in the plant — foliar stays the surest route on calcareous soil."
+      },
+      "conventional": {
+        "fr": "Correction au sol peu efficace en sol calcaire : le zinc y est immédiatement bloqué. Vérifiez aussi le pH et l'excès de phosphore, qui induisent la carence.",
+        "ar": "التصحيح في التربة قليل الفعالية في التربة الكلسية: الزنك يُحجب فوراً. تحقق أيضاً من الـpH وفائض الفوسفور، فهما يُحدثان النقص.",
+        "en": "Soil correction is weak on calcareous soil — zinc is locked up immediately. Also check pH and phosphorus excess, both of which induce the deficiency."
+      },
+      "prevention": {
+        "fr": "Analyse foliaire annuelle. N'abusez pas des engrais phosphatés, qui bloquent le zinc. Maintenez de la matière organique.",
+        "ar": "تحليل ورقي سنوي. لا تفرط في الأسمدة الفوسفاتية التي تحجب الزنك. حافظ على المادة العضوية.",
+        "en": "Annual leaf analysis. Don't overdo phosphate fertilisers, which lock zinc up. Keep organic matter in the soil."
+      },
+      "guide": [
+        { "s": 10, "fr": "Comparez la taille des feuilles terminales à celle des feuilles d'il y a deux ans sur la même branche.", "ar": "قارن حجم الأوراق الطرفية بأوراق سنتين خلتا على نفس الغصن.", "en": "Compare the size of terminal leaves with leaves from two years ago on the same branch." },
+        { "s": 8, "fr": "Mesurez les entre-nœuds : sous 2 cm sur pousse de l'année, la carence est nette.", "ar": "قس السلاميات: تحت 2 سم على نمو السنة، النقص واضح.", "en": "Measure the internodes: under 2 cm on current-season growth, the deficiency is clear." },
+        { "s": 10, "fr": "Pulvérisez le zinc sur jeune pousse, le matin. Sur feuille âgée et cireuse, l'absorption est quasi nulle.", "ar": "رش الزنك على النمو الحديث، صباحاً. على ورقة قديمة وشمعية، الامتصاص شبه منعدم.", "en": "Spray zinc on young growth, in the morning. On old waxy leaves, uptake is almost nil." }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,115 @@
+{
+  "_note": "Réponses d'exemple utilisées quand aucune clé API n'est configurée. Elles illustrent le format renvoyé par le modèle — ce ne sont pas de vraies analyses.",
+  "olive": {
+    "image_quality": "good",
+    "observations": [
+      "Taches rondes de 5 à 10 mm sur la face supérieure des feuilles, brun-vert, avec un halo jaune net.",
+      "Les feuilles atteintes sont concentrées dans le bas et l'intérieur de la frondaison.",
+      "Plusieurs rameaux sont déjà dégarnis sur leur partie inférieure."
+    ],
+    "verdict": "Œil de paon",
+    "verdict_latin": "Venturia oleaginea",
+    "kb_issue_id": "peacock_spot",
+    "confidence": 0.82,
+    "severity": "high",
+    "needs_expert": false,
+    "needs_expert_reason": "",
+    "differentials": [
+      { "name": "Carence en azote", "how_to_tell": "Le jaunissement serait uniforme sur toute la feuille, sans tache ronde ni halo." },
+      { "name": "Cercosporiose", "how_to_tell": "Les taches seraient grises et sur la face inférieure de la feuille, pas sur le dessus." }
+    ],
+    "actions_now": [
+      "Faites le test à la soude sur 100 feuilles pour mesurer les taches latentes avant de traiter.",
+      "Ouvrez le centre de l'arbre à la taille : supprimez les gourmands et les branches qui se croisent.",
+      "Ramassez et sortez les feuilles tombées au pied des arbres les plus atteints."
+    ],
+    "treatment_organic": "Deux passages de cuivre : un après la récolte, un à la reprise de végétation. Mouillez bien la face supérieure des feuilles, par temps sec et sans vent.",
+    "treatment_conventional": "Si la pression reste forte après deux saisons humides, alternez le cuivre avec un fongicide de contact homologué sur olivier.",
+    "prevention": "Aérez par la taille chaque hiver, supprimez l'irrigation par aspersion sur la frondaison et évitez les excès d'azote qui allongent la période de feuilles tendres.",
+    "phi_warning": "Vérifiez le délai avant récolte sur l'étiquette du produit homologué ONSSA avant tout traitement sur arbre en production."
+  },
+  "orange": {
+    "image_quality": "good",
+    "observations": [
+      "Jaunissement entre les nervures sur les feuilles les plus jeunes, les nervures restant nettement vertes.",
+      "Les feuilles âgées du bas de l'arbre sont restées d'un vert normal.",
+      "Aucune gomme ni nécrose visible sur le tronc et le collet."
+    ],
+    "verdict": "Chlorose ferrique induite par le calcaire",
+    "verdict_latin": "Carence en fer",
+    "kb_issue_id": "iron_chlorosis",
+    "confidence": 0.78,
+    "severity": "medium",
+    "needs_expert": false,
+    "needs_expert_reason": "",
+    "differentials": [
+      { "name": "Carence en azote", "how_to_tell": "Le jaunissement toucherait d'abord les VIEILLES feuilles, et serait uniforme au lieu d'épargner les nervures." },
+      { "name": "Excès d'eau / asphyxie racinaire", "how_to_tell": "Le jaunissement serait global, sans motif internervaire, et le sol resterait détrempé entre deux irrigations." }
+    ],
+    "actions_now": [
+      "Vérifiez l'âge des feuilles jaunes : si ce sont les plus jeunes, la piste du fer se confirme.",
+      "Contrôlez que l'eau ne stagne pas au pied : des racines noyées n'absorbent pas le fer même disponible.",
+      "Programmez un apport de chélate de fer au sol, en fertigation, plutôt qu'un simple passage foliaire."
+    ],
+    "treatment_organic": "Chélate de fer Fe-EDDHA au sol par la fertigation, à la reprise de végétation. Sur sol calcaire, les autres chélates sont bloqués par le pH et ne tiennent pas.",
+    "treatment_conventional": "Acidifiez l'eau d'irrigation et augmentez la matière organique pour débloquer le fer durablement. Le foliaire ne fait que verdir les feuilles déjà formées.",
+    "prevention": "À la replantation, choisissez un porte-greffe tolérant au calcaire, et surveillez les bicarbonates de l'eau d'irrigation par une analyse annuelle.",
+    "phi_warning": ""
+  },
+  "lemon": {
+    "image_quality": "usable",
+    "observations": [
+      "Nécrose brune sèche à la pointe des feuilles, nettement délimitée, avec un liseré jaune de transition.",
+      "Les feuilles les plus âgées sont les plus touchées ; les jeunes pousses restent saines.",
+      "Une croûte blanchâtre est visible en surface du sol autour des goutteurs."
+    ],
+    "verdict": "Brûlure saline (toxicité chlorure)",
+    "verdict_latin": "Toxicité chlorure / sodium",
+    "kb_issue_id": "salinity_burn",
+    "confidence": 0.71,
+    "severity": "high",
+    "needs_expert": true,
+    "needs_expert_reason": "Une analyse d'eau et de sol est nécessaire avant d'engager des frais : le diagnostic visuel ne distingue pas le chlorure du sodium, et la correction n'est pas la même.",
+    "differentials": [
+      { "name": "Carence en potassium", "how_to_tell": "La nécrose partirait du bord de la feuille sans que la pointe soit touchée en premier." },
+      { "name": "Coup de sec / vent", "how_to_tell": "La brûlure serait concentrée sur un seul côté de l'arbre, celui exposé au vent dominant." }
+    ],
+    "actions_now": [
+      "Faites analyser l'eau d'irrigation en demandant explicitement les chlorures, pas seulement la conductivité.",
+      "Lancez un cycle d'irrigation de lessivage avec 15 à 20 % d'eau en plus pour repousser le sel sous les racines.",
+      "Éloignez les goutteurs du tronc et croisez-en deux pour élargir le bulbe humide."
+    ],
+    "treatment_organic": "Lessivage programmé plus paillage permanent pour limiter l'évaporation et la remontée des sels en surface.",
+    "treatment_conventional": "Le gypse corrige le sodium mais pas le chlorure. Au-dessus de 1,5 dS/m sur l'eau d'irrigation, la réponse est de changer de ressource en eau ou de porte-greffe.",
+    "prevention": "Irrigations fréquentes et courtes plutôt que rares et longues, jamais d'aspersion sur le feuillage avec une eau chargée, et porte-greffe tolérant au chlorure à la replantation.",
+    "phi_warning": ""
+  },
+  "avocado": {
+    "image_quality": "good",
+    "observations": [
+      "Feuillage clairsemé et pâle, feuilles nettement plus petites que la normale : l'arbre paraît transparent.",
+      "Dessèchement des extrémités de rameaux, sans lésion ni gomme sur le bois.",
+      "Charge de petits fruits anormalement élevée par rapport à la vigueur de l'arbre."
+    ],
+    "verdict": "Pourriture racinaire à Phytophthora",
+    "verdict_latin": "Phytophthora cinnamomi",
+    "kb_issue_id": "phytophthora_root_rot",
+    "confidence": 0.64,
+    "severity": "critical",
+    "needs_expert": true,
+    "needs_expert_reason": "Le diagnostic doit être confirmé en creusant et en examinant les radicelles, et l'injection de phosphonate se dose selon la circonférence du tronc : cela demande un technicien.",
+    "differentials": [
+      { "name": "Brûlure par les chlorures", "how_to_tell": "Les pointes de feuilles seraient brunes et sèches, et les radicelles resteraient blanches et souples." },
+      { "name": "Asphyxie racinaire seule", "how_to_tell": "Les racines seraient brunes et molles mais sans progression, et le symptôme suivrait exactement les zones où l'eau stagne." }
+    ],
+    "actions_now": [
+      "Creusez à 20-30 cm sous la couronne et sortez une poignée de radicelles : noires et cassantes confirme Phytophthora.",
+      "Réduisez l'irrigation d'un tiers dès aujourd'hui et vérifiez qu'aucune eau ne stagne au pied.",
+      "Étalez 15 cm de paillage grossier sous la couronne, sans toucher le tronc."
+    ],
+    "treatment_organic": "Le drainage passe avant tout traitement. Paillage épais de bois raméal, gypse et matière organique pour relancer l'antagonisme microbien du sol.",
+    "treatment_conventional": "Injection de phosphonate dans le tronc, positionnée sur les flux de sève après floraison et après récolte. C'est un traitement de conservation : sans correction du drainage, l'arbre redescend.",
+    "prevention": "Plantation sur butte, porte-greffe tolérant, plants certifiés, et surtout aucune circulation d'eau de ruissellement d'une parcelle atteinte vers une parcelle saine.",
+    "phi_warning": "Toute injection sur arbre en production se planifie avec un technicien, en respectant le délai avant récolte du produit homologué."
+  }
+}

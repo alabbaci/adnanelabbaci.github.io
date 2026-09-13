@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Chajra">
+  <rect width="512" height="512" rx="96" fill="#1b5e20"/>
+  <path d="M256 400V270" stroke="#c8a26a" stroke-width="26" stroke-linecap="round"/>
+  <path d="M256 400c-34 0-62-10-84-28M256 400c34 0 62-10 84-28" stroke="#c8a26a" stroke-width="18" stroke-linecap="round" fill="none"/>
+  <circle cx="256" cy="196" r="96" fill="#5aa347"/>
+  <circle cx="176" cy="236" r="66" fill="#4c9440"/>
+  <circle cx="336" cy="236" r="66" fill="#6bb056"/>
+  <circle cx="212" cy="168" r="20" fill="#f0a92b"/>
+  <circle cx="300" cy="214" r="16" fill="#f0a92b"/>
+</svg>

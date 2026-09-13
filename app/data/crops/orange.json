@@ -1,0 +1,186 @@
+{
+  "id": "orange",
+  "emoji": "🍊",
+  "latin": "Citrus sinensis",
+  "name": { "fr": "Oranger", "ar": "برتقال", "en": "Orange" },
+  "note": {
+    "fr": "Le Souss-Massa, le Gharb et la Moulouya concentrent le verger d'agrumes. Sur sol calcaire et eau chargée, la chlorose et la gommose pèsent plus lourd que les ravageurs.",
+    "ar": "سوس ماسة والغرب وملوية تركز فيها بساتين الحوامض. في التربة الكلسية والماء المحمّل، الاصفرار والتصمغ أثقل من الحشرات.",
+    "en": "Souss-Massa, Gharb and Moulouya hold most of Morocco's citrus. On calcareous soil and loaded water, chlorosis and gummosis cost more than pests do."
+  },
+  "calendar": [
+    { "months": "01-02", "fr": "Taille légère après récolte, traitement huile blanche contre cochenilles.", "ar": "تقليم خفيف بعد الجني، معالجة بالزيت الأبيض ضد الحشرات القشرية.", "en": "Light post-harvest pruning, white-oil spray against scale." },
+    { "months": "03-04", "fr": "Floraison. Correction de la chlorose ferrique au chélate. Surveillance pucerons (vecteurs tristeza).", "ar": "الإزهار. تصحيح الاصفرار الحديدي بالمخلّب. مراقبة المنّ (ناقل التريستيزا).", "en": "Bloom. Correct iron chlorosis with chelate. Watch aphids (tristeza vectors)." },
+    { "months": "05-08", "fr": "Poussées de sève : pic de mineuse des agrumes. Irrigation régulière, évitez les à-coups.", "ar": "دفعات النمو: ذروة حفار أوراق الحوامض. ري منتظم، تجنب التذبذب.", "en": "Growth flushes: citrus leafminer peak. Steady irrigation, avoid swings." },
+    { "months": "09-12", "fr": "Maturation et récolte. Contrôle collet et drainage avant les pluies.", "ar": "النضج والجني. مراقبة الطوق والصرف قبل الأمطار.", "en": "Ripening and harvest. Check the collar and drainage before the rains." }
+  ],
+  "issues": [
+    {
+      "id": "phytophthora_gummosis",
+      "type": "fungal",
+      "severity": "critical",
+      "latin": "Phytophthora citrophthora / P. nicotianae",
+      "name": { "fr": "Gommose à Phytophthora", "ar": "التصمغ (فيتوفتورا)", "en": "Phytophthora gummosis" },
+      "signs": {
+        "fr": ["Exsudat de gomme ambrée au collet ou sur le tronc", "Écorce brunie, humide, qui se décolle en plaque", "Arbre entier qui jaunit, feuilles petites, nervures vertes puis chute"],
+        "ar": ["إفراز صمغ عنبري عند الطوق أو على الجذع", "لحاء بني رطب ينفصل على شكل رقعة", "اصفرار الشجرة كاملة، أوراق صغيرة، عروق خضراء ثم تساقط"],
+        "en": ["Amber gum oozing at the collar or on the trunk", "Browned, wet bark that peels away in a patch", "Whole tree yellowing, small leaves, green veins, then drop"]
+      },
+      "confusion": ["gommose physiologique après blessure (gomme claire, écorce saine dessous)", "chlorose ferrique (pas de gomme, pas de nécrose d'écorce)"],
+      "organic": {
+        "fr": "Dégagez le collet, laissez sécher à l'air. Curetez l'écorce nécrosée jusqu'au bois sain et badigeonnez au cuivre. Corrigez le drainage en priorité.",
+        "ar": "اكشف الطوق واتركه يجف في الهواء. اكشط اللحاء المتنخر حتى الخشب السليم وادهن بالنحاس. صحح الصرف كأولوية.",
+        "en": "Expose the collar and let it air-dry. Scrape necrotic bark back to sound wood and paint with copper. Fix drainage first."
+      },
+      "conventional": {
+        "fr": "Traitement à base de phosphonate ou de métalaxyl homologué agrumes, en badigeon ou au sol. Sans correction du drainage, la reprise est temporaire.",
+        "ar": "معالجة بالفوسفونات أو الميتالاكسيل المرخص للحوامض، دهناً أو في التربة. بدون تصحيح الصرف، التحسن مؤقت.",
+        "en": "A citrus-registered phosphonate or metalaxyl product, as a paint or soil application. Without drainage correction, recovery is temporary."
+      },
+      "prevention": {
+        "fr": "Point de greffe à 25-30 cm au-dessus du sol, jamais enterré. Goutteurs écartés du tronc. Pas de butte de terre ni de paillage contre le collet.",
+        "ar": "نقطة التطعيم على 25-30 سم فوق التربة، لا تُدفن أبداً. النقاطات بعيدة عن الجذع. لا تراب ولا تغطية ملاصقة للطوق.",
+        "en": "Keep the graft union 25–30 cm above soil, never buried. Move drippers away from the trunk. No soil mound or mulch against the collar."
+      },
+      "guide": [
+        { "s": 10, "fr": "Dégagez la terre autour du collet sur 20 cm de profondeur et cherchez le point de greffe.", "ar": "أزل التراب حول الطوق على عمق 20 سم وابحث عن نقطة التطعيم.", "en": "Clear soil from around the collar to 20 cm depth and find the graft union." },
+        { "s": 10, "fr": "Grattez légèrement l'écorce suspecte : si le tissu dessous est brun et humide au lieu de vert, c'est la gommose.", "ar": "اكشط قليلاً اللحاء المشبوه: إذا كان النسيج تحته بنياً ورطباً بدل الأخضر، فهو التصمغ.", "en": "Scratch the suspect bark lightly: if the tissue underneath is brown and wet instead of green, it's gummosis." },
+        { "s": 10, "fr": "Curetez jusqu'au bois sain, en dépassant de 2 cm la zone atteinte. Désinfectez l'outil.", "ar": "اكشط حتى الخشب السليم، متجاوزاً المنطقة المصابة بـ2 سم. عقّم الأداة.", "en": "Scrape back to healthy wood, 2 cm beyond the lesion. Disinfect the tool." },
+        { "s": 10, "fr": "Badigeonnez au cuivre, puis déplacez les goutteurs à 40 cm du tronc et laissez le collet à l'air.", "ar": "ادهن بالنحاس، ثم حرّك النقاطات إلى 40 سم من الجذع واترك الطوق مكشوفاً للهواء.", "en": "Paint with copper, then move drippers 40 cm from the trunk and leave the collar open to the air." }
+      ]
+    },
+    {
+      "id": "iron_chlorosis",
+      "type": "physiological",
+      "severity": "medium",
+      "latin": "Carence en fer induite par le calcaire",
+      "name": { "fr": "Chlorose ferrique", "ar": "الاصفرار الحديدي", "en": "Iron chlorosis" },
+      "signs": {
+        "fr": ["Jaunissement entre les nervures sur les feuilles LES PLUS JEUNES, nervures restées vertes", "Dans les cas sévères, feuille presque blanche, bord brûlé", "Rameaux qui se dessèchent par l'extrémité, fruits petits"],
+        "ar": ["اصفرار بين العروق على الأوراق الأحدث سناً، مع بقاء العروق خضراء", "في الحالات الشديدة، ورقة شبه بيضاء وحافة محروقة", "أغصان تجف من الطرف، ثمار صغيرة"],
+        "en": ["Interveinal yellowing on the YOUNGEST leaves, veins staying green", "In severe cases, near-white leaves with scorched margins", "Twig dieback from the tip, small fruit"]
+      },
+      "confusion": ["carence en azote (jaunissement uniforme sur les VIEILLES feuilles)", "carence en manganèse (motif plus flou, nervures moins nettes)", "excès d'eau (jaunissement global sans motif internervaire)"],
+      "organic": {
+        "fr": "Chélate de fer Fe-EDDHA au sol, en fertigation, à la reprise de végétation. Sur sol calcaire, seul l'EDDHA tient — les autres chélates sont bloqués par le pH.",
+        "ar": "مخلّب الحديد Fe-EDDHA في التربة عبر الري السمادي، عند انطلاق النمو. في التربة الكلسية، EDDHA وحده يصمد — المخلّبات الأخرى يعطلها الـpH.",
+        "en": "Fe-EDDHA chelate to the soil through fertigation at bud break. On calcareous soil only EDDHA holds — other chelates are locked out by pH."
+      },
+      "conventional": {
+        "fr": "Acidification de l'eau d'irrigation et apport de matière organique pour débloquer le fer durablement. Le foliaire ne fait que verdir la feuille déjà formée.",
+        "ar": "تحميض ماء الري وإضافة المادة العضوية لفك حصار الحديد بشكل دائم. الرش الورقي يخضّر فقط الورقة المتكونة أصلاً.",
+        "en": "Acidify irrigation water and add organic matter to unlock iron durably. Foliar sprays only green up leaves that already exist."
+      },
+      "prevention": {
+        "fr": "Choisissez un porte-greffe tolérant au calcaire à la plantation. Évitez l'excès de bicarbonates dans l'eau et l'asphyxie racinaire, qui aggravent tout.",
+        "ar": "اختر أصلاً متحملاً للكلس عند الغرس. تجنب فائض البيكربونات في الماء والاختناق الجذري، فهما يفاقمان كل شيء.",
+        "en": "Pick a lime-tolerant rootstock at planting. Avoid excess bicarbonate in the water and root asphyxia, which make everything worse."
+      },
+      "guide": [
+        { "s": 10, "fr": "Vérifiez l'âge de la feuille jaune : jeune = fer, vieille = azote. C'est le test le plus rapide.", "ar": "تحقق من عمر الورقة الصفراء: حديثة = حديد، قديمة = آزوت. هذا أسرع اختبار.", "en": "Check the age of the yellow leaf: young = iron, old = nitrogen. It's the fastest test." },
+        { "s": 8, "fr": "Regardez le sol : effervescence à l'acide = calcaire actif, la chlorose est induite.", "ar": "انظر إلى التربة: فوران عند وضع الحمض = كلس نشط، والاصفرار مُحدَث.", "en": "Test the soil: fizzing with acid means active lime, so the chlorosis is lime-induced." },
+        { "s": 10, "fr": "Appliquez le Fe-EDDHA au sol, au pied, en fertigation. Le foliaire seul ne règle rien durablement.", "ar": "طبّق Fe-EDDHA في التربة عند القدم بالري السمادي. الرش الورقي وحده لا يحل شيئاً بشكل دائم.", "en": "Apply Fe-EDDHA to the soil at the base, through fertigation. Foliar alone fixes nothing lasting." },
+        { "s": 8, "fr": "Contrôlez le drainage : des racines noyées ne prennent pas le fer, même s'il est disponible.", "ar": "راقب الصرف: الجذور الغارقة لا تمتص الحديد حتى لو كان متوفراً.", "en": "Check drainage: waterlogged roots won't take up iron even when it's available." }
+      ]
+    },
+    {
+      "id": "leafminer",
+      "type": "pest",
+      "severity": "medium",
+      "latin": "Phyllocnistis citrella",
+      "name": { "fr": "Mineuse des agrumes", "ar": "حفار أوراق الحوامض", "en": "Citrus leafminer" },
+      "signs": {
+        "fr": ["Galeries argentées sinueuses dans les JEUNES feuilles uniquement", "Feuilles enroulées, gaufrées, bord replié", "Attaque limitée aux poussées de sève d'été"],
+        "ar": ["أنفاق فضية متعرجة في الأوراق الحديثة فقط", "أوراق ملتفة ومجعدة وحافتها مطوية", "الهجوم محدود في دفعات النمو الصيفية"],
+        "en": ["Silvery winding mines in YOUNG leaves only", "Curled, puckered leaves with a folded margin", "Attack confined to summer growth flushes"]
+      },
+      "confusion": ["dégâts de thrips (argenture sans galerie)"],
+      "organic": {
+        "fr": "Sur arbre adulte, ne traitez pas : les parasitoïdes règlent la population et l'arbre compense. Huile de neem ou de paraffine uniquement sur jeune plantation.",
+        "ar": "على شجرة بالغة، لا تعالج: الطفيليات تنظم الساكنة والشجرة تعوّض. زيت النيم أو البارافين فقط في الغرس الحديث.",
+        "en": "On a mature tree, don't treat: parasitoids regulate the population and the tree compensates. Neem or paraffin oil only on young plantings."
+      },
+      "conventional": {
+        "fr": "Réservé aux plants de moins de trois ans, dont la croissance est réellement pénalisée. Sur verger en production, le traitement coûte plus qu'il ne rapporte.",
+        "ar": "محصور في الأشتال أقل من ثلاث سنوات، التي يتضرر نموها فعلاً. في بستان منتج، المعالجة تكلف أكثر مما تعيد.",
+        "en": "Reserved for trees under three years old whose growth is genuinely set back. On a bearing orchard, treating costs more than it returns."
+      },
+      "prevention": {
+        "fr": "Groupez les apports d'azote pour concentrer les poussées de sève au lieu de les étaler : moins de feuilles tendres disponibles en continu.",
+        "ar": "اجمع إضافات الآزوت لتركيز دفعات النمو بدل توزيعها: أوراق طرية أقل متاحة باستمرار.",
+        "en": "Group nitrogen applications so flushes are concentrated rather than spread out: less soft foliage continuously on offer."
+      },
+      "guide": [
+        { "s": 8, "fr": "Ouvrez une galerie à l'ongle : une petite larve translucide au bout confirme la mineuse.", "ar": "افتح نفقاً بالظفر: يرقة صغيرة شفافة في نهايته تؤكد الحفار.", "en": "Open a mine with a fingernail: a small translucent larva at the end confirms leafminer." },
+        { "s": 10, "fr": "Sur arbre adulte, comptez les feuilles minées : même à 50 %, le rendement n'est pas affecté.", "ar": "على شجرة بالغة، عد الأوراق المصابة: حتى عند 50%، المردود لا يتأثر.", "en": "On a mature tree, count mined leaves: even at 50%, yield is not affected." },
+        { "s": 8, "fr": "Ne taillez pas les pousses minées : vous relanceriez une poussée tendre, donc une nouvelle attaque.", "ar": "لا تقلّم البراعم المصابة: ستطلق دفعة طرية جديدة، أي هجوماً جديداً.", "en": "Don't prune out mined shoots: you'd trigger a fresh soft flush, and a fresh attack." }
+      ]
+    },
+    {
+      "id": "citrus_scale",
+      "type": "pest",
+      "severity": "medium",
+      "latin": "Aonidiella aurantii / Planococcus citri",
+      "name": { "fr": "Cochenilles (pou de Californie, farineuse)", "ar": "الحشرات القشرية (قشرية كاليفورنيا، البق الدقيقي)", "en": "Scale insects (California red scale, mealybug)" },
+      "signs": {
+        "fr": ["Petits boucliers ronds rougeâtres collés à l'écorce et aux fruits", "Ou amas blancs farineux aux aisselles et sous les fruits", "Miellat collant puis fumagine noire qui salit feuilles et fruits", "Fruits déclassés à l'export malgré une pulpe saine"],
+        "ar": ["دروع صغيرة مستديرة محمرة ملتصقة باللحاء والثمار", "أو كتل بيضاء دقيقية في الآباط وتحت الثمار", "ندوة عسلية لزجة ثم عفن أسود يلوث الأوراق والثمار", "ثمار مرفوضة للتصدير رغم سلامة اللب"],
+        "en": ["Small round reddish shields stuck to bark and fruit", "Or white mealy masses in leaf axils and under fruit", "Sticky honeydew then black sooty mould dirtying leaves and fruit", "Fruit downgraded for export despite sound flesh"]
+      },
+      "confusion": ["fumagine seule (chercher l'insecte producteur de miellat : cochenille, aleurode ou puceron)"],
+      "organic": {
+        "fr": "Huile blanche de paraffine en hiver, sur bois, par temps doux et sans gel annoncé. Lâchers d'Aphytis ou de Cryptolaemus. Fourmis à contrôler : elles protègent les cochenilles.",
+        "ar": "الزيت الأبيض البارافيني شتاءً على الخشب، في جو معتدل وبدون صقيع متوقع. إطلاق أفيتيس أو كريبتولايموس. مراقبة النمل: فهو يحمي الحشرات القشرية.",
+        "en": "White paraffin oil in winter on bare wood, in mild weather with no frost forecast. Release Aphytis or Cryptolaemus. Control ants — they farm and protect the scale."
+      },
+      "conventional": {
+        "fr": "Traitement positionné sur le stade larve mobile, repéré au piège à phéromone. Hors de cette fenêtre, le bouclier protège l'insecte et le traitement est perdu.",
+        "ar": "المعالجة تُوضع في طور اليرقة المتحركة، المحدد بمصيدة الفيرومون. خارج هذه النافذة، الدرع يحمي الحشرة والمعالجة ضائعة.",
+        "en": "Time the spray to the crawler stage, pinpointed with a pheromone trap. Outside that window the shield protects the insect and the spray is wasted."
+      },
+      "prevention": {
+        "fr": "Aérez par la taille, posez des bandes glu contre les fourmis, évitez les excès d'azote.",
+        "ar": "هوّئ بالتقليم، ضع أشرطة لاصقة ضد النمل، وتجنب فائض الآزوت.",
+        "en": "Open the canopy by pruning, band trunks against ants, avoid nitrogen excess."
+      },
+      "guide": [
+        { "s": 8, "fr": "Grattez un bouclier à l'ongle : s'il se soulève et laisse un corps jaune mou, l'insecte est vivant.", "ar": "اكشط درعاً بالظفر: إذا ارتفع وترك جسماً أصفر طرياً، فالحشرة حية.", "en": "Lift a shield with a fingernail: if it comes off over a soft yellow body, the insect is alive." },
+        { "s": 10, "fr": "Suivez la piste des fourmis jusqu'à la colonie : couper la route aux fourmis fait chuter la cochenille.", "ar": "تتبع مسار النمل حتى المستعمرة: قطع الطريق على النمل يُسقط الحشرة القشرية.", "en": "Follow the ant trail to the colony: cutting the ants off makes the scale population collapse." },
+        { "s": 10, "fr": "Appliquez l'huile en hiver, en mouillant à refus, sans mélanger avec du soufre à moins de trois semaines d'écart.", "ar": "طبّق الزيت شتاءً مع الترطيب حتى السيلان، بدون خلطه بالكبريت في أقل من ثلاثة أسابيع فارق.", "en": "Apply the oil in winter, spraying to run-off, and keep at least three weeks between oil and sulphur." }
+      ]
+    },
+    {
+      "id": "tristeza",
+      "type": "viral",
+      "severity": "critical",
+      "latin": "Citrus tristeza virus (CTV)",
+      "name": { "fr": "Tristeza", "ar": "التريستيزا", "en": "Citrus tristeza" },
+      "signs": {
+        "fr": ["Dépérissement rapide d'un arbre apparemment sain, feuilles bronzées puis chute", "Arbres greffés sur bigaradier les plus touchés", "Cannelures dans le bois sous l'écorce au-dessus du point de greffe", "Fructification excessive de petits fruits juste avant la mort"],
+        "ar": ["تدهور سريع لشجرة تبدو سليمة، أوراق برونزية ثم تساقط", "الأشجار المطعمة على النارنج هي الأكثر إصابة", "تخاديد في الخشب تحت اللحاء فوق نقطة التطعيم", "إثمار مفرط لثمار صغيرة قبيل الموت"],
+        "en": ["Rapid decline of an apparently healthy tree, bronzed leaves then drop", "Trees grafted on sour orange rootstock hit hardest", "Stem pitting in the wood under the bark above the graft union", "A heavy crop of small fruit just before death"]
+      },
+      "confusion": ["gommose à Phytophthora (gomme au collet, absente ici)", "asphyxie racinaire"],
+      "organic": {
+        "fr": "Aucun traitement. La maladie est virale et systémique. Il faut arracher et brûler l'arbre atteint pour protéger le verger.",
+        "ar": "لا يوجد علاج. المرض فيروسي وجهازي. يجب اقتلاع وحرق الشجرة المصابة لحماية البستان.",
+        "en": "No treatment. The disease is viral and systemic. Pull and burn the affected tree to protect the orchard."
+      },
+      "conventional": {
+        "fr": "La lutte porte sur le vecteur (pucerons) et surtout sur le matériel végétal : n'utilisez que des plants certifiés indemnes.",
+        "ar": "المكافحة تستهدف الناقل (المنّ) وخصوصاً المادة النباتية: لا تستعمل إلا أشتالاً معتمدة خالية من الفيروس.",
+        "en": "Control targets the vector (aphids) and above all the planting material: use only certified virus-free nursery trees."
+      },
+      "prevention": {
+        "fr": "Abandonnez le bigaradier comme porte-greffe en zone infestée. Plants certifiés obligatoires. Ne greffez jamais à partir d'un arbre du verger sans indexation.",
+        "ar": "تخلَّ عن النارنج كأصل في المناطق الموبوءة. الأشتال المعتمدة إجبارية. لا تطعّم أبداً من شجرة في البستان بدون فحص.",
+        "en": "Drop sour orange as a rootstock in infested areas. Certified trees only. Never take budwood from an orchard tree without indexing."
+      },
+      "guide": [
+        { "s": 10, "fr": "Décollez un carré d'écorce au-dessus du point de greffe et cherchez des cannelures en creux dans le bois.", "ar": "انزع مربعاً من اللحاء فوق نقطة التطعيم وابحث عن تخاديد غائرة في الخشب.", "en": "Lift a square of bark above the graft union and look for sunken pits in the wood." },
+        { "s": 8, "fr": "Notez le porte-greffe : sur bigaradier, la suspicion est forte. Faites confirmer par test ELISA.", "ar": "سجّل الأصل: على النارنج، الشك قوي. أكّد بتحليل ELISA.", "en": "Note the rootstock: on sour orange, suspicion is high. Confirm with an ELISA test." },
+        { "s": 10, "fr": "Si le test est positif, arrachez et brûlez. Un arbre laissé en place est un réservoir pour tout le verger.", "ar": "إذا كان التحليل إيجابياً، اقتلع واحرق. شجرة متروكة هي خزان للبستان كله.", "en": "If the test is positive, pull and burn. A tree left standing is a reservoir for the whole orchard." }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chajra — Diagnostic des arbres fruitiers</title>
+<meta name="description" content="Diagnostic mobile des maladies et ravageurs de l'olivier, de l'oranger, du citronnier et de l'avocatier, assisté par Gemini.">
+<meta name="theme-color" content="#1b5e20">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark" aria-hidden="true">🌳</span>
+    <span>
+      <strong data-i18n="app_name">Chajra</strong>
+      <small data-i18n="tagline">Diagnostic des arbres fruitiers</small>
+    </span>
+  </div>
+  <div class="lang-switch" role="group" aria-label="Language">
+    <button data-lang="fr">FR</button>
+    <button data-lang="ar">ع</button>
+    <button data-lang="en">EN</button>
+  </div>
+</header>
+
+<div id="offline-banner" class="banner" hidden data-i18n="offline"></div>
+
+<main id="main">
+
+  <!-- ───────────────── Diagnose: crop ───────────────── -->
+  <section class="view" id="view-crop">
+    <h1 data-i18n="step_crop">Quelle culture ?</h1>
+    <div class="crop-grid" id="crop-grid"></div>
+  </section>
+
+  <!-- ───────────────── Diagnose: capture ───────────────── -->
+  <section class="view" id="view-capture" hidden>
+    <button class="link-back" data-go="crop">← <span data-i18n="back">Retour</span></button>
+    <h1 data-i18n="step_capture">Photographiez le problème</h1>
+    <p class="muted" data-i18n="capture_hint"></p>
+
+    <div class="capture-actions">
+      <label class="btn btn-primary">
+        <span data-i18n="take_photo">Photo</span>
+        <input type="file" accept="image/*" capture="environment" id="in-camera" hidden>
+      </label>
+      <label class="btn">
+        <span data-i18n="pick_file">Galerie</span>
+        <input type="file" accept="image/*" multiple id="in-gallery" hidden>
+      </label>
+      <label class="btn">
+        <span data-i18n="take_video">Vidéo</span>
+        <input type="file" accept="video/*" capture="environment" id="in-video" hidden>
+      </label>
+    </div>
+    <p class="muted small" data-i18n="video_hint"></p>
+
+    <div class="media-grid" id="media-grid"></div>
+    <p class="err" id="capture-err" hidden></p>
+
+    <button class="btn btn-primary btn-wide" id="to-context" disabled>
+      <span data-i18n="next">Continuer</span>
+    </button>
+  </section>
+
+  <!-- ───────────────── Diagnose: context ───────────────── -->
+  <section class="view" id="view-context" hidden>
+    <button class="link-back" data-go="capture">← <span data-i18n="back">Retour</span></button>
+    <h1 data-i18n="step_context">Un peu de contexte</h1>
+
+    <fieldset class="chips">
+      <legend data-i18n="q_organ"></legend>
+      <div class="chip-row" data-field="organ">
+        <button data-v="leaf" data-i18n="organ_leaf"></button>
+        <button data-v="fruit" data-i18n="organ_fruit"></button>
+        <button data-v="branch" data-i18n="organ_branch"></button>
+        <button data-v="trunk" data-i18n="organ_trunk"></button>
+        <button data-v="whole" data-i18n="organ_whole"></button>
+      </div>
+    </fieldset>
+
+    <fieldset class="chips">
+      <legend data-i18n="q_spread"></legend>
+      <div class="chip-row" data-field="spread">
+        <button data-v="one" data-i18n="spread_one"></button>
+        <button data-v="patch" data-i18n="spread_patch"></button>
+        <button data-v="all" data-i18n="spread_all"></button>
+      </div>
+    </fieldset>
+
+    <fieldset class="chips">
+      <legend data-i18n="q_onset"></legend>
+      <div class="chip-row" data-field="onset">
+        <button data-v="days" data-i18n="onset_days"></button>
+        <button data-v="weeks" data-i18n="onset_weeks"></button>
+        <button data-v="season" data-i18n="onset_season"></button>
+        <button data-v="years" data-i18n="onset_years"></button>
+      </div>
+    </fieldset>
+
+    <fieldset class="chips">
+      <legend data-i18n="q_irrigation"></legend>
+      <div class="chip-row" data-field="irrigation">
+        <button data-v="drip" data-i18n="irr_drip"></button>
+        <button data-v="flood" data-i18n="irr_flood"></button>
+        <button data-v="sprinkler" data-i18n="irr_sprinkler"></button>
+        <button data-v="rain" data-i18n="irr_rain"></button>
+      </div>
+    </fieldset>
+
+    <div class="field-row">
+      <label class="field">
+        <span data-i18n="q_region"></span>
+        <input type="text" id="in-region" autocomplete="off">
+      </label>
+      <label class="field field-narrow">
+        <span data-i18n="q_age"></span>
+        <input type="number" id="in-age" min="0" max="500" inputmode="numeric">
+      </label>
+    </div>
+
+    <label class="field">
+      <span data-i18n="q_notes"></span>
+      <textarea id="in-notes" rows="3" data-i18n-ph="notes_ph"></textarea>
+    </label>
+
+    <button class="btn btn-primary btn-wide" id="do-analyse" data-i18n="analyse">Analyser</button>
+    <p class="err" id="context-err" hidden></p>
+  </section>
+
+  <!-- ───────────────── Diagnose: loading ───────────────── -->
+  <section class="view center" id="view-loading" hidden>
+    <div class="spinner" aria-hidden="true"></div>
+    <h2 data-i18n="analysing">Analyse en cours…</h2>
+    <p class="muted" data-i18n="analysing_note"></p>
+  </section>
+
+  <!-- ───────────────── Diagnose: result ───────────────── -->
+  <section class="view" id="view-result" hidden></section>
+
+  <!-- ───────────────── Library ───────────────── -->
+  <section class="view" id="view-library" hidden>
+    <h1 data-i18n="nav_library">Fiches</h1>
+    <div id="library"></div>
+  </section>
+
+  <!-- ───────────────── History ───────────────── -->
+  <section class="view" id="view-history" hidden>
+    <h1 data-i18n="nav_history">Historique</h1>
+    <div id="history"></div>
+  </section>
+
+  <!-- ───────────────── Settings ───────────────── -->
+  <section class="view" id="view-settings" hidden>
+    <h1 data-i18n="nav_settings">Réglages</h1>
+
+    <label class="field">
+      <span data-i18n="settings_key">Clé API Gemini</span>
+      <input type="password" id="in-key" autocomplete="off" spellcheck="false" placeholder="AIza…">
+    </label>
+    <p class="muted small" data-i18n="settings_key_h"></p>
+
+    <label class="field">
+      <span data-i18n="settings_model">Modèle</span>
+      <select id="in-model"></select>
+    </label>
+    <p class="muted small" data-i18n="settings_model_h"></p>
+    <button class="btn" id="do-refresh-models" data-i18n="refresh_models"></button>
+    <p class="err" id="settings-err" hidden></p>
+    <p class="ok" id="settings-ok" hidden></p>
+
+    <h2 data-i18n="demo_mode">Mode démonstration</h2>
+    <p class="muted small" data-i18n="demo_mode_h"></p>
+
+    <h2 data-i18n="nav_history">Historique</h2>
+    <div class="capture-actions">
+      <button class="btn" id="do-export" data-i18n="export"></button>
+      <button class="btn btn-danger" id="do-clear" data-i18n="clear_history"></button>
+    </div>
+
+    <p class="disclaimer" data-i18n="disclaimer"></p>
+  </section>
+
+</main>
+
+<nav class="tabbar">
+  <button data-tab="diagnose" class="active"><span aria-hidden="true">🔍</span><em data-i18n="nav_diagnose"></em></button>
+  <button data-tab="library"><span aria-hidden="true">📖</span><em data-i18n="nav_library"></em></button>
+  <button data-tab="history"><span aria-hidden="true">🕘</span><em data-i18n="nav_history"></em></button>
+  <button data-tab="settings"><span aria-hidden="true">⚙️</span><em data-i18n="nav_settings"></em></button>
+</nav>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
