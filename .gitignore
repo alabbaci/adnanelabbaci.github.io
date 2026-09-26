@@ -12,3 +12,6 @@ kepler_config.json
 
 # OS noise
 .DS_Store
+
+# Morocco September anomalies: downloads, tiles, fonts
+morocco_september_anomalies/.cache/
