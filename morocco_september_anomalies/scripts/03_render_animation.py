@@ -198,20 +198,34 @@ class Fonts:
 # --- forge3d ---------------------------------------------------------------
 
 class TerrainRenderer:
-    """One forge3d viewer session; the camera and sun stay fixed."""
+    """A forge3d viewer session; the camera and sun stay fixed.
+
+    Reloading the overlay every frame grows the viewer's memory and slows it
+    down, so the session is restarted every RESTART_EVERY renders.
+    """
+
+    RESTART_EVERY = 60
 
     def __init__(self, surface_path: Path, workdir: Path) -> None:
+        self.surface_path = surface_path
         self.workdir = workdir
+        self.viewer = None
+        self.n = 0
+        self._open()
+
+    def _open(self) -> None:
         self.viewer = f3d.open_viewer_async(
-            terrain_path=surface_path, width=1000, height=1000, timeout=600
+            terrain_path=self.surface_path, width=1000, height=1000, timeout=600
         )
         self.viewer.send_ipc({"cmd": "set_terrain", **CAMERA, "zscale": 1.0, **SUN, "background": [c / 255 for c in BG]})
         self.viewer.send_ipc({"cmd": "set_terrain_pbr", **PBR})
         self.viewer.send_ipc({"cmd": "set_overlays_enabled", "enabled": True})
         self.viewer.send_ipc({"cmd": "set_overlay_solid", "solid": False})
-        self.n = 0
 
     def render(self, rgb: np.ndarray, valid: np.ndarray, *, preserve_colors: bool) -> np.ndarray:
+        if self.n and self.n % self.RESTART_EVERY == 0:
+            self.viewer.close()
+            self._open()
         self.n += 1
         overlay = self.workdir / f"overlay_{self.n % 2}.png"
         shot = self.workdir / "shot.png"
