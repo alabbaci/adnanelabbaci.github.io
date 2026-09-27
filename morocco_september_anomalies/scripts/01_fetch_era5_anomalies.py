@@ -112,14 +112,25 @@ def main() -> None:
     da, time_index, attrs = open_region()
     print(f"ARCO-ERA5 final data to {attrs.get('valid_time_stop')}, ERA5T to {attrs.get('valid_time_stop_era5t')}")
 
-    print(f"Fetching September {args.year} ...", flush=True)
-    target = fetch_daily_means(
-        da, time_index, synoptic_times(dt.date(args.year, 9, 1), dt.date(args.year, 9, 30)), args.workers
-    )
-    era5t = pd.Timestamp(f"{args.year}-09-30T18") > pd.Timestamp(attrs.get("valid_time_stop", "1900-01-01"))
+    # A month still in progress stops at the last day ERA5T covers; the store
+    # carries empty (NaN) placeholders beyond that.
+    first, last = dt.date(args.year, 9, 1), dt.date(args.year, 9, 30)
+    era5t_stop = dt.date.fromisoformat(attrs.get("valid_time_stop_era5t", str(last))[:10])
+    last = min(last, era5t_stop)
+    if last < first:
+        raise SystemExit(f"No ERA5 data for September {args.year} yet (ERA5T ends {era5t_stop})")
+    print(f"Fetching September {args.year} ({first} -> {last}) ...", flush=True)
+    target = fetch_daily_means(da, time_index, synoptic_times(first, last), args.workers)
+    complete = target.notnull().all(("latitude", "longitude"))
+    target = target.sel(time=complete)
+    if target.sizes["time"] == 0:
+        raise SystemExit(f"No ERA5 data for September {args.year} yet")
+    last = dt.date.fromisoformat(str(target.time.values[-1])[:10])
+    era5t = pd.Timestamp(f"{last}T18") > pd.Timestamp(attrs.get("valid_time_stop", "1900-01-01"))
 
     print(f"Building {BASELINE_YEARS[0]}-{BASELINE_YEARS[1]} baseline ...", flush=True)
     clim = smoothed_september_climatology(baseline_daily_means(da, time_index, args.workers))
+    clim = clim.isel(monthday=slice(0, target.sizes["time"]))
     clim = clim.rename(monthday="time").assign_coords(time=target.time.values)
 
     lon = ((target.longitude.values + 180.0) % 360.0) - 180.0
@@ -140,6 +151,7 @@ def main() -> None:
         "title": f"Morocco daily 2 m temperature anomalies, September {args.year}",
         "source": "ECMWF ERA5 via ARCO-ERA5 (gs://gcp-public-data-arco-era5)",
         "era5t_preliminary": int(era5t),
+        "last_day": str(last),
         "baseline": f"{BASELINE_YEARS[0]}-{BASELINE_YEARS[1]}",
         "history": f"created {dt.datetime.now(dt.timezone.utc):%Y-%m-%d} by 01_fetch_era5_anomalies.py",
     }

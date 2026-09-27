@@ -51,7 +51,7 @@ CANVAS = (1920, 1080)
 MAP_BOX = (30, 20, 1170, 1060)  # where the rendered country is fitted
 RENDER_SIZE = (1600, 1600)
 VERTICAL_EXAGGERATION = 15.0
-CAMERA = {"phi": 90.0, "theta": 38.0, "radius": 3900.0, "fov": 24.0}
+CAMERA = {"phi": 90.0, "theta": 38.0, "radius": 4600.0, "fov": 24.0}
 SUN = {"sun_azimuth": 300.0, "sun_elevation": 28.0, "sun_intensity": 1.5, "ambient": 0.62, "shadow": 0.45}
 PBR = {
     "enabled": True,
@@ -245,6 +245,9 @@ def static_passes(renderer: TerrainRenderer, valid: np.ndarray):
     mask_img = renderer.render(black, valid, preserve_colors=True)
     darkness = 1.0 - mask_img.mean(axis=2) / np.mean(BG)
     alpha = np.clip((darkness - 0.15) / 0.7, 0.0, 1.0)
+    edge = alpha > 0.02
+    if edge[:, :2].any() or edge[:, -2:].any() or edge[:2].any() or edge[-2:].any():
+        raise SystemExit("The country touches the edge of the render; increase CAMERA['radius'].")
 
     grey = np.full(valid.shape + (3,), 170.0, dtype=np.float32)
     relief = renderer.render(grey, valid, preserve_colors=False).mean(axis=2)
@@ -296,7 +299,10 @@ class Composer:
         f = self.fonts
         x = 1230
         year = self.dates[0].year
-        d.text((x, 92), f"MOROCCO  ·  SEPTEMBER {year}", font=f(22, 600), fill=MUTED)
+        header = f"MOROCCO  ·  SEPTEMBER {year}"
+        if len(self.dates) < 30:
+            header += f"  ·  1–{self.dates[-1].day} SEP SO FAR"
+        d.text((x, 92), header, font=f(22, 600), fill=MUTED)
         d.text((x, 124), "Daily temperature", font=f(56, 800), fill=INK)
         d.text((x, 186), "anomaly", font=f(56, 800), fill=INK)
         d.multiline_text(
@@ -311,7 +317,7 @@ class Composer:
 
         credit = "Data: ECMWF ERA5 (Copernicus Climate Change Service), via ARCO-ERA5"
         if self.preliminary:
-            credit += " — preliminary ERA5T"
+            credit = "Data: ECMWF ERA5T, preliminary (Copernicus C3S), via ARCO-ERA5"
         d.text((x, 1000), credit, font=f(17), fill=MUTED)
         d.text((x, 1024), "Elevation: Tilezen Terrarium tiles (AWS Open Data) · Rendered with forge3d", font=f(17), fill=MUTED)
         return canvas
@@ -339,7 +345,7 @@ class Composer:
 
     def _bars(self, d: ImageDraw.ImageDraw, day: int, x: int, y: int) -> None:
         f = self.fonts
-        n = len(self.national)
+        n = 30  # one slot per September day; days without data yet stay empty
         w, h = 560, 150
         vmax = max(3.0, float(np.ceil(np.abs(self.national).max())))
         zero = y + h / 2
@@ -358,6 +364,11 @@ class Composer:
             if y1 - y0 >= 1:
                 d.rounded_rectangle((x0, y0, x1, y1), radius=2, fill=col)
         d.line((x, zero, x + w, zero), fill=MUTED, width=1)
+        if len(self.national) < n:
+            note = "not yet available"
+            gap_x = x + len(self.national) * step
+            d.text((gap_x + (x + w - gap_x - d.textlength(note, font=f(15))) / 2, zero - 26), note,
+                   font=f(15), fill=MUTED)
         for label, i in (("1 Sep", 0), ("15", 14), ("30 Sep", n - 1)):
             cx = x + (i + 0.5) * step
             tw = d.textlength(label, font=f(16))

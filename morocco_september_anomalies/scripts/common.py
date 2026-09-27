@@ -26,7 +26,7 @@ BASELINE_YEARS = (1991, 2020)
 # days, so the baseline for each September day uses days either side of it.
 CLIM_WINDOW_DAYS = 11
 
-DEFAULT_YEAR = 2025
+DEFAULT_YEAR = 2026
 
 # Morocco incl. the southern provinces (Western Sahara), with a margin so the
 # ERA5 field can be interpolated right up to the coastline.

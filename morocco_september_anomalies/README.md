@@ -1,14 +1,21 @@
-# Morocco, September 2025: daily temperature anomalies
+# Morocco, September: daily temperature anomalies
 
-A day-by-day animation of how much warmer or colder than normal each part of
-Morocco was through September 2025, draped over the country's relief and
+Day-by-day animations of how much warmer or colder than normal each part of
+Morocco was through September, draped over the country's relief and
 rendered with [forge3d](https://github.com/milos-agathon/forge3d).
 
-**▶ [Watch the animation](output/morocco_t2m_anomaly_sep2025.mp4)** ·
-[GIF](output/morocco_t2m_anomaly_sep2025.gif) ·
-[page](index.html) (served by GitHub Pages)
+| | Animation | |
+|---|---|---|
+| **September 2026** (1–21 Sep so far, preliminary ERA5T) | [MP4](output/morocco_t2m_anomaly_sep2026.mp4) · [GIF](output/morocco_t2m_anomaly_sep2026.gif) | [page](index.html) |
+| **September 2025** (complete month) | [MP4](output/morocco_t2m_anomaly_sep2025.mp4) · [GIF](output/morocco_t2m_anomaly_sep2025.gif) | |
 
-![Peak day of the September 2025 heat episode](output/morocco_t2m_anomaly_sep2025_peak.png)
+![Warmest day so far in September 2026](output/morocco_t2m_anomaly_sep2026_peak.png)
+
+**September 2026 is still in progress.** ERA5 is published about five days
+behind real time, so the 2026 animation covers 1–21 September and uses
+preliminary ERA5T data. Re-run steps 1 and 3 with `--year 2026` in early
+October to complete it; ERA5T is replaced by final ERA5 about three months
+later, with changes that are usually small.
 
 ## What the map shows
 
@@ -41,7 +48,7 @@ The outline is Morocco including its southern provinces (Natural Earth
 ## Pipeline
 
 ```
-scripts/01_fetch_era5_anomalies.py  → data/morocco_t2m_anomaly_sep2025.nc
+scripts/01_fetch_era5_anomalies.py  → data/morocco_t2m_anomaly_sep<year>.nc
 scripts/02_prepare_terrain.py       → data/morocco_dem_laea_1km.tif, data/morocco_boundary.geojson
 scripts/03_render_animation.py      → output/*.mp4, *.gif, *_peak.png
 ```
@@ -56,12 +63,14 @@ box (18.5°W–0°, 20–37°N, 0.25°) is kept in memory. The baseline takes ab
 cached in `.cache/` so later runs for other years only fetch the target month.
 
 ```bash
-python scripts/01_fetch_era5_anomalies.py --year 2025
+python scripts/01_fetch_era5_anomalies.py --year 2026
 ```
 
 The NetCDF output holds `t2m`, `t2m_normal` and `t2m_anomaly` (°C, 30 days ×
 69 × 74). ARCO-ERA5 carries final ERA5 with a ~3-month lag plus preliminary
-ERA5T up to about a week ago; if a month relies on ERA5T the frames say so.
+ERA5T up to about five days ago. For a month still in progress the script
+stops at the last ERA5T day; the frames then show "1–N Sep so far", mark the
+remaining days of the strip as not yet available, and credit ERA5T.
 
 ### 2. Terrain
 
@@ -92,16 +101,16 @@ date, colour bar and daily strip, and encoded with ffmpeg (H.264 MP4 at
 
 ```bash
 # with a GPU
-python scripts/03_render_animation.py --year 2025
+python scripts/03_render_animation.py --year 2026
 # headless Linux: software Vulkan (Mesa lavapipe) + a virtual display
 sudo apt-get install mesa-vulkan-drivers xvfb libxkbcommon-x11-0 ffmpeg
-xvfb-run -a -s "-screen 0 1920x1080x24" python scripts/03_render_animation.py --year 2025
+xvfb-run -a -s "-screen 0 1920x1080x24" python scripts/03_render_animation.py --year 2026
 # one composed frame, e.g. to tune the look
 xvfb-run -a python scripts/03_render_animation.py --preview 18
 ```
 
-On lavapipe (CPU only) a frame takes a few seconds; the full 233-frame
-animation renders in well under an hour.
+On lavapipe (CPU only) a frame takes a few seconds; a full month (233
+frames) takes 40–80 minutes.
 
 Note on forge3d units: the terrain viewer clamps the orbit radius to 50 000
 world units and takes horizontal units from the GeoTIFF transform, so the
