@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Mini Rabat 3D</title>
+<meta name="description" content="A 3D digital map of Rabat–Salé's trams and trains, moving in real time on a simulated timetable." />
+<meta name="theme-color" content="#101114" />
+<link rel="stylesheet" href="../vendor/maplibre-gl-4.7.1.css" />
+<link rel="stylesheet" href="style.css" />
+<script src="../vendor/maplibre-gl-4.7.1.min.js"></script>
+<script src="../vendor/deck.gl-9.1.14.min.js"></script>
+</head>
+<body>
+<div id="map" aria-label="3D map of Rabat–Salé public transport"></div>
+
+<header class="card brand" id="brand">
+  <div class="brand-row">
+    <div>
+      <h1>Mini Rabat 3D</h1>
+      <p class="brand-ar" lang="ar" dir="rtl">الرباط المصغّرة ثلاثية الأبعاد</p>
+    </div>
+    <button class="icon-btn" id="about-btn" aria-label="About this map" title="About">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><circle cx="12" cy="7.8" r=".6" fill="currentColor"/></svg>
+    </button>
+  </div>
+
+  <div class="clock-row">
+    <div class="clock">
+      <span id="clock-time">--:--:--</span>
+      <span id="clock-date" class="clock-date"></span>
+    </div>
+    <span class="live-chip" id="live-chip" data-live="true"><i></i><span>Live</span></span>
+  </div>
+
+  <div class="controls" role="group" aria-label="Playback speed">
+    <button class="seg" data-speed="live" aria-pressed="true">Now</button>
+    <button class="seg" data-speed="10" aria-pressed="false">10×</button>
+    <button class="seg" data-speed="60" aria-pressed="false">60×</button>
+    <button class="seg" data-speed="300" aria-pressed="false">300×</button>
+    <button class="seg seg-icon" id="pause-btn" aria-label="Pause" aria-pressed="false" title="Pause / play">
+      <span class="swap">
+        <svg class="ico-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6v12M15 6v12"/></svg>
+        <svg class="ico-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>
+      </span>
+    </button>
+  </div>
+  <label class="scrub">
+    <span class="sr-only">Time of day</span>
+    <input type="range" id="scrub" min="300" max="1440" step="1" value="720" />
+    <span class="scrub-ticks" aria-hidden="true"><span>05</span><span>09</span><span>13</span><span>17</span><span>21</span><span>24</span></span>
+  </label>
+</header>
+
+<section class="card legend" id="legend" aria-label="Lines">
+  <button class="legend-head" id="legend-toggle" aria-expanded="true">
+    <span>Lines</span>
+    <span class="legend-total"><b id="total-count">0</b> in service</span>
+    <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10l5 5 5-5"/></svg>
+  </button>
+  <ul id="line-list"></ul>
+  <div class="search">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg>
+    <input id="search" type="search" placeholder="Find a station" autocomplete="off" spellcheck="false" aria-label="Find a station" />
+    <ul id="search-results" role="listbox"></ul>
+  </div>
+</section>
+
+<aside class="card detail" id="detail" hidden aria-live="polite"></aside>
+
+<div class="banner" id="banner" hidden>
+  <span id="banner-text"></span>
+  <button id="banner-btn" class="banner-btn"></button>
+</div>
+
+<div id="tooltip" role="tooltip"></div>
+
+<dialog id="about">
+  <form method="dialog" class="about-inner">
+    <h2>About Mini Rabat 3D</h2>
+    <p>A 3D digital map of public transport in Rabat–Salé, in the spirit of
+      <a href="https://minitokyo3d.com/" target="_blank" rel="noopener">Mini Tokyo 3D</a>.
+      Trams and trains move along their real tracks according to a timetable, in Morocco local time.</p>
+    <h3>What's real, what's simulated</h3>
+    <ul>
+      <li><b>Real:</b> track geometry, stop order and station positions for tram lines L1 and L2 and the ONCF main line, from OpenStreetMap.</li>
+      <li><b>Simulated:</b> departure times. No public real-time feed exists for Rabat, so vehicles follow a
+        timetable built from typical headways (tram roughly every 8–15 min, 06:00–22:00) and typical
+        ONCF service patterns (TNR shuttles, Al Atlas intercity, Al Boraq). Positions show how the network
+        runs, not where a specific vehicle is right now.</li>
+      <li>Vehicles are drawn larger than life when zoomed out so they stay visible.</li>
+    </ul>
+    <h3>Tips</h3>
+    <ul>
+      <li>Click a tram or train to follow it. <kbd>Esc</kbd> stops following.</li>
+      <li>Click a station for its next departures.</li>
+      <li>Drag to pan; right-drag or <kbd>Ctrl</kbd>-drag to rotate and tilt.</li>
+    </ul>
+    <p class="fine">Transit data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors (ODbL).
+      Basemap © <a href="https://openfreemap.org" target="_blank" rel="noopener">OpenFreeMap</a> / <a href="https://www.openmaptiles.org/" target="_blank" rel="noopener">OpenMapTiles</a>.
+      Rendering: <a href="https://maplibre.org" target="_blank" rel="noopener">MapLibre</a> + <a href="https://deck.gl" target="_blank" rel="noopener">deck.gl</a>.</p>
+    <button class="primary" value="close">Explore Rabat</button>
+  </form>
+</dialog>
+
+<script src="app.js"></script>
+</body>
+</html>

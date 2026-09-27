@@ -135,6 +135,37 @@ of the previous step from `data/processed/`. Unlike the Torino original,
 the processed GeoJSONs (~2.9MB total — Dakhla is a compact city) **are**
 committed, so the GitHub Pages map works without running anything.
 
+## Mini Rabat 3D
+
+**▶ [`rabat3d/`](rabat3d/index.html)**: a 3D digital map of Rabat–Salé's
+public transport in the spirit of [Mini Tokyo 3D](https://minitokyo3d.com/).
+Tram lines L1 and L2 and the ONCF main line (TNR shuttles, Al Atlas
+intercity, Al Boraq) move along their real tracks in Morocco local time,
+with day/night lighting from the sun's position.
+
+- **Click a tram or train** to follow it: speed, next stop, ETA and the
+  full stop list with times. **Click a station** (or search for one) for
+  its next departures.
+- **Playback**: live, 10×, 60×, 300×, pause, or scrub to any time of day.
+- **Real data**: track geometry, stop order and station positions come from
+  OpenStreetMap. `scripts/rabat3d_build_network.py` turns the raw Overpass
+  extracts in `data/rabat3d/raw/` into `rabat3d/data/network.json` (12 KB).
+- **Simulated data**: departure times. Rabat has no public real-time or
+  GTFS feed, so vehicles follow a timetable built from typical headways
+  (tram every ~8–15 min, 06:00–22:00; lighter at weekends) and typical ONCF
+  patterns. Movement uses an accelerate / cruise / brake profile with
+  dwell times at every stop.
+- **Stack**: MapLibre GL + deck.gl (vendored in `vendor/`), OpenFreeMap
+  vector tiles for the 3D buildings (with a CARTO raster fallback). No
+  build step and no API keys.
+
+To rebuild the network after refreshing the OSM extracts:
+
+```bash
+pip install networkx
+python scripts/rabat3d_build_network.py
+```
+
 ## Caveats
 
 - `temperature_proxy` is a **density-based proxy**, not measured
