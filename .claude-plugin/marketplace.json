@@ -1,0 +1,20 @@
+{
+  "name": "adnanelabbaci-plugins",
+  "owner": {
+    "name": "Adnane Labbaci",
+    "url": "https://github.com/alabbaci"
+  },
+  "metadata": {
+    "description": "Plugins vendored into this repository."
+  },
+  "plugins": [
+    {
+      "name": "panelui",
+      "source": "./.claude/plugins/panelui",
+      "description": "Build React Native and Expo UIs with PanelUI: the component skill, the logo-maker skill, the setup and troubleshooting guide, and the registry MCP server.",
+      "homepage": "https://panelui.dev",
+      "repository": "https://github.com/panel-ui/PanelUI",
+      "license": "MIT"
+    }
+  ]
+}

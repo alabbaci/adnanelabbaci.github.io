@@ -1,0 +1,13 @@
+{
+  "extraKnownMarketplaces": {
+    "adnanelabbaci-plugins": {
+      "source": {
+        "source": "directory",
+        "path": "."
+      }
+    }
+  },
+  "enabledPlugins": {
+    "panelui@adnanelabbaci-plugins": true
+  }
+}
