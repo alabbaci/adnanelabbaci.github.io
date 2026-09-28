@@ -7,6 +7,7 @@ on:
   # Run immediately whenever the pipeline itself changes, so a fresh
   # deployment publishes forecasts without waiting for the next schedule.
   push:
+    branches: [main]
     paths:
       - "energy/pipeline/**"
       - "energy/requirements.txt"
