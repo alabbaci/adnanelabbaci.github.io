@@ -1,10 +1,11 @@
-"""Zonal electricity load forecasting for Morocco (XGBoost + LightGBM ensemble).
+"""Regional electricity load forecasting for Morocco (XGBoost + LightGBM ensemble).
 
 Unlike Italy (Terna) Morocco's operator ONEE publishes no open hourly load
 series. Two training targets are therefore supported:
 
 1. **Measured actuals** — if `energy/data/raw/load_actuals.csv` exists
-   (columns: `time_utc, zone, mw`), the ensemble trains on it directly.
+   (columns: `time_utc, region, mw`, region ids as in
+   config.REGIONS), the ensemble trains on it directly.
 2. **Calibrated reference load** (default) — a physically-shaped hourly
    series built from the Moroccan daily/weekly profile, the holiday and
    Ramadan calendar, population-weighted cooling/heating degree-hours from
@@ -18,7 +19,7 @@ import pandas as pd
 import xgboost as xgb
 
 from calendar_ma import calendar_frame
-from config import DATA, NATIONAL_ANNUAL_TWH, NATIONAL_PEAK_MW, TZ, ZONES
+from config import DATA, NATIONAL_ANNUAL_TWH, NATIONAL_PEAK_MW, REGIONS, TZ, demand_share
 
 ACTUALS = DATA / "raw" / "load_actuals.csv"
 
@@ -37,9 +38,9 @@ FEATURES = ["hour", "dow", "month", "doy_sin", "doy_cos", "is_holiday", "is_rama
             "temp", "temp_app", "temp_24h", "temp_72h", "humidity", "wind", "ghi", "trend"]
 
 
-def zone_weather(weather: dict[str, pd.DataFrame], zone: str) -> pd.DataFrame:
-    """Demand-weighted mean of the zone's city weather."""
-    cities = ZONES[zone]["cities"]
+def region_weather(weather: dict[str, pd.DataFrame], region: str) -> pd.DataFrame:
+    """Demand-weighted mean of the region's city weather."""
+    cities = REGIONS[region]["cities"]
     total = sum(w for _, _, w in cities.values())
     return sum(weather[c] * (w / total) for c, (_, _, w) in cities.items()).dropna()
 
@@ -77,17 +78,17 @@ def reference_shape(X: pd.DataFrame) -> pd.Series:
     return pd.Series(shape * day * weather * growth, index=X.index)
 
 
-def calibrate(X: pd.DataFrame, zone: str) -> float:
-    """MW scale so the zone's last 365 days match its share of national energy."""
+def calibrate(X: pd.DataFrame, region: str) -> float:
+    """MW scale so the region's last 365 days match its share of national energy."""
     s = reference_shape(X).iloc[-24 * 365:]
-    target_mean_mw = ZONES[zone]["share"] * NATIONAL_ANNUAL_TWH * 1e6 / 8760
+    target_mean_mw = demand_share(region) * NATIONAL_ANNUAL_TWH * 1e6 / 8760
     return target_mean_mw / s.mean()
 
 
-def _targets(X: pd.DataFrame, zone: str, scale: float) -> tuple[pd.Series, str]:
+def _targets(X: pd.DataFrame, region: str, scale: float) -> tuple[pd.Series, str]:
     if ACTUALS.exists():
         a = pd.read_csv(ACTUALS, parse_dates=["time_utc"])
-        a = a[a["zone"] == zone].set_index("time_utc")["mw"]
+        a = a[a["region"] == region].set_index("time_utc")["mw"]
         a.index = pd.to_datetime(a.index, utc=True)
         a = a.reindex(X.index).dropna()
         if len(a) > 24 * 60:
@@ -95,9 +96,9 @@ def _targets(X: pd.DataFrame, zone: str, scale: float) -> tuple[pd.Series, str]:
     return reference_shape(X) * scale, "reference"
 
 
-class ZoneModel:
-    def __init__(self, zone: str):
-        self.zone = zone
+class RegionModel:
+    def __init__(self, region: str):
+        self.region = region
         self.scale = None
         self.source = None
         self.holdout = {}
@@ -109,8 +110,8 @@ class ZoneModel:
 
     def fit(self, wx_hist: pd.DataFrame):
         X = features(wx_hist)
-        self.scale = calibrate(X, self.zone)
-        y, self.source = _targets(X, self.zone, self.scale)
+        self.scale = calibrate(X, self.region)
+        y, self.source = _targets(X, self.region, self.scale)
         X = X.loc[y.index]
         split = len(X) - 24 * 60                      # 60-day holdout
         for m in (self.xgb, self.lgb):
@@ -134,13 +135,13 @@ class ZoneModel:
         return reference_shape(features(wx)) * self.scale
 
 
-def model_card(models: dict[str, "ZoneModel"], national_hist_peak: float) -> dict:
+def model_card(models: dict[str, "RegionModel"], national_hist_peak: float) -> dict:
     return {
-        "algorithm": "Mean ensemble of XGBoost and LightGBM, one model per zone",
+        "algorithm": "Mean ensemble of XGBoost and LightGBM, one model per region",
         "features": FEATURES,
         "target": models[next(iter(models))].source,
         "holdout_days": 60,
-        "zones": {z: m.holdout for z, m in models.items()},
+        "regions": {z: m.holdout for z, m in models.items()},
         "calibration": {"annual_twh": NATIONAL_ANNUAL_TWH,
                         "reference_peak_mw": NATIONAL_PEAK_MW,
                         "modelled_peak_mw_last_year": round(national_hist_peak)},
