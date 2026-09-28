@@ -75,6 +75,31 @@ PV_PLANTS = {
                       "lat": 26.1400, "lon": -14.4400, "mw": 20},
 }
 
+# --- Wind farms ------------------------------------------------------------
+# Operating wind farms with published capacities, from Wikipedia's "List of
+# power stations in Morocco" (which cites ONEE, MASEN, the Ministry of
+# Energy and the operators). Dhar Sadane is part of the Tangier I site and is
+# not counted separately. Coordinates are approximate (the named locality),
+# which is adequate for weather-grid forecasting. This is ~1.4 GW, not the
+# full national fleet; add farms here as capacities are confirmed.
+WIND_FARMS = {
+    "tarfaya": {"label": "Tarfaya", "region": "lsh", "lat": 27.83, "lon": -12.85, "mw": 301},
+    "midelt": {"label": "Midelt", "region": "dt", "lat": 32.63, "lon": -4.63, "mw": 210},
+    "aftissat": {"label": "Aftissat", "region": "lsh", "lat": 26.73, "lon": -14.23, "mw": 201},
+    "akhfennir": {"label": "Akhfennir I+II", "region": "gon", "lat": 28.10, "lon": -12.05, "mw": 200},
+    "tangier_i": {"label": "Tangier I", "region": "tta", "lat": 35.78, "lon": -5.62, "mw": 140},
+    "khalladi": {"label": "Khalladi", "region": "tta", "lat": 35.66, "lon": -5.63, "mw": 120},
+    "cap_sim": {"label": "Cap Sim (Essaouira)", "region": "ms", "lat": 31.40, "lon": -9.78, "mw": 60},
+    "haouma": {"label": "Haouma", "region": "tta", "lat": 35.83, "lon": -5.50, "mw": 50.6},
+    "foum_el_oued": {"label": "Foum El Oued", "region": "lsh", "lat": 27.18, "lon": -13.37, "mw": 50.1},
+    "koudia_al_baida": {"label": "Koudia Al Baida", "region": "tta", "lat": 35.72, "lon": -5.43, "mw": 50},
+    "lafarge_tetouan": {"label": "Lafarge Tétouan", "region": "tta", "lat": 35.56, "lon": -5.40, "mw": 32},
+    "ynna_essaouira": {"label": "YNNA Bio Power (Essaouira)", "region": "ms", "lat": 31.45, "lon": -9.72, "mw": 20},
+}
+
+# Hub-height wind for the farms (Open-Meteo provides 100 m).
+WIND_VARS = ["wind_speed_100m", "temperature_2m"]
+
 # Weather variables pulled from Open-Meteo for every location.
 WEATHER_VARS = [
     "temperature_2m", "apparent_temperature", "relative_humidity_2m",

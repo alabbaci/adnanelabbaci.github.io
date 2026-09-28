@@ -15,6 +15,7 @@ to what Morocco actually publishes.
 | **Region map** | Clickable choropleth of Morocco's 12 administrative regions. Every tab filters to the selected region, and the map recolours per tab (peak demand, solar resource, max temperature, forecast error) |
 | **Load forecasting** | Hourly demand for each of the 12 regions and the national total, yesterday + 3 days ahead |
 | **PV forecasting** | Hourly output of MASEN's utility-scale PV plants (Noor Ouarzazate IV, Noor Laâyoune I, Noor Boujdour I) |
+| **Wind forecasting** | Hourly output of 12 wind farms (~1.4 GW: Tarfaya, Midelt, Aftissat, Akhfennir, Tangier I, Khalladi, …) from 100 m wind through a farm-averaged turbine power curve, split by region or farm |
 | **Weather analytics** | Temperature, feels-like temperature, wind, solar radiation and humidity per region (weighted mean of its main cities) |
 | **Forecast analytics** | 30-day day-ahead error tracking for load, PV and weather, plus the load model card |
 
@@ -26,6 +27,7 @@ GitHub Actions (daily 05:17 UTC)
        ├─ weather.py     Open-Meteo archive (3 y, cached) + forecast + previous runs
        ├─ load_model.py  XGBoost + LightGBM ensemble per region (12 models)
        ├─ pv_model.py    pvlib physical model, single-axis trackers
+       ├─ wind_model.py  100 m wind → farm power curve
        └─ writes energy/data/forecast.json + analytics.json  → committed to the repo
 GitHub Pages
   └─ energy/index.html  static dashboard reading those two JSON files
@@ -96,6 +98,10 @@ Open-Meteo. Everything runs on free tiers.
 
 - Load values are **modelled** until measured data is added (see above).
   Regional shares and national calibration are assumptions in `config.py`.
+- Wind covers the 12 farms with published capacities in Wikipedia's *List of power
+  stations in Morocco* (~1.4 GW, fewer than the national fleet), at approximate
+  locations, with a generic turbine curve. Farm-specific curves and newer farms
+  can be added in `config.WIND_FARMS`.
 - PV covers the **photovoltaic** Noor plants only. Noor Ouarzazate I–III and
   Noor Midelt are concentrated solar (CSP with storage) and aren't modelled.
 - Islamic holiday dates follow announced moon sightings and may shift by a

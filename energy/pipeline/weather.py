@@ -57,9 +57,10 @@ def _frame(payload: dict) -> pd.DataFrame:
     return pd.DataFrame(h, index=idx).astype(float)
 
 
-def forecast(lat: float, lon: float, past_days: int = 1, days: int = 3) -> pd.DataFrame:
+def forecast(lat: float, lon: float, past_days: int = 1, days: int = 3,
+             variables: list[str] = WEATHER_VARS) -> pd.DataFrame:
     return _frame(_get(FORECAST_URL, {
-        "latitude": lat, "longitude": lon, "hourly": ",".join(WEATHER_VARS),
+        "latitude": lat, "longitude": lon, "hourly": ",".join(variables),
         "past_days": past_days, "forecast_days": days,
     }))
 
@@ -122,20 +123,21 @@ def archive_many(locations: dict[str, tuple[float, float]], start: date, end: da
     return out
 
 
-def previous_runs(lat: float, lon: float, past_days: int = 31) -> tuple[pd.DataFrame, pd.DataFrame]:
+def previous_runs(lat: float, lon: float, past_days: int = 31,
+                  variables: list[str] = WEATHER_VARS) -> tuple[pd.DataFrame, pd.DataFrame]:
     """(lead-0, lead-1) weather for the last `past_days` days.
 
     Lead 0 is the run issued on the same day (a near-analysis); lead 1 is what
     the model predicted the day before — i.e. a day-ahead forecast.
     """
-    lead1 = [f"{v}_previous_day1" for v in WEATHER_VARS]
+    lead1 = [f"{v}_previous_day1" for v in variables]
     df = _frame(_get(PREVIOUS_RUNS_URL, {
-        "latitude": lat, "longitude": lon, "hourly": ",".join(WEATHER_VARS + lead1),
+        "latitude": lat, "longitude": lon, "hourly": ",".join(variables + lead1),
         "past_days": past_days, "forecast_days": 1,
     }))
     today = pd.Timestamp.now(tz="UTC").normalize()
     df = df[df.index < today]
-    d0 = df[WEATHER_VARS]
+    d0 = df[variables]
     d1 = df[lead1].rename(columns=lambda c: c.removesuffix("_previous_day1"))
     ok = d0.notna().all(axis=1) & d1.notna().all(axis=1)
     return d0[ok], d1[ok]
