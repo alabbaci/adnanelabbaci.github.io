@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Morocco Energy Forecasts</title>
+<meta name="description" content="Open, zero-cost electricity load, solar PV and weather forecasts for Morocco, refreshed daily." />
+<style>
+  :root {
+    color-scheme: light;
+    --page: #f9f9f7;
+    --surface: #fcfcfb;
+    --ink-1: #0b0b0b;
+    --ink-2: #52514e;
+    --ink-3: #898781;
+    --grid: #e1e0d9;
+    --axis: #c3c2b7;
+    --ring: rgba(11, 11, 11, 0.10);
+    --wash: rgba(11, 11, 11, 0.04);
+    --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100; --s5: #e87ba4;
+    --warn: #fab219;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --page: #0d0d0d; --surface: #1a1a19;
+      --ink-1: #ffffff; --ink-2: #c3c2b7; --ink-3: #898781;
+      --grid: #2c2c2a; --axis: #383835;
+      --ring: rgba(255, 255, 255, 0.10); --wash: rgba(255, 255, 255, 0.05);
+      --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface: #1a1a19;
+    --ink-1: #ffffff; --ink-2: #c3c2b7; --ink-3: #898781;
+    --grid: #2c2c2a; --axis: #383835;
+    --ring: rgba(255, 255, 255, 0.10); --wash: rgba(255, 255, 255, 0.05);
+    --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--page); color: var(--ink-1);
+    font: 14px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 24px 16px 48px; }
+  header h1 { font-size: 22px; margin: 0 0 4px; letter-spacing: -0.01em; }
+  header p { margin: 0; color: var(--ink-2); max-width: 70ch; }
+  .meta { margin-top: 8px; color: var(--ink-3); font-size: 12px; }
+  nav { display: flex; gap: 4px; margin: 20px 0 16px; border-bottom: 1px solid var(--ring);
+    overflow-x: auto; }
+  nav button { background: none; border: 0; border-bottom: 2px solid transparent;
+    color: var(--ink-2); font: inherit; padding: 8px 12px; cursor: pointer; white-space: nowrap; }
+  nav button:hover { color: var(--ink-1); }
+  nav button[aria-selected="true"] { color: var(--ink-1); border-bottom-color: var(--ink-1);
+    font-weight: 600; }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px; margin-bottom: 16px; }
+  .tile { background: var(--surface); border: 1px solid var(--ring); border-radius: 10px;
+    padding: 12px 14px; }
+  .tile .k { color: var(--ink-2); font-size: 12px; }
+  .tile .v { font-size: 26px; font-weight: 600; margin-top: 2px; }
+  .tile .v small { font-size: 14px; font-weight: 400; color: var(--ink-2); }
+  .tile .d { color: var(--ink-3); font-size: 12px; }
+  .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; }
+  .card { background: var(--surface); border: 1px solid var(--ring); border-radius: 10px;
+    padding: 14px 16px 10px; margin-bottom: 16px; min-width: 0; }
+  .card h2 { font-size: 14px; margin: 0; }
+  .card .sub { color: var(--ink-2); font-size: 12px; margin: 2px 0 8px; }
+  .note { border-left: 3px solid var(--warn); background: var(--wash); padding: 8px 12px;
+    color: var(--ink-2); font-size: 13px; border-radius: 0 6px 6px 0; margin-bottom: 16px; }
+  .note strong, .note a { color: var(--ink-1); }
+  .controls { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
+  .controls label { color: var(--ink-2); font-size: 13px; }
+  select { font: inherit; color: var(--ink-1); background: var(--surface);
+    border: 1px solid var(--ring); border-radius: 6px; padding: 4px 8px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12px; color: var(--ink-2);
+    margin-bottom: 4px; }
+  .legend i { display: inline-block; width: 12px; height: 3px; border-radius: 2px;
+    vertical-align: middle; margin-right: 6px; }
+  .legend i.dash { background: repeating-linear-gradient(90deg, currentColor 0 4px, transparent 4px 7px) !important; }
+  .chart { position: relative; }
+  .chart svg { display: block; width: 100%; overflow: visible; }
+  .chart text { fill: var(--ink-3); font-size: 11px; font-variant-numeric: tabular-nums; }
+  .chart text.dl { fill: var(--ink-2); font-size: 11px; }
+  .tip { position: absolute; pointer-events: none; display: none; z-index: 5;
+    background: var(--surface); border: 1px solid var(--ring); border-radius: 8px;
+    padding: 6px 10px; font-size: 12px; box-shadow: 0 4px 16px rgba(0,0,0,.12); white-space: nowrap; }
+  .tip .t { color: var(--ink-3); margin-bottom: 2px; }
+  .tip .row { display: flex; align-items: center; gap: 6px; color: var(--ink-2); }
+  .tip .row b { color: var(--ink-1); font-weight: 600; margin-left: auto; padding-left: 12px;
+    font-variant-numeric: tabular-nums; }
+  .tip .sw { width: 8px; height: 8px; border-radius: 50%; }
+  details { margin-top: 6px; font-size: 12px; color: var(--ink-2); }
+  summary { cursor: pointer; color: var(--ink-3); }
+  table { border-collapse: collapse; width: 100%; font-size: 12px; }
+  th, td { text-align: right; padding: 4px 8px; border-bottom: 1px solid var(--grid);
+    font-variant-numeric: tabular-nums; }
+  th:first-child, td:first-child { text-align: left; }
+  th { color: var(--ink-3); font-weight: 500; }
+  .scroll { max-height: 260px; overflow: auto; }
+  .tablecard { overflow-x: auto; }
+  footer { color: var(--ink-3); font-size: 12px; margin-top: 24px; border-top: 1px solid var(--ring);
+    padding-top: 12px; }
+  footer a, header a { color: var(--ink-2); }
+  [hidden] { display: none !important; }
+  #err { color: var(--ink-1); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Morocco Energy Forecasts</h1>
+    <p>Day-ahead electricity demand, solar PV output and weather for Morocco, built with
+      machine learning on open data and refreshed every morning by GitHub Actions. It runs
+      entirely on free services.</p>
+    <div class="meta" id="meta">Loading…</div>
+  </header>
+
+  <nav role="tablist">
+    <button role="tab" data-tab="load" aria-selected="true">Load</button>
+    <button role="tab" data-tab="pv" aria-selected="false">Solar PV</button>
+    <button role="tab" data-tab="weather" aria-selected="false">Weather</button>
+    <button role="tab" data-tab="analytics" aria-selected="false">Forecast analytics</button>
+  </nav>
+
+  <div id="err" class="note" hidden></div>
+
+  <section id="tab-load" role="tabpanel">
+    <div class="note" id="load-note" hidden><strong>Reference load.</strong> ONEE publishes no
+      open hourly demand data, so the models train on a calibrated reference series: the
+      Moroccan daily profile, holidays and Ramadan, and cooling/heating from real weather,
+      scaled to national annual demand. Treat these numbers as modelled, not metered. See the
+      <a href="README.md">README</a> for how to train on measured data.</div>
+    <div class="tiles" id="load-tiles"></div>
+    <div class="card"><h2>National demand</h2>
+      <div class="sub">MW, hourly. Yesterday and the next days, Morocco local time.</div>
+      <div id="c-load-nat"></div></div>
+    <div class="card"><h2>Demand by zone</h2>
+      <div class="sub">MW, hourly</div>
+      <div id="c-load-zones"></div></div>
+  </section>
+
+  <section id="tab-pv" role="tabpanel" hidden>
+    <div class="tiles" id="pv-tiles"></div>
+    <div class="card"><h2>Total PV output: MASEN Noor photovoltaic plants</h2>
+      <div class="sub">MW AC, hourly. Physical model (pvlib, single-axis trackers) driven by
+        forecast irradiance</div>
+      <div id="c-pv-total"></div></div>
+    <div class="card"><h2>Output by plant</h2>
+      <div class="sub">MW AC, hourly</div>
+      <div id="c-pv-plants"></div></div>
+  </section>
+
+  <section id="tab-weather" role="tabpanel" hidden>
+    <div class="controls"><label for="city">City</label><select id="city"></select></div>
+    <div class="grid2">
+      <div class="card"><h2>Temperature</h2><div class="sub">°C</div><div id="c-wx-temp"></div></div>
+      <div class="card"><h2>Solar radiation (GHI)</h2><div class="sub">W/m²</div><div id="c-wx-ghi"></div></div>
+      <div class="card"><h2>Wind speed (10 m)</h2><div class="sub">m/s</div><div id="c-wx-wind"></div></div>
+      <div class="card"><h2>Relative humidity</h2><div class="sub">%</div><div id="c-wx-hum"></div></div>
+    </div>
+    <div class="card tablecard"><h2>Tomorrow at a glance</h2>
+      <div class="sub">Daily values for every forecast city</div>
+      <div id="wx-table"></div></div>
+  </section>
+
+  <section id="tab-analytics" role="tabpanel" hidden>
+    <div class="note" id="an-note"></div>
+    <div class="tiles" id="an-tiles"></div>
+    <div class="grid2">
+      <div class="card"><h2>Last 7 days: national demand</h2>
+        <div class="sub">Day-ahead forecast vs outcome, MW</div><div id="c-an-load"></div></div>
+      <div class="card"><h2>Last 7 days: total PV</h2>
+        <div class="sub">Day-ahead forecast vs outcome, MW</div><div id="c-an-pv"></div></div>
+    </div>
+    <div class="card"><h2>Daily load error by zone</h2>
+      <div class="sub">Mean absolute percentage error of the day-ahead forecast, %</div>
+      <div id="c-an-mape"></div></div>
+    <div class="card"><h2>Daily PV error</h2>
+      <div class="sub">Mean absolute error as % of installed capacity</div>
+      <div id="c-an-nmae"></div></div>
+    <div class="grid2">
+      <div class="card tablecard"><h2>Weather forecast skill (30 days)</h2>
+        <div class="sub">Mean absolute error, day-ahead vs same-day run</div>
+        <div id="an-wx"></div></div>
+      <div class="card tablecard"><h2>Load model card</h2>
+        <div class="sub" id="mc-sub"></div>
+        <div id="an-model"></div></div>
+    </div>
+  </section>
+
+  <footer>
+    Weather: <a href="https://open-meteo.com/">Open-Meteo</a> (CC BY 4.0), including the
+    Previous Runs API for forecast verification. PV plants and capacities: MASEN Noor programme.
+    Population weights: RGPH 2024 (HCP). Inspired by an open energy forecasting platform for the
+    Italian market. <a href="https://github.com/alabbaci/adnanelabbaci.github.io/tree/main/energy">Source code</a>.
+  </footer>
+</div>
+
+<script>
+const TZ = "Africa/Casablanca";
+const SLOTS = ["--s1", "--s2", "--s3", "--s4", "--s5"];
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const $ = id => document.getElementById(id);
+const fmt = (v, d = 0) => v == null ? "–" : v.toLocaleString("en-US",
+  {minimumFractionDigits: d, maximumFractionDigits: d});
+
+const fHour = new Intl.DateTimeFormat("en-GB", {timeZone: TZ, weekday: "short", day: "numeric",
+  month: "short", hour: "2-digit", minute: "2-digit"});
+const fDay = new Intl.DateTimeFormat("en-GB", {timeZone: TZ, weekday: "short", day: "numeric", month: "short"});
+const fDayShort = new Intl.DateTimeFormat("en-GB", {timeZone: TZ, weekday: "short", day: "numeric"});
+const fDate =new Intl.DateTimeFormat("en-CA", {timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit"});
+const fH = new Intl.DateTimeFormat("en-GB", {timeZone: TZ, hour: "2-digit", hourCycle: "h23"});
+const localDate = t => fDate.format(t);
+const localHour = t => +fH.format(t);
+
+// ---------------------------------------------------------------- charts
+const charts = new Map();   // host id -> redraw fn (for resize / theme change)
+function niceTicks(lo, hi, n = 5) {
+  if (hi === lo) hi = lo + 1;
+  const raw = (hi - lo) / n, mag = 10 ** Math.floor(Math.log10(raw));
+  const step = [1, 2, 2.5, 5, 10].map(m => m * mag).find(s => s >= raw);
+  const t0 = Math.floor(lo / step) * step, out = [];
+  for (let v = t0; v <= hi + step * 0.999; v += step) out.push(+v.toFixed(10));
+  return out;
+}
+
+// opts: {x: Date[], series: [{name, values, slot, dash}], unit, digits, zero, kind: "hour"|"day", now}
+function lineChart(hostId, opts) {
+  const host = $(hostId);
+  const draw = () => renderLine(host, opts);
+  charts.set(hostId, draw);
+  draw();
+}
+
+function renderLine(host, o) {
+  const {x, series, unit = "", digits = 0, zero = true, kind = "hour"} = o;
+  host.innerHTML = "";
+  host.className = "chart";
+  const color = s => css(SLOTS[s.slot ?? 0]);
+  if (series.length > 1) {
+    const lg = document.createElement("div");
+    lg.className = "legend";
+    lg.innerHTML = series.map(s => `<span style="color:${color(s)}"><i class="${s.dash ? "dash" : ""}"
+      style="background:${color(s)}"></i><span style="color:var(--ink-2)">${s.name}</span></span>`).join("");
+    host.appendChild(lg);
+  }
+  const W = Math.max(280, host.clientWidth), H = W < 520 ? 220 : 260;
+  const direct = series.length > 1 && series.length <= 4 && W >= 520;
+  const m = {l: 48, r: direct ? 118 : 14, t: 10, b: 26};
+  const iw = W - m.l - m.r, ih = H - m.t - m.b;
+  const all = series.flatMap(s => s.values).filter(v => v != null);
+  let lo = zero ? 0 : Math.min(...all), hi = Math.max(...all);
+  const ticks = niceTicks(lo, hi);
+  lo = Math.min(lo, ticks[0]); hi = ticks[ticks.length - 1];
+  const X = i => m.l + (x.length === 1 ? iw / 2 : i / (x.length - 1) * iw);
+  const Y = v => m.t + ih - (v - lo) / (hi - lo) * ih;
+  const NS = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(NS, "svg");
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  svg.setAttribute("height", H);
+  svg.setAttribute("role", "img");
+  const el = (tag, attrs, parent = svg) => {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    parent.appendChild(e); return e;
+  };
+  for (const t of ticks) {
+    el("line", {x1: m.l, x2: m.l + iw, y1: Y(t), y2: Y(t),
+      stroke: t === ticks[0] ? css("--axis") : css("--grid"), "stroke-width": 1});
+    el("text", {x: m.l - 6, y: Y(t) + 4, "text-anchor": "end"}).textContent = fmt(t, t % 1 ? 1 : 0);
+  }
+  // x ticks: local midnights (hourly) or evenly spaced days (daily), thinned so
+  // labels (~80px each) never collide or run past the plot edge
+  const cand = x.map((t, i) => i).filter(i => kind === "day" || localHour(x[i]) === 0);
+  const pxPer = cand.length > 1 ? X(cand[1]) - X(cand[0]) : iw;
+  const short = pxPer < 90, lw = short ? 46 : 84;
+  const every = Math.max(1, Math.ceil(lw / pxPer));
+  cand.forEach((i, k) => {
+    const keep = kind === "day" ? (cand.length - 1 - k) % every === 0 : k % every === 0;
+    if (kind === "hour") el("line", {x1: X(i), x2: X(i), y1: m.t, y2: m.t + ih, stroke: css("--grid")});
+    if (!keep) return;
+    const anchor = kind === "hour" ? "start" : "middle";
+    const lx = kind === "hour" ? X(i) + 4 : X(i);
+    if ((anchor === "start" ? lx + lw - 8 : lx + lw / 2 - 4) > W - 2) return;
+    el("text", {x: lx, y: H - 8, "text-anchor": anchor}).textContent =
+      (short ? fDayShort : fDay).format(x[i]);
+  });
+  if (o.now) {
+    const i = x.findIndex(t => t >= o.now);
+    if (i > 0) {
+      el("line", {x1: X(i), x2: X(i), y1: m.t, y2: m.t + ih, stroke: css("--ink-3"),
+        "stroke-dasharray": "2 3"});
+      el("text", {x: X(i) - 4, y: m.t + 10, "text-anchor": "end"}).textContent = "now";
+    }
+  }
+  const ends = [];
+  series.forEach(s => {
+    let d = "", pen = false;
+    s.values.forEach((v, i) => {
+      if (v == null) { pen = false; return; }
+      d += (pen ? "L" : "M") + X(i).toFixed(1) + "," + Y(v).toFixed(1);
+      pen = true;
+    });
+    el("path", {d, fill: "none", stroke: color(s), "stroke-width": 2, "stroke-linejoin": "round",
+      "stroke-linecap": "round", ...(s.dash ? {"stroke-dasharray": "5 4"} : {})});
+    if (kind === "day") s.values.forEach((v, i) => v != null && el("circle",
+      {cx: X(i), cy: Y(v), r: 3, fill: color(s), stroke: css("--surface"), "stroke-width": 1.5}));
+    let li = s.values.length - 1;
+    while (li > 0 && s.values[li] == null) li--;
+    ends.push({s, y: Y(s.values[li] ?? lo), x: X(li)});
+  });
+  if (direct) {
+    ends.sort((a, b) => a.y - b.y);
+    for (let i = 1; i < ends.length; i++) ends[i].y = Math.max(ends[i].y, ends[i - 1].y + 14);
+    ends.forEach(e => {
+      const name = e.s.name.length > 18 ? e.s.name.slice(0, 17) + "…" : e.s.name;
+      el("text", {x: e.x + 6, y: e.y + 4, class: "dl"}).textContent = name;
+    });
+  }
+  // hover layer
+  const hover = el("g", {style: "display:none"});
+  const vline = el("line", {y1: m.t, y2: m.t + ih, stroke: css("--ink-3")}, hover);
+  const dots = series.map(s => el("circle", {r: 4, fill: color(s), stroke: css("--surface"),
+    "stroke-width": 2}, hover));
+  const hit = el("rect", {x: m.l, y: m.t, width: iw, height: ih, fill: "transparent"});
+  host.appendChild(svg);
+  const tip = document.createElement("div");
+  tip.className = "tip";
+  host.appendChild(tip);
+  const move = ev => {
+    const r = svg.getBoundingClientRect(), sx = (ev.clientX - r.left) * W / r.width;
+    const i = Math.max(0, Math.min(x.length - 1, Math.round((sx - m.l) / iw * (x.length - 1))));
+    hover.style.display = "";
+    vline.setAttribute("x1", X(i)); vline.setAttribute("x2", X(i));
+    series.forEach((s, k) => {
+      const v = s.values[i];
+      dots[k].style.display = v == null ? "none" : "";
+      if (v != null) { dots[k].setAttribute("cx", X(i)); dots[k].setAttribute("cy", Y(v)); }
+    });
+    tip.innerHTML = `<div class="t">${(kind === "hour" ? fHour : fDay).format(x[i])}</div>` +
+      series.map(s => `<div class="row"><span class="sw" style="background:${color(s)}"></span>
+        ${s.name}<b>${fmt(s.values[i], digits)} ${unit}</b></div>`).join("");
+    tip.style.display = "block";
+    const px = X(i) * r.width / W, tw = tip.offsetWidth;
+    tip.style.left = (px + 14 + tw > r.width ? px - 14 - tw : px + 14) + "px";
+    tip.style.top = (series.length > 1 ? 28 : 0) + "px";
+  };
+  hit.addEventListener("pointermove", move);
+  hit.addEventListener("pointerdown", move);
+  hit.addEventListener("pointerleave", () => { hover.style.display = "none"; tip.style.display = "none"; });
+  // table view
+  const det = document.createElement("details");
+  det.innerHTML = `<summary>Show data table</summary><div class="scroll"><table><thead><tr>
+    <th>${kind === "hour" ? "Time" : "Day"}</th>${series.map(s => `<th>${s.name}</th>`).join("")}</tr></thead>
+    <tbody>${x.map((t, i) => `<tr><td>${(kind === "hour" ? fHour : fDay).format(t)}</td>${series.map(s =>
+      `<td>${fmt(s.values[i], digits)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+  host.appendChild(det);
+}
+
+let resizeT;
+window.addEventListener("resize", () => {
+  clearTimeout(resizeT);
+  resizeT = setTimeout(() => charts.forEach(d => d()), 150);
+});
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => charts.forEach(d => d()));
+// charts on hidden tabs have zero width; redraw when their tab opens
+const redrawVisible = () => charts.forEach((d, id) => { if ($(id).offsetParent) d(); });
+
+// ---------------------------------------------------------------- tabs
+const rendered = {};
+function show(tab) {
+  document.querySelectorAll("nav button").forEach(b =>
+    b.setAttribute("aria-selected", b.dataset.tab === tab));
+  document.querySelectorAll("[role=tabpanel]").forEach(p => p.hidden = p.id !== "tab-" + tab);
+  if (!rendered[tab] && window.DATA) { rendered[tab] = true; RENDER[tab](); }
+  else redrawVisible();
+  try { localStorage.setItem("energy-tab", tab); } catch (e) {}
+}
+document.querySelectorAll("nav button").forEach(b => b.addEventListener("click", () => show(b.dataset.tab)));
+
+function tiles(id, items) {
+  $(id).innerHTML = items.map(([k, v, unit, d]) => `<div class="tile"><div class="k">${k}</div>
+    <div class="v">${v}${unit ? ` <small>${unit}</small>` : ""}</div>${d ? `<div class="d">${d}</div>` : ""}</div>`).join("");
+}
+
+// indices of the next local calendar day
+function tomorrowIdx(times) {
+  const t = new Date(Date.now() + 86400e3), key = localDate(t);
+  return times.map((x, i) => localDate(x) === key ? i : -1).filter(i => i >= 0);
+}
+
+// ---------------------------------------------------------------- views
+const RENDER = {
+  load() {
+    const {F} = DATA, x = F.x, L = F.load;
+    $("load-note").hidden = L.target !== "reference";
+    const tm = tomorrowIdx(x), nat = L.national;
+    const pk = tm.reduce((a, i) => nat[i] > nat[a] ? i : a, tm[0]);
+    const lowI = tm.reduce((a, i) => nat[i] < nat[a] ? i : a, tm[0]);
+    const energy = tm.reduce((s, i) => s + nat[i], 0) / 1000;
+    tiles("load-tiles", [
+      ["Tomorrow's peak", fmt(nat[pk]), "MW", "at " + fHour.format(x[pk]).split(" ").pop()],
+      ["Tomorrow's minimum", fmt(nat[lowI]), "MW", "at " + fHour.format(x[lowI]).split(" ").pop()],
+      ["Tomorrow's energy", fmt(energy, 1), "GWh", ""],
+      ["Day-ahead error", fmt(DATA.A.summary.load_mape_30d, 2), "%", "national MAPE, last 30 days"],
+    ]);
+    lineChart("c-load-nat", {x, series: [{name: "National demand", values: nat}], unit: "MW",
+      zero: false, now: new Date()});
+    lineChart("c-load-zones", {x, zero: false, now: new Date(), unit: "MW",
+      series: Object.entries(L.zones).map(([k, z], i) => ({name: z.label.split(" (")[0], values: z.mw, slot: i}))});
+  },
+  pv() {
+    const {F} = DATA, x = F.x, P = F.pv, tm = tomorrowIdx(x);
+    const cap = Object.values(P.plants).reduce((s, p) => s + p.capacity_mw, 0);
+    const e = tm.reduce((s, i) => s + P.total[i], 0);
+    const pk = Math.max(...tm.map(i => P.total[i]));
+    tiles("pv-tiles", [
+      ["Tomorrow's PV energy", fmt(e), "MWh", ""],
+      ["Tomorrow's peak output", fmt(pk), "MW", `${fmt(pk / cap * 100)}% of ${cap} MW AC`],
+      ["Capacity factor tomorrow", fmt(e / (cap * 24) * 100, 1), "%", ""],
+      ["30-day day-ahead error", fmt(DATA.A.summary.pv_nmae_30d, 2), "%", "MAE as % of capacity"],
+    ]);
+    lineChart("c-pv-total", {x, series: [{name: "Total PV", values: P.total}], unit: "MW", digits: 1,
+      now: new Date()});
+    lineChart("c-pv-plants", {x, unit: "MW", digits: 1, now: new Date(),
+      series: Object.values(P.plants).map((p, i) => ({name: `${p.label} (${p.capacity_mw} MW)`, values: p.mw, slot: i}))});
+  },
+  weather() {
+    const {F} = DATA, x = F.x, W = F.weather, sel = $("city");
+    sel.innerHTML = Object.keys(W).map(c => `<option>${c}</option>`).join("");
+    let saved; try { saved = localStorage.getItem("energy-city"); } catch (e) {}
+    if (saved && W[saved]) sel.value = saved;
+    const draw = () => {
+      const c = W[sel.value];
+      lineChart("c-wx-temp", {x, zero: false, unit: "°C", digits: 1, now: new Date(), series: [
+        {name: "Temperature", values: c.temp, slot: 1},
+        {name: "Feels like", values: c.feels_like, slot: 0, dash: true}]});
+      lineChart("c-wx-ghi", {x, unit: "W/m²", now: new Date(), series: [{name: "GHI", values: c.ghi, slot: 3}]});
+      lineChart("c-wx-wind", {x, unit: "m/s", digits: 1, now: new Date(), series: [{name: "Wind", values: c.wind, slot: 2}]});
+      lineChart("c-wx-hum", {x, unit: "%", now: new Date(), series: [{name: "Humidity", values: c.humidity, slot: 0}]});
+    };
+    sel.addEventListener("change", () => {
+      try { localStorage.setItem("energy-city", sel.value); } catch (e) {}
+      draw();
+    });
+    draw();
+    const tm = tomorrowIdx(x);
+    const agg = (a, f) => f(...tm.map(i => a[i]).filter(v => v != null));
+    const rows = Object.entries(W).map(([n, c]) => [n, agg(c.temp, Math.min), agg(c.temp, Math.max),
+      agg(c.feels_like, Math.max), agg(c.wind, Math.max), tm.reduce((s, i) => s + (c.ghi[i] || 0), 0) / 1000,
+      tm.reduce((s, i) => s + c.humidity[i], 0) / tm.length]).sort((a, b) => b[2] - a[2]);
+    $("wx-table").innerHTML = `<table><thead><tr><th>City</th><th>Min °C</th><th>Max °C</th>
+      <th>Max feels-like °C</th><th>Max wind m/s</th><th>Solar kWh/m²</th><th>Mean RH %</th></tr></thead><tbody>${
+      rows.map(r => `<tr><td>${r[0]}</td><td>${fmt(r[1], 1)}</td><td>${fmt(r[2], 1)}</td><td>${fmt(r[3], 1)}</td>
+      <td>${fmt(r[4], 1)}</td><td>${fmt(r[5], 2)}</td><td>${fmt(r[6])}</td></tr>`).join("")}</tbody></table>`;
+  },
+  analytics() {
+    const {A, F} = DATA;
+    $("an-note").innerHTML = `<strong>How errors are measured.</strong> ${A.method} This isolates
+      the error that comes from weather forecasts; it builds up a fresh 30-day window every day.`;
+    tiles("an-tiles", [
+      ["Load MAPE, national (30 d)", fmt(A.summary.load_mape_30d, 2), "%", ""],
+      ["PV error (30 d)", fmt(A.summary.pv_nmae_30d, 2), "%", "MAE / installed capacity"],
+      ["Temperature MAE (30 d)", fmt(A.summary.temp_mae_30d, 2), "°C", "mean across cities"],
+      ["Model holdout MAPE", fmt(A.model.zones.centre?.mape, 2), "%", "Centre zone, last 60 days"],
+    ]);
+    const rx = A.recent.times.map(t => new Date(t));
+    lineChart("c-an-load", {x: rx, zero: false, unit: "MW", series: [
+      {name: "Outcome", values: A.recent.load_act, slot: 0},
+      {name: "Day-ahead forecast", values: A.recent.load_fc, slot: 1, dash: true}]});
+    lineChart("c-an-pv", {x: rx, unit: "MW", digits: 1, series: [
+      {name: "Outcome", values: A.recent.pv_act, slot: 0},
+      {name: "Day-ahead forecast", values: A.recent.pv_fc, slot: 1, dash: true}]});
+    const dx = A.days.map(d => new Date(d + "T12:00:00Z"));
+    const zl = F.load.zones;
+    lineChart("c-an-mape", {x: dx, kind: "day", unit: "%", digits: 2, series: [
+      ...Object.keys(zl).map((z, i) => ({name: zl[z].label.split(" (")[0], values: A.load_mape[z], slot: i})),
+      {name: "National", values: A.load_mape.national, slot: 4}]});
+    const pl = F.pv.plants;
+    lineChart("c-an-nmae", {x: dx, kind: "day", unit: "%", digits: 2, series: [
+      ...Object.keys(pl).map((p, i) => ({name: pl[p].label, values: A.pv_nmae[p], slot: i})),
+      {name: "All plants", values: A.pv_nmae.total, slot: 4}]});
+    const mean = a => { const v = a.filter(x => x != null); return v.reduce((s, x) => s + x, 0) / v.length; };
+    $("an-wx").innerHTML = `<table><thead><tr><th>City</th><th>Temp °C</th><th>Feels-like °C</th>
+      <th>Wind m/s</th><th>GHI W/m²</th></tr></thead><tbody>${Object.entries(A.weather_mae).map(([c, e]) =>
+      `<tr><td>${c}</td><td>${fmt(mean(e.temp), 2)}</td><td>${fmt(mean(e.feels_like), 2)}</td>
+      <td>${fmt(mean(e.wind), 2)}</td><td>${fmt(mean(e.ghi), 1)}</td></tr>`).join("")}</tbody></table>`;
+    const mc = A.model;
+    $("mc-sub").textContent = `${mc.algorithm}. Target: ${mc.target} load. Holdout: last ${mc.holdout_days} days.`;
+    $("an-model").innerHTML = `<table><thead><tr><th>Zone</th><th>Holdout MAPE %</th><th>Holdout MAE MW</th></tr></thead>
+      <tbody>${Object.entries(mc.zones).map(([z, h]) => `<tr><td>${zl[z].label.split(" (")[0]}</td>
+      <td>${fmt(h.mape, 2)}</td><td>${fmt(h.mae_mw)}</td></tr>`).join("")}</tbody></table>
+      <details><summary>Features and calibration</summary><p>${mc.features.join(", ")}</p>
+      <p>Calibrated to ${mc.calibration.annual_twh} TWh/year national demand; modelled peak over the
+      last year ${fmt(mc.calibration.modelled_peak_mw_last_year)} MW (reference ≈ ${fmt(mc.calibration.reference_peak_mw)} MW).</p></details>`;
+  },
+};
+
+// ---------------------------------------------------------------- boot
+Promise.all(["data/forecast.json", "data/analytics.json"].map(f =>
+  fetch(f, {cache: "no-cache"}).then(r => { if (!r.ok) throw new Error(f + ": HTTP " + r.status); return r.json(); })
+)).then(([F, A]) => {
+  F.x = F.times.map(t => new Date(t));
+  window.DATA = {F, A};
+  const gen = new Date(F.generated_utc);
+  $("meta").textContent = `Updated ${fHour.format(gen)} (Morocco time) · ${F.x.length} hourly steps · ` +
+    `${Object.keys(F.load.zones).length} load zones · ${Object.keys(F.pv.plants).length} PV plants · ` +
+    `${Object.keys(F.weather).length} cities`;
+  let tab = "load";
+  try { tab = localStorage.getItem("energy-tab") || "load"; } catch (e) {}
+  show(RENDER[tab] ? tab : "load");
+}).catch(e => {
+  $("meta").textContent = "";
+  $("err").hidden = false;
+  $("err").textContent = "Could not load forecast data (" + e.message + "). The daily pipeline may not have run yet.";
+});
+</script>
+</body>
+</html>

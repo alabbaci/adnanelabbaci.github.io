@@ -1,3 +1,7 @@
+> **Also in this repo:** [⚡ Morocco Energy Forecasts](energy/README.md), a
+> zero-cost daily forecasting platform for electricity load, solar PV and
+> weather in Morocco ([dashboard](energy/index.html)).
+
 # 3D Heat Traps & Pedestrian Exposure in Dakhla
 
 A spatial analysis pipeline that maps Dakhla's 3D urban geometry to find
