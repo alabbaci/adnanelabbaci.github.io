@@ -4,6 +4,13 @@ on:
   schedule:
     - cron: "17 5 * * *"      # daily, 05:17 UTC (06:17 Morocco)
   workflow_dispatch:
+  # Run immediately whenever the pipeline itself changes, so a fresh
+  # deployment publishes forecasts without waiting for the next schedule.
+  push:
+    paths:
+      - "energy/pipeline/**"
+      - "energy/requirements.txt"
+      - ".github/workflows/energy-forecast.yml"
 
 permissions:
   contents: write
@@ -12,12 +19,20 @@ concurrency:
   group: energy-forecast
   cancel-in-progress: false
 
+env:
+  PUBLISH_BRANCH: main
+
 jobs:
   forecast:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
+      # Always forecast from, and publish to, main, whichever branch
+      # triggered the run (schedules fire on the default branch).
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.PUBLISH_BRANCH }}
+          fetch-depth: 0
 
       - uses: actions/setup-python@v5
         with:
@@ -38,10 +53,19 @@ jobs:
       - run: python energy/pipeline/run_daily.py
 
       - name: Commit forecasts
+        env:
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add energy/data/forecast.json energy/data/analytics.json
           git diff --cached --quiet && exit 0
           git commit -m "energy: daily forecast $(date -u +%F)"
-          git push
+          git pull --rebase origin "$PUBLISH_BRANCH"
+          git push origin "HEAD:$PUBLISH_BRANCH"
+          # Keep the repository's default branch in step too, in case
+          # GitHub Pages publishes from it rather than from main.
+          if [ -n "$DEFAULT_BRANCH" ] && [ "$DEFAULT_BRANCH" != "$PUBLISH_BRANCH" ]; then
+            git push origin "HEAD:refs/heads/$DEFAULT_BRANCH" \
+              || echo "::warning::$DEFAULT_BRANCH has diverged from $PUBLISH_BRANCH; forecasts were published to $PUBLISH_BRANCH only"
+          fi

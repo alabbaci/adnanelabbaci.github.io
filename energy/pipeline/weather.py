@@ -18,17 +18,28 @@ PREVIOUS_RUNS_URL = "https://previous-runs-api.open-meteo.com/v1/forecast"
 CACHE = ROOT / ".cache" / "weather"
 
 
+# The load model trains only on these; fetching fewer variables keeps the
+# multi-year archive requests small and fast.
+ARCHIVE_VARS = ["temperature_2m", "apparent_temperature", "relative_humidity_2m",
+                "wind_speed_10m", "shortwave_radiation"]
+
+
 def _get(url: str, params: dict) -> dict:
     params = {**params, "timezone": "GMT", "wind_speed_unit": "ms"}
+    last = None
     for attempt in range(5):
-        r = requests.get(url, params=params, timeout=60)
-        if r.status_code == 200:
-            return r.json()
-        if r.status_code in (429, 500, 502, 503, 504):
-            time.sleep(2 ** attempt * 3)
-            continue
-        raise RuntimeError(f"{url} -> HTTP {r.status_code}: {r.text[:300]}")
-    raise RuntimeError(f"{url}: gave up after retries")
+        try:
+            r = requests.get(url, params=params, timeout=180)
+        except (requests.Timeout, requests.ConnectionError) as e:
+            last = e
+        else:
+            if r.status_code == 200:
+                return r.json()
+            if r.status_code not in (429, 500, 502, 503, 504):
+                raise RuntimeError(f"{url} -> HTTP {r.status_code}: {r.text[:300]}")
+            last = f"HTTP {r.status_code}"
+        time.sleep(2 ** attempt * 5)
+    raise RuntimeError(f"{url}: gave up after retries ({last})")
 
 
 def _frame(payload: dict) -> pd.DataFrame:
@@ -50,7 +61,7 @@ def archive(lat: float, lon: float, start: date, end: date) -> pd.DataFrame:
     parts = []
     for year in range(start.year, end.year + 1):
         y0, y1 = max(start, date(year, 1, 1)), min(end, date(year, 12, 31))
-        f = CACHE / f"{lat:.3f}_{lon:.3f}_{year}.csv.gz"
+        f = CACHE / f"v2_{lat:.3f}_{lon:.3f}_{year}.csv.gz"
         complete_year = y1 == date(year, 12, 31)
         if f.exists():
             df = pd.read_csv(f, index_col=0, parse_dates=True)
@@ -59,7 +70,7 @@ def archive(lat: float, lon: float, start: date, end: date) -> pd.DataFrame:
                 parts.append(df.loc[str(y0):str(y1)])
                 continue
         df = _frame(_get(ARCHIVE_URL, {
-            "latitude": lat, "longitude": lon, "hourly": ",".join(WEATHER_VARS),
+            "latitude": lat, "longitude": lon, "hourly": ",".join(ARCHIVE_VARS),
             "start_date": y0.isoformat(), "end_date": y1.isoformat(),
         })).dropna(how="all")
         df.to_csv(f)
