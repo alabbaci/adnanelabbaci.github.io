@@ -1,0 +1,7 @@
+numpy>=1.26
+pandas>=2.2
+requests>=2.31
+xgboost>=2.0
+lightgbm>=4.3
+scikit-learn>=1.4
+pvlib>=0.11

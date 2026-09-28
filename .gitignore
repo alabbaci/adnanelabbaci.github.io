@@ -4,7 +4,10 @@ __pycache__/
 .venv/
 
 # Raw inputs (user-supplied census layers etc.)
-data/raw/
+/data/raw/
+
+# Energy pipeline weather cache (restored by GitHub Actions cache)
+energy/.cache/
 
 # Large Kepler exports
 kepler_gl.html
