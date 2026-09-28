@@ -15,9 +15,11 @@ import pandas as pd
 
 import weather
 from weather import log
-from config import DATA, FORECAST_DAYS, PV_PLANTS, REGIONS, TRAIN_YEARS, TZ, demand_share
+from config import (DATA, FORECAST_DAYS, PV_PLANTS, REGIONS, TRAIN_YEARS, TZ, WIND_FARMS, WIND_VARS,
+                    demand_share)
 from load_model import ACTUALS, RegionModel, model_card, region_weather
 from pv_model import plant_output
+from wind_model import farm_output
 
 # Days of extra weather history fetched ahead of each window so the lagged
 # temperature features (24 h / 72 h thermal memory) are warmed up.
@@ -87,11 +89,13 @@ def main():
     log("Fetching forecasts…")
     fc_city = {c: weather.forecast(lat, lon, 1 + WARMUP_DAYS, FORECAST_DAYS) for c, (lat, lon) in city_xy.items()}
     fc_plant = {p: weather.forecast(v["lat"], v["lon"], 1, FORECAST_DAYS) for p, v in PV_PLANTS.items()}
+    fc_farm = {w: weather.forecast(v["lat"], v["lon"], 1, FORECAST_DAYS, WIND_VARS) for w, v in WIND_FARMS.items()}
     idx = next(iter(fc_city.values())).index[24 * WARMUP_DAYS:]     # yesterday + forecast days
 
     fc_region_wx = {r: region_weather(fc_city, r) for r in REGIONS}
     load_fc = {r: models[r].predict(fc_region_wx[r]).reindex(idx) for r in REGIONS}
     pv_fc = {p: plant_output(PV_PLANTS[p], fc_plant[p]).reindex(idx) for p in PV_PLANTS}
+    wind_fc = {w: farm_output(WIND_FARMS[w], fc_farm[w]).reindex(idx) for w in WIND_FARMS}
 
     forecast = {
         "generated_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%MZ"),
@@ -112,11 +116,18 @@ def main():
                            "lat": v["lat"], "lon": v["lon"], "mw": rnd(pv_fc[p], 1)}
                        for p, v in PV_PLANTS.items()},
         },
+        "wind": {
+            "total": rnd(sum(wind_fc.values()), 1),
+            "farms": {w: {"label": v["label"], "region": v["region"], "capacity_mw": v["mw"],
+                          "lat": v["lat"], "lon": v["lon"], "mw": rnd(wind_fc[w], 1)}
+                      for w, v in WIND_FARMS.items()},
+        },
     }
 
     log("Backtesting day-ahead forecasts (previous model runs)…")
     runs_city = {c: weather.previous_runs(lat, lon, 31 + WARMUP_DAYS) for c, (lat, lon) in city_xy.items()}
     runs_plant = {p: weather.previous_runs(v["lat"], v["lon"]) for p, v in PV_PLANTS.items()}
+    runs_farm = {w: weather.previous_runs(v["lat"], v["lon"], 31, WIND_VARS) for w, v in WIND_FARMS.items()}
     d0_reg = {r: region_weather({c: v[0] for c, v in runs_city.items()}, r) for r in REGIONS}
     d1_reg = {r: region_weather({c: v[1] for c, v in runs_city.items()}, r) for r in REGIONS}
     d0_reg["national"], d1_reg["national"] = national_weather(d0_reg), national_weather(d1_reg)
@@ -140,6 +151,16 @@ def main():
     pv_err["total"] = daily((pv_f - pv_a).abs() / cap * 100)
     pv_energy = pd.DataFrame({"fc": daily(pv_f, "sum"), "act": daily(pv_a, "sum")})
 
+    wind_err, wind_f_all, wind_a_all = {}, [], []
+    for w, (d0, d1) in runs_farm.items():
+        f, a = farm_output(WIND_FARMS[w], d1), farm_output(WIND_FARMS[w], d0).reindex(d1.index)
+        wind_f_all.append(f)
+        wind_a_all.append(a)
+        wind_err[w] = daily((f - a).abs() / WIND_FARMS[w]["mw"] * 100)
+    wind_f, wind_a = sum(wind_f_all).dropna(), sum(wind_a_all).dropna()
+    wind_cap = sum(v["mw"] for v in WIND_FARMS.values())
+    wind_err["total"] = daily((wind_f - wind_a).abs() / wind_cap * 100)
+
     wx_err = {}
     for k in d0_reg:
         d0, d1 = d0_reg[k], d1_reg[k].reindex(d0_reg[k].index)
@@ -149,6 +170,7 @@ def main():
     t_end = fc_s["national"].index.max()
     recent = fc_s["national"].index[fc_s["national"].index >= t_end - pd.Timedelta(days=7)]
     keys = ["national", *REGIONS]
+    mean30 = lambda s: round(float(s.reindex(days).mean()), 2)   # noqa: E731
     analytics = {
         "generated_utc": forecast["generated_utc"],
         "days": [d.isoformat() for d in days],
@@ -157,6 +179,7 @@ def main():
                    f"{target} load series."),
         "load_mape": {k: rnd(load_err[k].reindex(days), 2) for k in keys},
         "pv_nmae": {p: rnd(s.reindex(days), 2) for p, s in pv_err.items()},
+        "wind_nmae": {w: rnd(s.reindex(days), 2) for w, s in wind_err.items()},
         "pv_energy_mwh": {"fc": rnd(pv_energy["fc"].reindex(days), 0),
                           "act": rnd(pv_energy["act"].reindex(days), 0)},
         "weather_mae": {k: {n: rnd(s.reindex(days), 2) for n, s in wx_err[k].items()} for k in keys},
@@ -165,12 +188,12 @@ def main():
             "load": {k: {"fc": rnd(fc_s[k].reindex(recent), 0), "act": rnd(act_s[k].reindex(recent), 0)}
                      for k in keys},
             "pv": {"fc": rnd(pv_f.reindex(recent), 1), "act": rnd(pv_a.reindex(recent), 1)},
+            "wind": {"fc": rnd(wind_f.reindex(recent), 1), "act": rnd(wind_a.reindex(recent), 1)},
         },
         "summary": {
-            k: {"load_mape_30d": round(float(load_err[k].mean()), 2),
-                "temp_mae_30d": round(float(wx_err[k]["temp"].mean()), 2)}
+            k: {"load_mape_30d": mean30(load_err[k]), "temp_mae_30d": mean30(wx_err[k]["temp"])}
             for k in keys
-        } | {"pv_nmae_30d": round(float(pv_err["total"].mean()), 2)},
+        } | {"pv_nmae_30d": mean30(pv_err["total"]), "wind_nmae_30d": mean30(wind_err["total"])},
         "model": model_card(models, national_hist.max()),
     }
 

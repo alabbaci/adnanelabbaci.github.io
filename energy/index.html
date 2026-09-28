@@ -128,7 +128,7 @@
   table { border-collapse: collapse; width: 100%; font-size: 12px; }
   th, td { text-align: right; padding: 4px 8px; border-bottom: 1px solid var(--grid);
     font-variant-numeric: tabular-nums; }
-  th:first-child, td:first-child { text-align: left; }
+  th:first-child, td:first-child, th.lt, td.lt { text-align: left; }
   th { color: var(--ink-3); font-weight: 500; }
   tr.click { cursor: pointer; }
   tr.click:hover td { background: var(--wash); }
@@ -146,7 +146,7 @@
 <div class="wrap">
   <header>
     <h1>Morocco Energy Forecasts</h1>
-    <p>Day-ahead electricity demand, solar PV output and weather for Morocco's 12 regions,
+    <p>Day-ahead electricity demand, solar PV and wind output, and weather for Morocco's 12 regions,
       built with machine learning on open data and refreshed every morning by GitHub Actions.
       Click a region on the map to explore it. It runs entirely on free services.</p>
     <div class="meta" id="meta">Loading…</div>
@@ -155,6 +155,7 @@
   <nav role="tablist">
     <button role="tab" data-tab="load" aria-selected="true">Load</button>
     <button role="tab" data-tab="pv" aria-selected="false">Solar PV</button>
+    <button role="tab" data-tab="wind" aria-selected="false">Wind</button>
     <button role="tab" data-tab="weather" aria-selected="false">Weather</button>
     <button role="tab" data-tab="analytics" aria-selected="false">Forecast analytics</button>
   </nav>
@@ -202,6 +203,20 @@
           <div id="c-pv-plants"></div></div>
       </section>
 
+      <section id="tab-wind" role="tabpanel" hidden>
+        <div class="tiles" id="wind-tiles"></div>
+        <div class="card"><h2 id="wind-h">Wind output</h2>
+          <div class="sub">MW, hourly. Physical model: Open-Meteo 100 m wind through a farm-averaged
+            turbine power curve, minus 12% wake and availability losses.</div>
+          <div id="c-wind-total"></div></div>
+        <div class="card" id="wind-split-card"><h2 id="wind-split-h">Output by region</h2>
+          <div class="sub">MW, hourly</div>
+          <div id="c-wind-split"></div></div>
+        <div class="card tablecard"><h2>Wind farms</h2>
+          <div class="sub" id="wind-table-sub"></div>
+          <div id="wind-table"></div></div>
+      </section>
+
       <section id="tab-weather" role="tabpanel" hidden>
         <div class="tiles" id="wx-tiles"></div>
         <div class="grid2">
@@ -220,8 +235,8 @@
         <div class="card"><h2>Daily load error</h2>
           <div class="sub">Mean absolute percentage error of the day-ahead forecast, %</div>
           <div id="c-an-mape"></div></div>
-        <div class="card"><h2>Daily PV error (all plants)</h2>
-          <div class="sub">Mean absolute error as % of installed capacity</div>
+        <div class="card"><h2>Daily renewables error</h2>
+          <div class="sub">Mean absolute error of the day-ahead forecast as % of installed capacity</div>
           <div id="c-an-nmae"></div></div>
         <div class="card tablecard"><h2>All regions</h2>
           <div class="sub">30-day day-ahead errors and model test scores. Click a row to select the region.</div>
@@ -234,7 +249,7 @@
   <footer>
     Region boundaries: <a href="https://www.geoboundaries.org/">geoBoundaries</a> (CC BY 4.0), 2015
     division into 12 regions. Weather: <a href="https://open-meteo.com/">Open-Meteo</a> (CC BY 4.0),
-    including the Previous Runs API for forecast verification. PV plants: MASEN Noor programme.
+    including the Previous Runs API for forecast verification. PV plants: MASEN Noor programme. Wind farms and capacities: <a href="https://en.wikipedia.org/wiki/List_of_power_stations_in_Morocco">List of power stations in Morocco</a> (sources: ONEE, MASEN, operators); locations approximate.
     Population: RGPH 2024 (HCP); regional GDP: HCP regional accounts. Inspired by an open energy
     forecasting platform for the Italian market.
     <a href="https://github.com/alabbaci/adnanelabbaci.github.io/tree/main/energy">Source code</a>.
@@ -433,6 +448,8 @@ const METRICS = {
     value: r => maxOf(pick(F.regions[r].load, F.tm))},
   pv: {title: "Tomorrow's solar resource", unit: "kWh/m²", digits: 2,
     value: r => sum(pick(F.regions[r].weather.ghi, F.tm)) / 1000},
+  wind: {title: "Tomorrow's mean wind speed (10 m)", unit: "m/s", digits: 1,
+    value: r => mean(pick(F.regions[r].weather.wind, F.tm))},
   weather: {title: "Tomorrow's maximum temperature", unit: "°C", digits: 1,
     value: r => maxOf(pick(F.regions[r].weather.temp, F.tm))},
   analytics: {title: "Day-ahead load error, last 30 days (MAPE)", unit: "%", digits: 2,
@@ -483,10 +500,11 @@ function drawMap() {
   });
   // selected region drawn last so its outline sits on top
   shapes.sort((a, b) => a.includes(" sel\"") - b.includes(" sel\""));
-  const plants = state.tab === "pv" ? Object.values(F.pv.plants).map(p => {
+  const sites = state.tab === "pv" ? Object.values(F.pv.plants) : state.tab === "wind" ? Object.values(F.wind.farms) : [];
+  const plants = sites.map(p => {
     const [x, y] = P([p.lon, p.lat]);
     return `<circle class="plant" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(3 + Math.sqrt(p.capacity_mw) * 0.6).toFixed(1)}"></circle>`;
-  }).join("") : "";
+  }).join("");
   host.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Map of Morocco's regions: ${M.title}">
     ${shapes.join("")}${plants}</svg><div class="tip" id="maptip"></div>`;
 
@@ -507,7 +525,7 @@ function drawMap() {
     p.addEventListener("pointerleave", () => tip.style.display = "none");
   });
 
-  $("map-title").textContent = M.title + (state.tab === "pv" ? " · dots: PV plants" : "");
+  $("map-title").textContent = M.title + ({pv: " · dots: PV plants", wind: " · dots: wind farms"}[state.tab] || "");
   $("ramp-lo").textContent = fmt(lo, M.digits);
   $("ramp-hi").textContent = fmt(hi, M.digits) + " " + M.unit;
   $("ramp-bar").style.background = `linear-gradient(90deg, ${[0, .17, .33, .5, .67, .83, 1].map(seqColor).join(",")})`;
@@ -568,6 +586,48 @@ const VIEWS = {
     if (plants.length > 1) lineChart("c-pv-plants", {x, unit: "MW", digits: 1, now: new Date(), direct: false,
       series: plants.map(([, p], i) => ({name: `${p.label} (${p.capacity_mw} MW)`, values: p.mw, slot: i}))});
   },
+  wind() {
+    const x = F.x, tm = F.tm, all = Object.entries(F.wind.farms), nat = state.region === "national";
+    const here = nat ? all : all.filter(([, f]) => f.region === state.region);
+    const farms = here.length ? here : all;
+    const scope = here.length && !nat ? regionName(state.region) : "All listed wind farms";
+    const total = x.map((_, i) => sum(farms.map(([, f]) => f.mw[i])));
+    const cap = sum(farms.map(([, f]) => f.capacity_mw));
+    const e = sum(pick(total, tm)), pk = maxOf(pick(total, tm));
+    tiles("wind-tiles", [
+      ["Tomorrow's wind energy", fmt(e / 1000, 1), "GWh", scope],
+      ["Tomorrow's peak output", fmt(pk), "MW", `${fmt(pk / cap * 100)}% of ${fmt(cap)} MW`],
+      ["Capacity factor tomorrow", fmt(e / (cap * 24) * 100, 1), "%", `${farms.length} farm${farms.length > 1 ? "s" : ""}`],
+      ["30-day day-ahead error", fmt(A.summary.wind_nmae_30d, 2), "%", "all farms, MAE / capacity"],
+    ]);
+    $("wind-h").textContent = "Wind output: " + scope +
+      (here.length || nat ? "" : ` (no listed farm in ${regionName(state.region)})`);
+    lineChart("c-wind-total", {x, unit: "MW", now: new Date(), series: [{name: "Wind output", values: total}]});
+    // national: split by region; one region: split by farm (max 5 series, rest folded into "Other")
+    let groups;
+    if (nat || !here.length) {
+      const byReg = {};
+      farms.forEach(([, f]) => (byReg[f.region] ||= []).push(f));
+      groups = Object.entries(byReg).map(([r, fs]) => [regionName(r), fs]);
+      $("wind-split-h").textContent = "Output by region";
+    } else {
+      groups = farms.map(([, f]) => [f.label, [f]]);
+      $("wind-split-h").textContent = "Output by farm";
+    }
+    groups.sort((a, b) => sum(b[1].map(f => f.capacity_mw)) - sum(a[1].map(f => f.capacity_mw)));
+    if (groups.length > 5) groups = [...groups.slice(0, 4), ["Other", groups.slice(4).flatMap(g => g[1])]];
+    $("wind-split-card").hidden = groups.length < 2;
+    if (groups.length > 1) lineChart("c-wind-split", {x, unit: "MW", now: new Date(), direct: false,
+      series: groups.map(([name, fs], i) => ({name, slot: i, values: x.map((_, j) => sum(fs.map(f => f.mw[j])))}))});
+    $("wind-table-sub").textContent = "Tomorrow's forecast per farm. Click a row to select its region.";
+    const rows = farms.map(([, f]) => [f, sum(pick(f.mw, tm))]).sort((a, b) => b[0].capacity_mw - a[0].capacity_mw);
+    $("wind-table").innerHTML = `<table><thead><tr><th>Farm</th><th class="lt">Region</th><th>Capacity MW</th>
+      <th>Energy MWh</th><th>Capacity factor %</th><th>Peak MW</th></tr></thead><tbody>${rows.map(([f, en]) =>
+      `<tr class="click" data-id="${f.region}"><td>${esc(f.label)}</td><td class="lt">${esc(regionName(f.region))}</td>
+      <td>${fmt(f.capacity_mw, f.capacity_mw % 1 ? 1 : 0)}</td><td>${fmt(en)}</td>
+      <td>${fmt(en / (f.capacity_mw * 24) * 100, 1)}</td><td>${fmt(maxOf(pick(f.mw, tm)))}</td></tr>`).join("")}</tbody></table>`;
+    $("wind-table").querySelectorAll("tr.click").forEach(tr => tr.addEventListener("click", () => select(tr.dataset.id)));
+  },
   weather() {
     const x = F.x, w = sel().weather, tm = F.tm;
     tiles("wx-tiles", [
@@ -605,8 +665,9 @@ const VIEWS = {
       ? [{name: "Morocco", values: A.load_mape.national, slot: 0}]
       : [{name: regionName(r), values: A.load_mape[r], slot: 0},
          {name: "Morocco", values: A.load_mape.national, slot: 1, dash: true}]});
-    lineChart("c-an-nmae", {x: dx, kind: "day", unit: "%", digits: 2,
-      series: [{name: "All plants", values: A.pv_nmae.total, slot: 2}]});
+    lineChart("c-an-nmae", {x: dx, kind: "day", unit: "%", digits: 2, series: [
+      {name: "Solar PV", values: A.pv_nmae.total, slot: 3},
+      ...(A.wind_nmae ? [{name: "Wind", values: A.wind_nmae.total, slot: 2}] : [])]});
     const rows = ["national", ...Object.keys(F.regions)];
     $("an-table").innerHTML = `<table><thead><tr><th>Region</th><th>Load MAPE 30 d %</th>
       <th>Temp MAE 30 d °C</th><th>Model test MAPE %</th><th>Demand share %</th></tr></thead><tbody>${
@@ -653,12 +714,14 @@ Promise.all(["data/forecast.json", "data/analytics.json", "data/regions.geojson"
 )).then(([f, a, g]) => {
   F = f; A = a; GEO = g;
   if (!F.regions) throw new Error("forecast data predates the regional pipeline; the next daily run will refresh it");
+  if (!F.wind) { document.querySelector('nav button[data-tab="wind"]').hidden = true; delete VIEWS.wind; }
   F.x = F.times.map(t => new Date(t));
   F.tm = tomorrowIdx(F.x);
   $("region").innerHTML = `<option value="national">All Morocco</option>` +
     Object.entries(F.regions).map(([id, r]) => `<option value="${id}">${esc(r.name)}</option>`).join("");
   $("meta").textContent = `Updated ${fHour.format(new Date(F.generated_utc))} (Morocco time) · ` +
     `${Object.keys(F.regions).length} regions · ${Object.keys(F.pv.plants).length} PV plants · ` +
+    (F.wind ? `${Object.keys(F.wind.farms).length} wind farms · ` : "") +
     `${F.x.length} hourly steps`;
   const [tab, region] = location.hash.slice(1).split("/");
   if (VIEWS[tab]) state.tab = tab;
