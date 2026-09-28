@@ -26,7 +26,7 @@ env:
 jobs:
   forecast:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60     # first run backfills ~3 years of history
     steps:
       # Always forecast from, and publish to, main, whichever branch
       # triggered the run (schedules fire on the default branch).
@@ -45,13 +45,21 @@ jobs:
 
       # Reanalysis history is immutable once a year is complete, so cache it
       # between runs to keep Open-Meteo traffic small.
-      - uses: actions/cache@v4
+      - uses: actions/cache/restore@v4
         with:
           path: energy/.cache
           key: weather-${{ github.run_id }}
           restore-keys: weather-
 
-      - run: python energy/pipeline/run_daily.py
+      - run: python -u energy/pipeline/run_daily.py
+
+      # Save even when the run fails or times out, so a partial history
+      # backfill isn't lost and the next run resumes from it.
+      - uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: energy/.cache
+          key: weather-${{ github.run_id }}
 
       - name: Commit forecasts
         env:
