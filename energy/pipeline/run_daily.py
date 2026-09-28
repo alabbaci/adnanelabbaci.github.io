@@ -19,6 +19,10 @@ from config import DATA, FORECAST_DAYS, PV_PLANTS, REGIONS, TRAIN_YEARS, TZ, dem
 from load_model import ACTUALS, RegionModel, model_card, region_weather
 from pv_model import plant_output
 
+# Days of extra weather history fetched ahead of each window so the lagged
+# temperature features (24 h / 72 h thermal memory) are warmed up.
+WARMUP_DAYS = 3
+
 SHOW_VARS = {
     "temperature_2m": "temp", "apparent_temperature": "feels_like",
     "relative_humidity_2m": "humidity", "wind_speed_10m": "wind",
@@ -81,9 +85,9 @@ def main():
     target = models["cs"].source
 
     log("Fetching forecasts…")
-    fc_city = {c: weather.forecast(lat, lon, 1, FORECAST_DAYS) for c, (lat, lon) in city_xy.items()}
+    fc_city = {c: weather.forecast(lat, lon, 1 + WARMUP_DAYS, FORECAST_DAYS) for c, (lat, lon) in city_xy.items()}
     fc_plant = {p: weather.forecast(v["lat"], v["lon"], 1, FORECAST_DAYS) for p, v in PV_PLANTS.items()}
-    idx = next(iter(fc_city.values())).index
+    idx = next(iter(fc_city.values())).index[24 * WARMUP_DAYS:]     # yesterday + forecast days
 
     fc_region_wx = {r: region_weather(fc_city, r) for r in REGIONS}
     load_fc = {r: models[r].predict(fc_region_wx[r]).reindex(idx) for r in REGIONS}
@@ -111,7 +115,7 @@ def main():
     }
 
     log("Backtesting day-ahead forecasts (previous model runs)…")
-    runs_city = {c: weather.previous_runs(lat, lon) for c, (lat, lon) in city_xy.items()}
+    runs_city = {c: weather.previous_runs(lat, lon, 31 + WARMUP_DAYS) for c, (lat, lon) in city_xy.items()}
     runs_plant = {p: weather.previous_runs(v["lat"], v["lon"]) for p, v in PV_PLANTS.items()}
     d0_reg = {r: region_weather({c: v[0] for c, v in runs_city.items()}, r) for r in REGIONS}
     d1_reg = {r: region_weather({c: v[1] for c, v in runs_city.items()}, r) for r in REGIONS}
@@ -141,7 +145,7 @@ def main():
         d0, d1 = d0_reg[k], d1_reg[k].reindex(d0_reg[k].index)
         wx_err[k] = {name: daily((d1[v] - d0[v]).abs()) for v, name in SHOW_VARS.items()}
 
-    days = sorted(load_err["national"].index)
+    days = sorted(load_err["national"].index)[WARMUP_DAYS:]        # drop warm-up days
     t_end = fc_s["national"].index.max()
     recent = fc_s["national"].index[fc_s["national"].index >= t_end - pd.Timedelta(days=7)]
     keys = ["national", *REGIONS]

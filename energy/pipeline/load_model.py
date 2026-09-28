@@ -71,6 +71,9 @@ def reference_shape(X: pd.DataFrame) -> pd.Series:
     shape[ram & (h >= 21) & (h <= 23)] *= 1.04
     shape[ram & (h >= 2) & (h <= 4)] *= 1.08
     day = DOW_FACTOR[X["dow"]] * np.where(X["is_holiday"] == 1, 0.86, 1.0)
+    # Ease weekday/weekend/holiday transitions over the night instead of
+    # stepping at midnight, as real demand does.
+    day = pd.Series(day, index=X.index).rolling(7, center=True, min_periods=1).mean().to_numpy()
     cdh = np.clip(0.5 * X["temp_app"] + 0.5 * X["temp_24h"] - 24.0, 0, None)
     hdh = np.clip(14.0 - X["temp_24h"], 0, None)
     weather = 1 + 0.032 * cdh + 0.012 * hdh
