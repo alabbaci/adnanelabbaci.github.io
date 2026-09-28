@@ -14,6 +14,7 @@ import numpy as np
 import pandas as pd
 
 import weather
+from weather import log
 from config import DATA, FORECAST_DAYS, PV_PLANTS, REGIONS, TRAIN_YEARS, TZ, demand_share
 from load_model import ACTUALS, RegionModel, model_card, region_weather
 from pv_model import plant_output
@@ -65,21 +66,21 @@ def weather_block(wx: pd.DataFrame, idx: pd.DatetimeIndex) -> dict:
 
 def main():
     city_xy = cities()
-    print(f"Fetching training weather for {len(city_xy)} cities…")
+    log(f"Fetching training weather for {len(city_xy)} cities…")
     start, end = weather.training_window(TRAIN_YEARS)
-    hist = {c: weather.archive(lat, lon, start, end) for c, (lat, lon) in city_xy.items()}
+    hist = weather.archive_many(city_xy, start, end)
 
-    print("Training regional models…")
+    log("Training regional models…")
     models, hist_ref = {}, []
     for r in REGIONS:
         wx = region_weather(hist, r)
         models[r] = RegionModel(r).fit(wx)
         hist_ref.append(models[r].reference(wx))
-        print(f"  {r}: holdout MAPE {models[r].holdout['mape']:.2f}% ({models[r].source})")
+        log(f"  {r}: holdout MAPE {models[r].holdout['mape']:.2f}% ({models[r].source})")
     national_hist = sum(hist_ref).dropna().iloc[-24 * 365:]
     target = models["cs"].source
 
-    print("Fetching forecasts…")
+    log("Fetching forecasts…")
     fc_city = {c: weather.forecast(lat, lon, 1, FORECAST_DAYS) for c, (lat, lon) in city_xy.items()}
     fc_plant = {p: weather.forecast(v["lat"], v["lon"], 1, FORECAST_DAYS) for p, v in PV_PLANTS.items()}
     idx = next(iter(fc_city.values())).index
@@ -109,7 +110,7 @@ def main():
         },
     }
 
-    print("Backtesting day-ahead forecasts (previous model runs)…")
+    log("Backtesting day-ahead forecasts (previous model runs)…")
     runs_city = {c: weather.previous_runs(lat, lon) for c, (lat, lon) in city_xy.items()}
     runs_plant = {p: weather.previous_runs(v["lat"], v["lon"]) for p, v in PV_PLANTS.items()}
     d0_reg = {r: region_weather({c: v[0] for c, v in runs_city.items()}, r) for r in REGIONS}
@@ -173,7 +174,7 @@ def main():
     for name, obj in (("forecast.json", forecast), ("analytics.json", analytics)):
         text = json.dumps(obj, ensure_ascii=False, separators=(",", ":"), allow_nan=False)
         (DATA / name).write_text(text)
-        print(f"Wrote {DATA / name} ({len(text) / 1024:.0f} KB)")
+        log(f"Wrote {DATA / name} ({len(text) / 1024:.0f} KB)")
 
 
 if __name__ == "__main__":
