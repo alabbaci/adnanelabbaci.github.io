@@ -15,3 +15,6 @@ kepler_config.json
 
 # Morocco September anomalies: downloads, tiles, fonts
 morocco_september_anomalies/.cache/
+
+# Morocco rainfall: per-season download cache, fonts
+morocco_rainfall_50_years/.cache/

@@ -1,8 +1,8 @@
 # 3D Heat Traps & Pedestrian Exposure in Dakhla
 
-> **Also in this repo:** [Morocco, September 2025 — daily temperature
-> anomalies](morocco_september_anomalies/), an ERA5 animation rendered with
-> forge3d.
+> **Also in this repo:** two ERA5 animations of Morocco rendered with forge3d:
+> [daily temperature anomalies in September](morocco_september_anomalies/) and
+> [fifty years of rainfall, 1976/77 – 2025/26](morocco_rainfall_50_years/).
 
 A spatial analysis pipeline that maps Dakhla's 3D urban geometry to find
 dense blocks that trap heat, then overlays the walkable street network and

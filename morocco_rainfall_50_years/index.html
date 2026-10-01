@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Morocco Fifty Years of Rain</title>
+  <meta name="description" content="Fifty rainy seasons in Morocco, 1976/77 to 2025/26, from ERA5 reanalysis, rendered with forge3d.">
+  <style>
+    :root { --bg: #fcfcfb; --ink: #1d1d1b; --muted: #6b6b66; --rule: #e0dfdb; }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg: #1a1a19; --ink: #ededea; --muted: #a3a29c; --rule: #383835; }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink);
+           font: 16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+    main { max-width: 1200px; margin: 0 auto; padding: 32px 16px 48px; }
+    h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); line-height: 1.15; margin: 0 0 8px; }
+    p { color: var(--muted); margin: 0 0 20px; max-width: 70ch; }
+    video { width: 100%; height: auto; display: block; border-radius: 8px; background: #fcfcfb; }
+    footer { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--rule);
+             color: var(--muted); font-size: 14px; }
+    a { color: inherit; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Morocco, fifty years of rainfall</h1>
+  <p>Every rainy season from 1976/77 to 2025/26 (September to August), compared with the
+     1991–2020 normal and draped over Morocco's relief with forge3d. The map shows the
+     Standardized Precipitation Index; the numbers give each season's rainfall in mm and
+     as a share of normal.</p>
+  <video controls autoplay muted loop playsinline
+         poster="output/morocco_rainfall_1976_2026_driest.png"
+         src="output/morocco_rainfall_1976_2026.mp4"></video>
+  <footer>
+    Data: ECMWF ERA5 (Copernicus Climate Change Service) via WeatherBench 2 and ARCO-ERA5 ·
+    Elevation: Tilezen Terrarium · Rendered with
+    <a href="https://github.com/milos-agathon/forge3d">forge3d</a> ·
+    <a href="README.md">Method and code</a>
+  </footer>
+</main>
+</body>
+</html>

@@ -51,6 +51,7 @@ The outline is Morocco including its southern provinces (Natural Earth
 scripts/01_fetch_era5_anomalies.py  → data/morocco_t2m_anomaly_sep<year>.nc
 scripts/02_prepare_terrain.py       → data/morocco_dem_laea_1km.tif, data/morocco_boundary.geojson
 scripts/03_render_animation.py      → output/*.mp4, *.gif, *_peak.png
+scripts/drape.py                    (forge3d draping code, shared with ../morocco_rainfall_50_years)
 ```
 
 ### 1. ERA5 anomalies
