@@ -21,7 +21,8 @@ and built on the same terrain and rendering code.
   WMO's recommended drought index. For every 0.25° cell a gamma distribution
   is fitted to its 1991/92–2020/21 totals, and each season is placed on that
   cell's own curve: 0 is a typical year, ±1 happens about one year in six,
-  ±2 about one year in forty. Brown is dry, teal is wet.
+  ±2 about one year in forty. Red is dry, blue is wet, on a graduated scale
+  through a neutral grey at 0.
 - **Numbers and bars** – the Morocco-wide precipitation in mm and as a share
   of the 1991–2020 normal (187 mm), area-weighted over land.
 
@@ -30,7 +31,7 @@ year brings 20–60 mm, so a single storm, or its absence, swings the share of
 normal between 20 % and 300 %. Year-to-year variability there is 2.4 times
 that of the north (coefficient of variation 0.72 vs 0.30), and on a
 %-of-normal map a fifth of the southern cells hit the extreme colours against
-2 % in the north, so the desert would flicker from black-brown to deep teal
+2 % in the north, so the desert would flicker from deep red to deep blue
 and drown out the north, where most of the rain falls. SPI rates every place
 against its own variability, so extremes are equally rare everywhere.
 

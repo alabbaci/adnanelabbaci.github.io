@@ -51,15 +51,15 @@ CANVAS = (1920, 1080)
 MAP_BOX = (30, 20, 1170, 1060)  # where the rendered country is fitted
 PANEL_X = 1230
 
-# SPI: brown (dry) <-> teal (wet) with a neutral grey at 0 (ColorBrewer BrBG
-# arms); values beyond +-2.5 take the end colours.
+# SPI: graduated red (dry) -> neutral grey at 0 -> blue (wet) (ColorBrewer
+# RdBu arms); values beyond +-2.5 take the end colours.
 SPI_LIMIT = 2.5
 rain_rgb = Ramp([
-    (-2.5, "#543005"), (-2.0, "#8c510a"), (-1.5, "#bf812d"), (-1.0, "#dfc27d"), (-0.5, "#f6e8c3"),
+    (-2.5, "#67001f"), (-2.0, "#b2182b"), (-1.5, "#d6604d"), (-1.0, "#f4a582"), (-0.5, "#fddbc7"),
     (0.0, "#f0efec"),
-    (0.5, "#c7eae5"), (1.0, "#80cdc1"), (1.5, "#35978f"), (2.0, "#01665e"), (2.5, "#003c30"),
+    (0.5, "#d1e5f0"), (1.0, "#92c5de"), (1.5, "#4393c3"), (2.0, "#2166ac"), (2.5, "#053061"),
 ])
-DRY, WET = "#bf812d", "#35978f"
+DRY, WET = "#d6604d", "#4393c3"
 
 HOLD_FIRST_S = 1.0
 HOLD_LAST_S = 3.0
