@@ -161,9 +161,10 @@ class TerrainRenderer:
 
     RESTART_EVERY = 60
 
-    def __init__(self, surface_path: Path, workdir: Path) -> None:
+    def __init__(self, surface_path: Path, workdir: Path, zscale: float = 1.0) -> None:
         self.surface_path = surface_path
         self.workdir = workdir
+        self.zscale = zscale
         self.viewer = None
         self.n = 0
         self._open()
@@ -172,7 +173,7 @@ class TerrainRenderer:
         self.viewer = f3d.open_viewer_async(
             terrain_path=self.surface_path, width=1000, height=1000, timeout=600
         )
-        self.viewer.send_ipc({"cmd": "set_terrain", **CAMERA, "zscale": 1.0, **SUN, "background": [c / 255 for c in BG]})
+        self.viewer.send_ipc({"cmd": "set_terrain", **CAMERA, "zscale": self.zscale, **SUN, "background": [c / 255 for c in BG]})
         self.viewer.send_ipc({"cmd": "set_terrain_pbr", **PBR})
         self.viewer.send_ipc({"cmd": "set_overlays_enabled", "enabled": True})
         self.viewer.send_ipc({"cmd": "set_overlay_solid", "solid": False})
@@ -222,11 +223,15 @@ def shade_colours(colour: np.ndarray, shade: np.ndarray) -> np.ndarray:
 # --- composition -----------------------------------------------------------
 
 class MapLayer:
-    """Crops the rendered country and fits it into a box on the frame."""
+    """Crops the rendered country and fits it into a box on the frame.
 
-    def __init__(self, alpha: np.ndarray, box: tuple[int, int, int, int]) -> None:
+    The crop is fixed from the first alpha; when the terrain itself changes
+    between frames, pass that frame's alpha to paste() and leave enough pad
+    for the silhouette to move.
+    """
+
+    def __init__(self, alpha: np.ndarray, box: tuple[int, int, int, int], pad: int = 12) -> None:
         ys, xs = np.nonzero(alpha > 0.02)
-        pad = 12
         self.crop = (max(xs.min() - pad, 0), max(ys.min() - pad, 0),
                      min(xs.max() + pad, alpha.shape[1]), min(ys.max() + pad, alpha.shape[0]))
         cw, ch = self.crop[2] - self.crop[0], self.crop[3] - self.crop[1]
@@ -234,7 +239,10 @@ class MapLayer:
         scale = min(bw / cw, bh / ch)
         self.size = (int(round(cw * scale)), int(round(ch * scale)))
         self.xy = (box[0] + (bw - self.size[0]) // 2, box[1] + (bh - self.size[1]) // 2)
-        self.alpha = Image.fromarray(np.round(alpha * 255).astype(np.uint8), "L").crop(self.crop).resize(
+        self.alpha = self.fit_alpha(alpha)
+
+    def fit_alpha(self, alpha: np.ndarray) -> Image.Image:
+        return Image.fromarray(np.round(alpha * 255).astype(np.uint8), "L").crop(self.crop).resize(
             self.size, Image.LANCZOS)
 
     def paste_shadow(self, canvas: Image.Image) -> None:
@@ -244,9 +252,10 @@ class MapLayer:
         shadow = shadow.filter(ImageFilter.GaussianBlur(14)).point(lambda v: int(v * 0.22))
         canvas.paste(Image.new("RGB", canvas.size, (60, 58, 52)), (0, 0), shadow)
 
-    def paste(self, canvas: Image.Image, rgb: np.ndarray) -> None:
+    def paste(self, canvas: Image.Image, rgb: np.ndarray, alpha: np.ndarray | None = None) -> None:
         mp = Image.fromarray(np.round(np.clip(rgb, 0, 255)).astype(np.uint8), "RGB").crop(self.crop)
-        canvas.paste(mp.resize(self.size, Image.LANCZOS), self.xy, self.alpha)
+        mask = self.alpha if alpha is None else self.fit_alpha(alpha)
+        canvas.paste(mp.resize(self.size, Image.LANCZOS), self.xy, mask)
 
 
 # --- animation ---------------------------------------------------------------

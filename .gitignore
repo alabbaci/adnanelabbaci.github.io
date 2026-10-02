@@ -18,3 +18,6 @@ morocco_september_anomalies/.cache/
 
 # Morocco rainfall: per-season download cache, fonts
 morocco_rainfall_50_years/.cache/
+
+# Morocco rain bank: fonts
+morocco_rain_bank/.cache/
