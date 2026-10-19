@@ -48,6 +48,7 @@ during episodic *chergui* (Saharan wind) events when temperatures spike.
 
 ```
 scripts/01_fetch_overture_geometry.py → buildings (with height) + walkable network
+scripts/01b_fetch_mars_footprints.py  → optional: footprints from MARS on Azure
 scripts/02_generate_heat_grid.py      → 200m grid, urban density, temperature_proxy
 scripts/03_integrate_demographics.py  → RGPH 2024 population distributed onto the grid
                                        ↓
@@ -67,6 +68,13 @@ every walkable road class.
 > same OSM geometry *plus* Microsoft/Google ML-detected footprints, which
 > matters in Dakhla where hand-mapped OSM coverage is thinner than in a
 > European city.
+
+For a higher-fidelity footprint layer extracted from your own
+high-resolution satellite imagery, `scripts/01b_fetch_mars_footprints.py`
+runs Microsoft's MARS model against a Planetary Computer Pro collection and
+writes the result in this same schema. It needs an Azure deployment and
+commercial imagery, so it is optional and off the default path — see
+[`docs/mars_building_footprints.md`](docs/mars_building_footprints.md).
 
 ```bash
 python scripts/01_fetch_overture_geometry.py
@@ -150,7 +158,9 @@ committed, so the GitHub Pages map works without running anything.
   volume share), not counts; per-cell accuracy is unvalidated.
 - Building heights are sparse in Overture for Dakhla; most buildings fall
   back to the 4.5m low-rise default, so the extrusion layer shows form more
-  than measured height.
+  than measured height. Footprint *coverage* is uneven too, especially in
+  the informal fabric — `docs/mars_building_footprints.md` weighs a
+  commercial-imagery alternative.
 
 ## License
 
