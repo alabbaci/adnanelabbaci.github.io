@@ -1,0 +1,1607 @@
+{
+ "generated_utc": "2026-10-26T19:01Z",
+ "run": "20261026T00Z",
+ "run_time": "2026-10-26T00:00Z",
+ "written_by": "rules",
+ "attribution": "Data: © ECMWF, CC BY 4.0. Cropped and unit-converted.",
+ "domain": [
+  -26.0,
+  -42.0,
+  64.0,
+  40.0
+ ],
+ "items": [
+  {
+   "title": "Unusual heat in South Sudan and Chad",
+   "where": {
+    "label": "South Sudan, Chad and Sudan",
+    "centre": [
+     11.75,
+     33.0
+    ],
+    "bbox": [
+     6.75,
+     0.5,
+     44.0,
+     24.5
+    ]
+   },
+   "when": {
+    "start": "2026-10-26T12:00Z",
+    "peak": "2026-10-27T12:00Z",
+    "end": "2026-10-31T18:00Z"
+   },
+   "status": "ongoing",
+   "summary": "HRES has afternoon highs up to 43 °C about 150 km west of Ad Damazīn, Sudan on Tue 27 Oct. Temperatures of 40 °C or more cover about 704,000 km² between Mon 26 Oct and Sat 31 Oct. Up to 100 % of ensemble members put the air about 1.5 km up (850 hPa) more than two standard deviations warmer than normal for the time of year, so this is unusual heat, not just the hot season.",
+   "why_interesting": "Across the Sahel the year has two hot peaks: the big one in April to June before the monsoon, and a smaller one in October once the rains have retreated and the ground dries out. This is that second peak.",
+   "evidence": [
+    {
+     "kind": "field",
+     "text": "HRES highest 3-hourly maximum 43.3 °C near 11.8N 33.0E on Tue 27 Oct, 12 UTC (00 UTC Mon 26 Oct run)"
+    },
+    {
+     "kind": "field",
+     "text": "HRES highs: Sarh 41 °C, Malakal 41 °C, Ad Damazīn 41 °C, N'Djamena 39 °C"
+    },
+    {
+     "kind": "ensemble",
+     "text": "ENS: up to 100 % chance that 850 hPa temperature is more than 2 SD above normal"
+    }
+   ],
+   "talking_points": [
+    "Why do warm nights make a heatwave more dangerous?",
+    "How do the ensemble anomaly charts tell 'hot for the time of year' from simply 'hot'?",
+    "Why does dry ground let temperatures climb higher?"
+   ],
+   "confidence": "high: the ensemble strongly agrees the warmth is unusual",
+   "id": "2026-10-26-heat-ad-damazin",
+   "kind": "event",
+   "hazards": [
+    "heat"
+   ],
+   "score": 10.04,
+   "scenes": [
+    {
+     "title": "Afternoon heat",
+     "fill": "tmax",
+     "label": "Highest temperature in the past 6 h",
+     "units": "C",
+     "palette": "temp",
+     "kind": "past6",
+     "grid": {
+      "west": 6.75,
+      "north": 24.5,
+      "res": 0.25,
+      "nx": 150,
+      "ny": 97
+     },
+     "frames": [
+      "2026-10-26T06:00Z",
+      "2026-10-26T12:00Z",
+      "2026-10-26T18:00Z",
+      "2026-10-27T00:00Z",
+      "2026-10-27T06:00Z",
+      "2026-10-27T12:00Z",
+      "2026-10-27T18:00Z",
+      "2026-10-28T00:00Z",
+      "2026-10-28T06:00Z",
+      "2026-10-28T12:00Z",
+      "2026-10-28T18:00Z",
+      "2026-10-29T00:00Z",
+      "2026-10-29T06:00Z",
+      "2026-10-29T12:00Z",
+      "2026-10-29T18:00Z",
+      "2026-10-30T00:00Z",
+      "2026-10-30T06:00Z",
+      "2026-10-30T12:00Z",
+      "2026-10-30T18:00Z",
+      "2026-10-31T00:00Z",
+      "2026-10-31T06:00Z",
+      "2026-10-31T12:00Z",
+      "2026-10-31T18:00Z",
+      "2026-11-01T00:00Z"
+     ],
+     "layers": {
+      "fill": {
+       "file": "fill.webp",
+       "lo": -10,
+       "hi": 50,
+       "scale": "linear"
+      }
+     },
+     "isobars": false,
+     "particles": false,
+     "bbox": [
+      6.75,
+      0.5,
+      44.0,
+      24.5
+     ],
+     "captions": [
+      {
+       "at": "2026-10-26T06:00Z",
+       "text": "Each frame shows the highest temperature in the past 6 hours"
+      },
+      {
+       "at": "2026-10-27T12:00Z",
+       "text": "Peak: 43 °C, about 150 km west of Ad Damazīn"
+      }
+     ],
+     "focus": [
+      {
+       "lat": 12.115,
+       "lon": 15.047,
+       "label": "N'Djamena"
+      },
+      {
+       "lat": 9.15,
+       "lon": 18.39,
+       "label": "Sarh"
+      },
+      {
+       "lat": 11.77,
+       "lon": 34.35,
+       "label": "Ad Damazīn"
+      }
+     ],
+     "package": "p/20261026T00Z/2026-10-26-heat-ad-damazin-0",
+     "bytes": 167548
+    },
+    {
+     "title": "Hot days, warm nights",
+     "fill": "t2",
+     "label": "Temperature (2 m)",
+     "units": "C",
+     "palette": "temp",
+     "kind": "instant",
+     "grid": {
+      "west": 6.75,
+      "north": 24.5,
+      "res": 0.25,
+      "nx": 150,
+      "ny": 97
+     },
+     "frames": [
+      "2026-10-26T00:00Z",
+      "2026-10-26T06:00Z",
+      "2026-10-26T12:00Z",
+      "2026-10-26T18:00Z",
+      "2026-10-27T00:00Z",
+      "2026-10-27T06:00Z",
+      "2026-10-27T12:00Z",
+      "2026-10-27T18:00Z",
+      "2026-10-28T00:00Z",
+      "2026-10-28T06:00Z",
+      "2026-10-28T12:00Z",
+      "2026-10-28T18:00Z",
+      "2026-10-29T00:00Z",
+      "2026-10-29T06:00Z",
+      "2026-10-29T12:00Z",
+      "2026-10-29T18:00Z",
+      "2026-10-30T00:00Z",
+      "2026-10-30T06:00Z",
+      "2026-10-30T12:00Z",
+      "2026-10-30T18:00Z",
+      "2026-10-31T00:00Z",
+      "2026-10-31T06:00Z",
+      "2026-10-31T12:00Z",
+      "2026-10-31T18:00Z",
+      "2026-11-01T00:00Z"
+     ],
+     "layers": {
+      "fill": {
+       "file": "fill.webp",
+       "lo": -10,
+       "hi": 50,
+       "scale": "linear"
+      },
+      "mslp": {
+       "file": "mslp.webp",
+       "lo": 1002,
+       "hi": 1027,
+       "scale": "linear"
+      },
+      "wind": {
+       "file": "wind.webp",
+       "amp": 15
+      }
+     },
+     "isobars": true,
+     "particles": true,
+     "bbox": [
+      6.75,
+      0.5,
+      44.0,
+      24.5
+     ],
+     "captions": [
+      {
+       "at": "2026-10-26T00:00Z",
+       "text": "Watch the daily swing between hot afternoons and warm nights"
+      }
+     ],
+     "focus": [
+      {
+       "lat": 12.115,
+       "lon": 15.047,
+       "label": "N'Djamena"
+      },
+      {
+       "lat": 9.15,
+       "lon": 18.39,
+       "label": "Sarh"
+      },
+      {
+       "lat": 11.77,
+       "lon": 34.35,
+       "label": "Ad Damazīn"
+      }
+     ],
+     "package": "p/20261026T00Z/2026-10-26-heat-ad-damazin-1",
+     "bytes": 776604
+    },
+    {
+     "title": "Ensemble: how unusual is the warmth?",
+     "fill": "ens_warm2",
+     "label": "Ensemble chance the 850 hPa temperature is 2 SD above normal",
+     "units": "pct",
+     "palette": "probwarm",
+     "kind": "instant",
+     "grid": {
+      "west": 6.75,
+      "north": 24.5,
+      "res": 0.25,
+      "nx": 150,
+      "ny": 97
+     },
+     "frames": [
+      "2026-10-26T12:00Z",
+      "2026-10-27T00:00Z",
+      "2026-10-27T12:00Z",
+      "2026-10-28T00:00Z",
+      "2026-10-28T12:00Z",
+      "2026-10-29T00:00Z",
+      "2026-10-29T12:00Z",
+      "2026-10-30T00:00Z",
+      "2026-10-30T12:00Z",
+      "2026-10-31T00:00Z",
+      "2026-10-31T12:00Z",
+      "2026-11-01T00:00Z"
+     ],
+     "layers": {
+      "fill": {
+       "file": "fill.webp",
+       "lo": 0,
+       "hi": 100,
+       "scale": "linear"
+      }
+     },
+     "isobars": false,
+     "particles": false,
+     "bbox": [
+      6.75,
+      0.5,
+      44.0,
+      24.5
+     ],
+     "captions": [
+      {
+       "at": "2026-10-26T12:00Z",
+       "text": "Chance that the air 1.5 km up is far warmer than normal"
+      }
+     ],
+     "focus": [
+      {
+       "lat": 12.115,
+       "lon": 15.047,
+       "label": "N'Djamena"
+      },
+      {
+       "lat": 9.15,
+       "lon": 18.39,
+       "label": "Sarh"
+      },
+      {
+       "lat": 11.77,
+       "lon": 34.35,
+       "label": "Ad Damazīn"
+      }
+     ],
+     "package": "p/20261026T00Z/2026-10-26-heat-ad-damazin-2",
+     "bytes": 66262
+    }
+   ],
+   "rank": 1
+  },
+  {
+   "title": "Unusual heat in South Africa and Namibia",
+   "where": {
+    "label": "South Africa and Namibia",
+    "centre": [
+     -28.5,
+     20.25
+    ],
+    "bbox": [
+     13.0,
+     -34.0,
+     32.75,
+     -20.75
+    ]
+   },
+   "when": {
+    "start": "2026-10-26T12:00Z",
+    "peak": "2026-10-31T18:00Z",
+    "end": "2026-10-31T18:00Z"
+   },
+   "status": "ongoing",
+   "summary": "HRES has afternoon highs up to 43 °C about 100 km west of Upington, South Africa on Sat 31 Oct. Temperatures of 40 °C or more cover about 94,000 km² between Mon 26 Oct and Sat 31 Oct. Up to 100 % of ensemble members put the air about 1.5 km up (850 hPa) more than two standard deviations warmer than normal for the time of year, so this is unusual heat, not just the hot season.",
+   "why_interesting": "In much of southern Africa, October and November are the hottest months. The sun is high and the ground is still dry before the summer rains, so heat builds day after day until the first storms break it.",
+   "evidence": [
+    {
+     "kind": "field",
+     "text": "HRES highest 3-hourly maximum 43.3 °C near 28.5S 20.2E on Sat 31 Oct, 18 UTC (00 UTC Mon 26 Oct run)"
+    },
+    {
+     "kind": "field",
+     "text": "HRES highs: Upington 41 °C, Kimberley 38 °C"
+    },
+    {
+     "kind": "ensemble",
+     "text": "ENS: up to 100 % chance that 850 hPa temperature is more than 2 SD above normal"
+    },
+    {
+     "kind": "field",
+     "text": "Also dust-raising winds, gusts to 23 m/s about 120 km south-west of Bloemfontein, South Africa (Mon 26 Oct, 12 UTC)"
+    }
+   ],
+   "talking_points": [
+    "Why do warm nights make a heatwave more dangerous?",
+    "How do the ensemble anomaly charts tell 'hot for the time of year' from simply 'hot'?",
+    "Why does dry ground let temperatures climb higher?"
+   ],
+   "confidence": "high: the ensemble strongly agrees the warmth is unusual",
+   "id": "2026-10-26-heat-upington",
+   "kind": "event",
+   "hazards": [
+    "heat",
+    "dust"
+   ],
+   "score": 8.93,
+   "scenes": [
+    {
+     "title": "Afternoon heat",
+     "fill": "tmax",
+     "label": "Highest temperature in the past 6 h",
+     "units": "C",
+     "palette": "temp",
+     "kind": "past6",
+     "grid": {
+      "west": 13.0,
+      "north": -20.75,
+      "res": 0.25,
+      "nx": 80,
+      "ny": 54
+     },
+     "frames": [
+      "2026-10-26T06:00Z",
+      "2026-10-26T12:00Z",
+      "2026-10-26T18:00Z",
+      "2026-10-27T00:00Z",
+      "2026-10-27T06:00Z",
+      "2026-10-27T12:00Z",
+      "2026-10-27T18:00Z",
+      "2026-10-28T00:00Z",
+      "2026-10-28T06:00Z",
+      "2026-10-28T12:00Z",
+      "2026-10-28T18:00Z",
+      "2026-10-29T00:00Z",
+      "2026-10-29T06:00Z",
+      "2026-10-29T12:00Z",
+      "2026-10-29T18:00Z",
+      "2026-10-30T00:00Z",
+      "2026-10-30T06:00Z",
+      "2026-10-30T12:00Z",
+      "2026-10-30T18:00Z",
+      "2026-10-31T00:00Z",
+      "2026-10-31T06:00Z",
+      "2026-10-31T12:00Z",
+      "2026-10-31T18:00Z",
+      "2026-11-01T00:00Z"
+     ],
+     "layers": {
+      "fill": {
+       "file": "fill.webp",
+       "lo": -10,
+       "hi": 50,
+       "scale": "linear"
+      }
+     },
+     "isobars": false,
+     "particles": false,
+     "bbox": [
+      13.0,
+      -34.0,
+      32.75,
+      -20.75
+     ],
+     "captions": [
+      {
+       "at": "2026-10-26T06:00Z",
+       "text": "Each frame shows the highest temperature in the past 6 hours"
+      },
+      {
+       "at": "2026-10-31T18:00Z",
+       "text": "Peak: 43 °C, about 100 km west of Upington"
+      }
+     ],
+     "focus": [
+      {
+       "lat": -28.46,
+       "lon": 21.23,
+       "label": "Upington"
+      },
+      {
+       "lat": -28.747,
+       "lon": 24.77,
+       "label": "Kimberley"
+      }
+     ],
+     "package": "p/20261026T00Z/2026-10-26-heat-upington-0",
+     "bytes": 51266
+    },
+    {
+     "title": "Hot days, warm nights",
+     "fill": "t2",
+     "label": "Temperature (2 m)",
+     "units": "C",
+     "palette": "temp",
+     "kind": "instant",
+     "grid": {
+      "west": 13.0,
+      "north": -20.75,
+      "res": 0.25,
+      "nx": 80,
+      "ny": 54
+     },
+     "frames": [
+      "2026-10-26T00:00Z",
+      "2026-10-26T06:00Z",
+      "2026-10-26T12:00Z",
+      "2026-10-26T18:00Z",
+      "2026-10-27T00:00Z",
+      "2026-10-27T06:00Z",
+      "2026-10-27T12:00Z",
+      "2026-10-27T18:00Z",
+      "2026-10-28T00:00Z",
+      "2026-10-28T06:00Z",
+      "2026-10-28T12:00Z",
+      "2026-10-28T18:00Z",
+      "2026-10-29T00:00Z",
+      "2026-10-29T06:00Z",
+      "2026-10-29T12:00Z",
+      "2026-10-29T18:00Z",
+      "2026-10-30T00:00Z",
+      "2026-10-30T06:00Z",
+      "2026-10-30T12:00Z",
+      "2026-10-30T18:00Z",
+      "2026-10-31T00:00Z",
+      "2026-10-31T06:00Z",
+      "2026-10-31T12:00Z",
+      "2026-10-31T18:00Z",
+      "2026-11-01T00:00Z"
+     ],
+     "layers": {
+      "fill": {
+       "file": "fill.webp",
+       "lo": -10,
+       "hi": 50,
+       "scale": "linear"
+      },
+      "mslp": {
+       "file": "mslp.webp",
+       "lo": 1004,
+       "hi": 1029,
+       "scale": "linear"
+      },
+      "wind": {
+       "file": "wind.webp",
+       "amp": 15
+      }
+     },
+     "isobars": true,
+     "particles": true,
+     "bbox": [
+      13.0,
+      -34.0,
+      32.75,
+      -20.75
+     ],
+     "captions": [
+      {
+       "at": "2026-10-26T00:00Z",
+       "text": "Watch the daily swing between hot afternoons and warm nights"
+      }
+     ],
+     "focus": [
+      {
+       "lat": -28.46,
+       "lon": 21.23,
+       "label": "Upington"
+      },
+      {
+       "lat": -28.747,
+       "lon": 24.77,
+       "label": "Kimberley"
+      }
+     ],
+     "package": "p/20261026T00Z/2026-10-26-heat-upington-1",
+     "bytes": 241430
+    },
+    {
+     "title": "Ensemble: how unusual is the warmth?",
+     "fill": "ens_warm2",
+     "label": "Ensemble chance the 850 hPa temperature is 2 SD above normal",
+     "units": "pct",
+     "palette": "probwarm",
+     "kind": "instant",
+     "grid": {
+      "west": 13.0,
+      "north": -20.75,
+      "res": 0.25,
+      "nx": 80,
+      "ny": 54
+     },
+     "frames": [
+      "2026-10-26T12:00Z",
+      "2026-10-27T00:00Z",
+      "2026-10-27T12:00Z",
+      "2026-10-28T00:00Z",
+      "2026-10-28T12:00Z",
+      "2026-10-29T00:00Z",
+      "2026-10-29T12:00Z",
+      "2026-10-30T00:00Z",
+      "2026-10-30T12:00Z",
+      "2026-10-31T00:00Z",
+      "2026-10-31T12:00Z",
+      "2026-11-01T00:00Z"
+     ],
+     "layers": {
+      "fill": {
+       "file": "fill.webp",
+       "lo": 0,
+       "hi": 100,
+       "scale": "linear"
+      }
+     },
+     "isobars": false,
+     "particles": false,
+     "bbox": [
+      13.0,
+      -34.0,
+      32.75,
+      -20.75
+     ],
+     "captions": [
+      {
+       "at": "2026-10-26T12:00Z",
+       "text": "Chance that the air 1.5 km up is far warmer than normal"
+      },
+      {
+       "at": "2026-10-31T00:00Z",
+       "text": "Up to 100 % of members"
+      }
+     ],
+     "focus": [
+      {
+       "lat": -28.46,
+       "lon": 21.23,
+       "label": "Upington"
+      },
+      {
+       "lat": -28.747,
+       "lon": 24.77,
+       "label": "Kimberley"
+      }
+     ],
+     "package": "p/20261026T00Z/2026-10-26-heat-upington-2",
+     "bytes": 7256
+    }
+   ],
+   "rank": 2
+  },
+  {
+   "title": "Damaging gusts for Lesotho and South Africa",
+   "where": {
+    "label": "Lesotho and South Africa",
+    "centre": [
+     -30.5,
+     28.0
+    ],
+    "bbox": [
+     19.25,
+     -35.25,
+     35.5,
+     -24.25
+    ]
+   },
+   "when": {
+    "start": "2026-10-26T12:00Z",
+    "peak": "2026-10-26T12:00Z",
+    "end": "2026-10-26T12:00Z"
+   },
+   "status": "ongoing",
+   "summary": "HRES has gusts up to 25 m/s (90 km/h) about 30 km east of Moyeni, Lesotho around Mon 26 Oct, 12 UTC, with strong winds on Mon 26 Oct. Up to 73 % of ensemble members have gusts above 25 m/s (90 km/h).",
+   "why_interesting": "Southern Africa's coasts lie close to the westerly storm track of the Southern Ocean. Cold fronts and strong pressure gradients can bring damaging gales, and they fan wildfires in the dry season.",
+   "evidence": [
+    {
+     "kind": "field",
+     "text": "HRES gusts up to 25 m/s near 30.5S 28.0E at Mon 26 Oct, 12 UTC (00 UTC Mon 26 Oct run)"
+    },
+    {
+     "kind": "ensemble",
+     "text": "ENS: 73 % chance of gusts over 25 m/s"
+    }
+   ],
+   "talking_points": [
+    "What do tightly packed isobars tell you about the wind?",
+    "Why are gusts so much stronger than the average wind?"
+   ],
+   "confidence": "high: ensemble and HRES agree",
+   "id": "2026-10-26-wind-moyeni",
+   "kind": "event",
+   "hazards": [
+    "wind"
+   ],
+   "score": 4.83,
+   "scenes": [
+    {
+     "title": "Strongest gusts",
+     "fill": "gust",
+     "label": "Strongest gust in the past 6 h",
+     "units": "ms",
+     "palette": "wind",
+     "kind": "past6",
+     "grid": {
+      "west": 19.25,
+      "north": -24.25,
+      "res": 0.25,
+      "nx": 66,
+      "ny": 45
+     },
+     "frames": [
+      "2026-10-26T06:00Z",
+      "2026-10-26T12:00Z",
+      "2026-10-26T18:00Z",
+      "2026-10-27T00:00Z",
+      "2026-10-27T06:00Z",
+      "2026-10-27T12:00Z",
+      "2026-10-27T18:00Z",
+      "2026-10-28T00:00Z"
+     ],
+     "layers": {
+      "fill": {
+       "file": "fill.webp",
+       "lo": 0,
+       "hi": 50,
+       "scale": "linear"
+      },
+      "mslp": {
+       "file": "mslp.webp",
+       "lo": 1004,
+       "hi": 1026,
+       "scale": "linear"
+      }
+     },
+     "isobars": true,
+     "particles": false,
+     "bbox": [
+      19.25,
+      -35.25,
+      35.5,
+      -24.25
+     ],
+     "captions": [
+      {
+       "at": "2026-10-26T06:00Z",
+       "text": "Strongest gust in each 6-hour period"
+      },
+      {
+       "at": "2026-10-26T12:00Z",
+       "text": "Peak: 25 m/s, about 30 km east of Moyeni"
+      },
+      {
+       "at": "2026-10-26T18:00Z",
+       "text": "Easing"
+      }
+     ],
+     "focus": [
+      {
+       "lat": -30.411,
+       "lon": 27.716,
+       "label": "Moyeni"
+      }
+     ],
+     "package": "p/20261026T00Z/2026-10-26-wind-moyeni-0",
+     "bytes": 25666
+    },
+    {
+     "title": "The wind flow",
+     "fill": "wind10",
+     "label": "Wind speed (10 m)",
+     "units": "ms",
+     "palette": "wind",
+     "kind": "instant",
+     "grid": {
+      "west": 19.25,
+      "north": -24.25,
+      "res": 0.25,
+      "nx": 66,
+      "ny": 45
+     },
+     "frames": [
+      "2026-10-26T00:00Z",
+      "2026-10-26T06:00Z",
+      "2026-10-26T12:00Z",
+      "2026-10-26T18:00Z",
+      "2026-10-27T00:00Z",
+      "2026-10-27T06:00Z",
+      "2026-10-27T12:00Z",
+      "2026-10-27T18:00Z",
+      "2026-10-28T00:00Z"
+     ],
+     "layers": {
+      "fill": {
+       "file": "fill.webp",
+       "lo": 0,
+       "hi": 40,
+       "scale": "linear"
+      },
+      "mslp": {
+       "file": "mslp.webp",
+       "lo": 1004,
+       "hi": 1026,
+       "scale": "linear"
+      },
+      "wind": {
+       "file": "wind.webp",
+       "amp": 20
+      }
+     },
+     "isobars": true,
+     "particles": true,
+     "bbox": [
+      19.25,
+      -35.25,
+      35.5,
+      -24.25
+     ],
+     "captions": [
+      {
+       "at": "2026-10-26T00:00Z",
+       "text": "Moving streaks follow the 10 m wind"
+      },
+      {
+       "at": "2026-10-26T18:00Z",
+       "text": "Easing"
+      }
+     ],
+     "focus": [
+      {
+       "lat": -30.411,
+       "lon": 27.716,
+       "label": "Moyeni"
+      }
+     ],
+     "package": "p/20261026T00Z/2026-10-26-wind-moyeni-1",
+     "bytes": 60440
+    },
+    {
+     "title": "Ensemble: chance of damaging gusts",
+     "fill": "ens_gust25",
+     "label": "Ensemble chance of gusts over 25 m/s in 24 h",
+     "units": "pct",
+     "palette": "prob",
+     "kind": "window24",
+     "grid": {
+      "west": 19.25,
+      "north": -24.25,
+      "res": 0.25,
+      "nx": 66,
+      "ny": 45
+     },
+     "frames": [
+      "2026-10-27T00:00Z",
+      "2026-10-27T12:00Z",
+      "2026-10-28T00:00Z",
+      "2026-10-28T12:00Z"
+     ],
+     "layers": {
+      "fill": {
+       "file": "fill.webp",
+       "lo": 0,
+       "hi": 100,
+       "scale": "linear"
+      }
+     },
+     "isobars": false,
+     "particles": false,
+     "bbox": [
+      19.25,
+      -35.25,
+      35.5,
+      -24.25
+     ],
+     "captions": [
+      {
+       "at": "2026-10-27T00:00Z",
+       "text": "Each frame is the 24 hours ending at the time shown"
+      }
+     ],
+     "focus": [
+      {
+       "lat": -30.411,
+       "lon": 27.716,
+       "label": "Moyeni"
+      }
+     ],
+     "package": "p/20261026T00Z/2026-10-26-wind-moyeni-2",
+     "bytes": 574
+    }
+   ],
+   "rank": 3
+  },
+  {
+   "title": "Intense heat in Zimbabwe and Mozambique",
+   "where": {
+    "label": "Zimbabwe, Mozambique and Malawi",
+    "centre": [
+     -15.75,
+     29.5
+    ],
+    "bbox": [
+     25.75,
+     -21.75,
+     42.0,
+     -10.75
+    ]
+   },
+   "when": {
+    "start": "2026-10-27T12:00Z",
+    "peak": "2026-10-28T18:00Z",
+    "end": "2026-10-28T18:00Z"
+   },
+   "status": "forecast",
+   "summary": "HRES has afternoon highs up to 43 °C about 140 km east of Lusaka, Zambia on Wed 28 Oct. Temperatures of 40 °C or more cover about 70,000 km² between Tue 27 Oct and Wed 28 Oct. The ensemble does not flag the air aloft as unusually warm, so this is hot-season heat at its peak.",
+   "why_interesting": "In much of southern Africa, October and November are the hottest months. The sun is high and the ground is still dry before the summer rains, so heat builds day after day until the first storms break it.",
+   "evidence": [
+    {
+     "kind": "field",
+     "text": "HRES highest 3-hourly maximum 43.1 °C near 15.8S 29.5E on Wed 28 Oct, 18 UTC (00 UTC Mon 26 Oct run)"
+    },
+    {
+     "kind": "ensemble",
+     "text": "ENS: up to 2 % chance that 850 hPa temperature is more than 2 SD above normal"
+    }
+   ],
+   "talking_points": [
+    "Why do warm nights make a heatwave more dangerous?",
+    "How do the ensemble anomaly charts tell 'hot for the time of year' from simply 'hot'?",
+    "Why does dry ground let temperatures climb higher?"
+   ],
+   "confidence": "medium: HRES heat; typical for the season according to the ensemble",
+   "id": "2026-10-26-heat-lusaka",
+   "kind": "event",
+   "hazards": [
+    "heat"
+   ],
+   "score": 4.46,
+   "scenes": [
+    {
+     "title": "Afternoon heat",
+     "fill": "tmax",
+     "label": "Highest temperature in the past 6 h",
+     "units": "C",
+     "palette": "temp",
+     "kind": "past6",
+     "grid": {
+      "west": 25.75,
+      "north": -10.75,
+      "res": 0.25,
+      "nx": 66,
+      "ny": 45
+     },
+     "frames": [
+      "2026-10-27T00:00Z",
+      "2026-10-27T06:00Z",
+      "2026-10-27T12:00Z",
+      "2026-10-27T18:00Z",
+      "2026-10-28T00:00Z",
+      "2026-10-28T06:00Z",
+      "2026-10-28T12:00Z",
+      "2026-10-28T18:00Z",
+      "2026-10-29T00:00Z",
+      "2026-10-29T06:00Z"
+     ],
+     "layers": {
+      "fill": {
+       "file": "fill.webp",
+       "lo": -10,
+       "hi": 50,
+       "scale": "linear"
+      }
+     },
+     "isobars": false,
+     "particles": false,
+     "bbox": [
+      25.75,
+      -21.75,
+      42.0,
+      -10.75
+     ],
+     "captions": [
+      {
+       "at": "2026-10-27T00:00Z",
+       "text": "Each frame shows the highest temperature in the past 6 hours"
+      },
+      {
+       "at": "2026-10-28T18:00Z",
+       "text": "Peak: 43 °C, about 140 km east of Lusaka"
+      },
+      {
+       "at": "2026-10-29T00:00Z",
+       "text": "Easing"
+      }
+     ],
+     "focus": [
+      {
+       "lat": -16.1,
+       "lon": 33.95,
+       "label": "Moatize"
+      }
+     ],
+     "package": "p/20261026T00Z/2026-10-26-heat-lusaka-0",
+     "bytes": 14864
+    },
+    {
+     "title": "Hot days, warm nights",
+     "fill": "t2",
+     "label": "Temperature (2 m)",
+     "units": "C",
+     "palette": "temp",
+     "kind": "instant",
+     "grid": {
+      "west": 25.75,
+      "north": -10.75,
+      "res": 0.25,
+      "nx": 66,
+      "ny": 45
+     },
+     "frames": [
+      "2026-10-27T00:00Z",
+      "2026-10-27T06:00Z",
+      "2026-10-27T12:00Z",
+      "2026-10-27T18:00Z",
+      "2026-10-28T00:00Z",
+      "2026-10-28T06:00Z",
+      "2026-10-28T12:00Z",
+      "2026-10-28T18:00Z",
+      "2026-10-29T00:00Z",
+      "2026-10-29T06:00Z"
+     ],
+     "layers": {
+      "fill": {
+       "file": "fill.webp",
+       "lo": -10,
+       "hi": 50,
+       "scale": "linear"
+      },
+      "mslp": {
+       "file": "mslp.webp",
+       "lo": 1002,
+       "hi": 1023,
+       "scale": "linear"
+      },
+      "wind": {
+       "file": "wind.webp",
+       "amp": 15
+      }
+     },
+     "isobars": true,
+     "particles": true,
+     "bbox": [
+      25.75,
+      -21.75,
+      42.0,
+      -10.75
+     ],
+     "captions": [
+      {
+       "at": "2026-10-27T00:00Z",
+       "text": "Watch the daily swing between hot afternoons and warm nights"
+      }
+     ],
+     "focus": [
+      {
+       "lat": -16.1,
+       "lon": 33.95,
+       "label": "Moatize"
+      }
+     ],
+     "package": "p/20261026T00Z/2026-10-26-heat-lusaka-1",
+     "bytes": 67376
+    },
+    {
+     "title": "Ensemble: how unusual is the warmth?",
+     "fill": "ens_warm2",
+     "label": "Ensemble chance the 850 hPa temperature is 2 SD above normal",
+     "units": "pct",
+     "palette": "probwarm",
+     "kind": "instant",
+     "grid": {
+      "west": 25.75,
+      "north": -10.75,
+      "res": 0.25,
+      "nx": 66,
+      "ny": 45
+     },
+     "frames": [
+      "2026-10-26T12:00Z",
+      "2026-10-27T00:00Z",
+      "2026-10-27T12:00Z",
+      "2026-10-28T00:00Z",
+      "2026-10-28T12:00Z",
+      "2026-10-29T00:00Z",
+      "2026-10-29T12:00Z"
+     ],
+     "layers": {
+      "fill": {
+       "file": "fill.webp",
+       "lo": 0,
+       "hi": 100,
+       "scale": "linear"
+      }
+     },
+     "isobars": false,
+     "particles": false,
+     "bbox": [
+      25.75,
+      -21.75,
+      42.0,
+      -10.75
+     ],
+     "captions": [
+      {
+       "at": "2026-10-26T12:00Z",
+       "text": "Chance that the air 1.5 km up is far warmer than normal"
+      },
+      {
+       "at": "2026-10-29T00:00Z",
+       "text": "Up to 2 % of members"
+      }
+     ],
+     "focus": [
+      {
+       "lat": -16.1,
+       "lon": 33.95,
+       "label": "Moatize"
+      }
+     ],
+     "package": "p/20261026T00Z/2026-10-26-heat-lusaka-2",
+     "bytes": 2106
+    }
+   ],
+   "rank": 4
+  },
+  {
+   "title": "Heavy rain for South Africa",
+   "where": {
+    "label": "South Africa",
+    "centre": [
+     -32.25,
+     28.5
+    ],
+    "bbox": [
+     19.75,
+     -38.0,
+     36.25,
+     -27.0
+    ]
+   },
+   "when": {
+    "start": "2026-10-27T06:00Z",
+    "peak": "2026-10-27T12:00Z",
+    "end": "2026-10-28T00:00Z"
+   },
+   "status": "forecast",
+   "summary": "HRES gives up to 84 mm of rain in 24 h about 80 km south of Umtata, South Africa, in the 24 hours to Tue 27 Oct, 12 UTC. Heavy rain covers about 10,000 km² between Tue 27 Oct and Wed 28 Oct. Up to 51 % of ensemble members give more than 50 mm in a day here. Flash flooding is possible, especially in towns and on steep ground.",
+   "why_interesting": "The summer rains are just starting over southern Africa. The first heavy storms of the season fall on hard, dry ground, so runoff and flash flooding can be worse than the totals suggest.",
+   "evidence": [
+    {
+     "kind": "field",
+     "text": "HRES 24 h rain up to 84 mm near 32.2S 28.5E ending Tue 27 Oct, 12 UTC (00 UTC Mon 26 Oct run)"
+    },
+    {
+     "kind": "ensemble",
+     "text": "ENS: 51 % chance of more than 50 mm in 24 h"
+    }
+   ],
+   "talking_points": [
+    "What lifts the moist air enough to make this much rain?",
+    "Why can a forecast be confident about heavy rain but not about exactly where it falls?",
+    "Why do cities flood more easily than the countryside?"
+   ],
+   "confidence": "medium: HRES heavy rain with some ensemble support",
+   "id": "2026-10-26-rain-umtata",
+   "kind": "event",
+   "hazards": [
+    "rain"
+   ],
+   "score": 4.0,
+   "scenes": [
+    {
+     "title": "Where the rain falls",
+     "fill": "rain6",
+     "label": "Rain in the past 6 h",
+     "units": "mm",
+     "palette": "rain",
+     "kind": "past6",
+     "grid": {
+      "west": 19.75,
+      "north": -27.0,
+      "res": 0.25,
+      "nx": 67,
+      "ny": 45
+     },
+     "frames": [
+      "2026-10-26T12:00Z",
+      "2026-10-26T18:00Z",
+      "2026-10-27T00:00Z",
+      "2026-10-27T06:00Z",
+      "2026-10-27T12:00Z",
+      "2026-10-27T18:00Z",
+      "2026-10-28T00:00Z",
+      "2026-10-28T06:00Z",
+      "2026-10-28T12:00Z",
+      "2026-10-28T18:00Z"
+     ],
+     "layers": {
+      "fill": {
+       "file": "fill.webp",
+       "lo": 0,
+       "hi": 150,
+       "scale": "sqrt"
+      },
+      "mslp": {
+       "file": "mslp.webp",
+       "lo": 1005,
+       "hi": 1028,
+       "scale": "linear"
+      }
+     },
+     "isobars": true,
+     "particles": false,
+     "bbox": [
+      19.75,
+      -38.0,
+      36.25,
+      -27.0
+     ],
+     "captions": [
+      {
+       "at": "2026-10-26T12:00Z",
+       "text": "Rain in 6-hour steps; isobars every 4 hPa"
+      },
+      {
+       "at": "2026-10-27T12:00Z",
+       "text": "Peak: 84 mm in 24 h, about 80 km south of Umtata"
+      },
+      {
+       "at": "2026-10-28T06:00Z",
+       "text": "Easing"
+      }
+     ],
+     "focus": [
+      {
+       "lat": -31.58,
+       "lon": 28.79,
+       "label": "Umtata"
+      }
+     ],
+     "package": "p/20261026T00Z/2026-10-26-rain-umtata-0",
+     "bytes": 21444
+    },
+    {
+     "title": "Moisture feeding the rain",
+     "fill": "tcwv",
+     "label": "Total column water vapour",
+     "units": "kgm2",
+     "palette": "moisture",
+     "kind": "instant",
+     "grid": {
+      "west": 19.75,
+      "north": -27.0,
+      "res": 0.25,
+      "nx": 67,
+      "ny": 45
+     },
+     "frames": [
+      "2026-10-26T12:00Z",
+      "2026-10-26T18:00Z",
+      "2026-10-27T00:00Z",
+      "2026-10-27T06:00Z",
+      "2026-10-27T12:00Z",
+      "2026-10-27T18:00Z",
+      "2026-10-28T00:00Z",
+      "2026-10-28T06:00Z",
+      "2026-10-28T12:00Z",
+      "2026-10-28T18:00Z"
+     ],
+     "layers": {
+      "fill": {
+       "file": "fill.webp",
+       "lo": 0,
+       "hi": 75,
+       "scale": "linear"
+      },
+      "mslp": {
+       "file": "mslp.webp",
+       "lo": 1005,
+       "hi": 1028,
+       "scale": "linear"
+      },
+      "wind": {
+       "file": "wind.webp",
+       "amp": 15
+      }
+     },
+     "isobars": true,
+     "particles": true,
+     "bbox": [
+      19.75,
+      -38.0,
+      36.25,
+      -27.0
+     ],
+     "captions": [
+      {
+       "at": "2026-10-26T12:00Z",
+       "text": "Purple and red: deep moisture that can fuel heavy rain"
+      }
+     ],
+     "focus": [
+      {
+       "lat": -31.58,
+       "lon": 28.79,
+       "label": "Umtata"
+      }
+     ],
+     "package": "p/20261026T00Z/2026-10-26-rain-umtata-1",
+     "bytes": 64116
+    },
+    {
+     "title": "Ensemble: chance of more than 50 mm in a day",
+     "fill": "ens_rain50",
+     "label": "Ensemble chance of more than 50 mm in 24 h",
+     "units": "pct",
+     "palette": "prob",
+     "kind": "window24",
+     "grid": {
+      "west": 19.75,
+      "north": -27.0,
+      "res": 0.25,
+      "nx": 67,
+      "ny": 45
+     },
+     "frames": [
+      "2026-10-27T00:00Z",
+      "2026-10-27T12:00Z",
+      "2026-10-28T00:00Z",
+      "2026-10-28T12:00Z",
+      "2026-10-29T00:00Z",
+      "2026-10-29T12:00Z"
+     ],
+     "layers": {
+      "fill": {
+       "file": "fill.webp",
+       "lo": 0,
+       "hi": 100,
+       "scale": "linear"
+      }
+     },
+     "isobars": false,
+     "particles": false,
+     "bbox": [
+      19.75,
+      -38.0,
+      36.25,
+      -27.0
+     ],
+     "captions": [
+      {
+       "at": "2026-10-27T00:00Z",
+       "text": "Each frame is the 24 hours ending at the time shown"
+      },
+      {
+       "at": "2026-10-27T12:00Z",
+       "text": "Highest: 51 % of 51 members"
+      }
+     ],
+     "focus": [
+      {
+       "lat": -31.58,
+       "lon": 28.79,
+       "label": "Umtata"
+      }
+     ],
+     "package": "p/20261026T00Z/2026-10-26-rain-umtata-2",
+     "bytes": 1080
+    }
+   ],
+   "rank": 5
+  },
+  {
+   "kind": "explainer",
+   "title": "Africa's rain belt this week",
+   "hazards": [
+    "explainer"
+   ],
+   "where": {
+    "label": "Africa",
+    "centre": [
+     1.0,
+     17.0
+    ],
+    "bbox": [
+     -20.0,
+     -36.0,
+     54.0,
+     38.0
+    ]
+   },
+   "when": {
+    "start": "2026-10-26T00:00Z",
+    "peak": "2026-10-29T00:00Z",
+    "end": "2026-11-01T00:00Z"
+   },
+   "status": "forecast",
+   "summary": "Over the next six days (Mon 26 Oct to Sun 1 Nov), most of Africa's rain falls between about 12°S and 5°N. The wettest spot in HRES is about 40 km north of Moshi, Tanzania, with about 208 mm in total. The largest areas with more than 50 mm are in DR Congo, Gabon, Angola and Congo. Rain of 25 mm or more covers about 6.2 million km² of land.",
+   "why_interesting": "In October and November the tropical rain belt follows the sun south. The rains are ending in the Sahel and Sudan, the 'short rains' are starting in East Africa, and the first summer storms are reaching southern Africa.",
+   "evidence": [
+    {
+     "kind": "field",
+     "text": "HRES total rain Mon 26 Oct to Sun 1 Nov; 25 mm or more over 6.2 million km² of African land"
+    }
+   ],
+   "talking_points": [
+    "What is the tropical rain belt (the ITCZ), and why does it follow the sun?",
+    "Why do some places get two rainy seasons a year and others only one?",
+    "Where does the moisture for Africa's rain come from?"
+   ],
+   "confidence": "high for the broad pattern; individual storms are less certain",
+   "id": "2026-10-26-rain-belt",
+   "scenes": [
+    {
+     "title": "The rain belt in 6-hour steps",
+     "fill": "rain6",
+     "label": "Rain in the past 6 h",
+     "units": "mm",
+     "palette": "rain",
+     "kind": "past6",
+     "grid": {
+      "west": -20.0,
+      "north": 38.0,
+      "res": 0.5,
+      "nx": 149,
+      "ny": 149
+     },
+     "frames": [
+      "2026-10-26T06:00Z",
+      "2026-10-26T12:00Z",
+      "2026-10-26T18:00Z",
+      "2026-10-27T00:00Z",
+      "2026-10-27T06:00Z",
+      "2026-10-27T12:00Z",
+      "2026-10-27T18:00Z",
+      "2026-10-28T00:00Z",
+      "2026-10-28T06:00Z",
+      "2026-10-28T12:00Z",
+      "2026-10-28T18:00Z",
+      "2026-10-29T00:00Z",
+      "2026-10-29T06:00Z",
+      "2026-10-29T12:00Z",
+      "2026-10-29T18:00Z",
+      "2026-10-30T00:00Z",
+      "2026-10-30T06:00Z",
+      "2026-10-30T12:00Z",
+      "2026-10-30T18:00Z",
+      "2026-10-31T00:00Z",
+      "2026-10-31T06:00Z",
+      "2026-10-31T12:00Z",
+      "2026-10-31T18:00Z",
+      "2026-11-01T00:00Z"
+     ],
+     "layers": {
+      "fill": {
+       "file": "fill.webp",
+       "lo": 0,
+       "hi": 150,
+       "scale": "sqrt"
+      },
+      "mslp": {
+       "file": "mslp.webp",
+       "lo": 990,
+       "hi": 1030,
+       "scale": "linear"
+      }
+     },
+     "isobars": true,
+     "particles": false,
+     "bbox": [
+      -20.0,
+      -36.0,
+      54.0,
+      38.0
+     ],
+     "captions": [
+      {
+       "at": "2026-10-26T06:00Z",
+       "text": "Rain falls in a broad belt that follows the sun"
+      },
+      {
+       "at": "2026-10-29T00:00Z",
+       "text": "Afternoon storms flare up over land each day"
+      }
+     ],
+     "focus": [],
+     "package": "p/20261026T00Z/2026-10-26-rain-belt-0",
+     "bytes": 304182
+    },
+    {
+     "title": "Moist tropical air and dry desert air",
+     "fill": "tcwv",
+     "label": "Total column water vapour",
+     "units": "kgm2",
+     "palette": "moisture",
+     "kind": "instant",
+     "grid": {
+      "west": -20.0,
+      "north": 38.0,
+      "res": 0.5,
+      "nx": 149,
+      "ny": 149
+     },
+     "frames": [
+      "2026-10-26T00:00Z",
+      "2026-10-26T06:00Z",
+      "2026-10-26T12:00Z",
+      "2026-10-26T18:00Z",
+      "2026-10-27T00:00Z",
+      "2026-10-27T06:00Z",
+      "2026-10-27T12:00Z",
+      "2026-10-27T18:00Z",
+      "2026-10-28T00:00Z",
+      "2026-10-28T06:00Z",
+      "2026-10-28T12:00Z",
+      "2026-10-28T18:00Z",
+      "2026-10-29T00:00Z",
+      "2026-10-29T06:00Z",
+      "2026-10-29T12:00Z",
+      "2026-10-29T18:00Z",
+      "2026-10-30T00:00Z",
+      "2026-10-30T06:00Z",
+      "2026-10-30T12:00Z",
+      "2026-10-30T18:00Z",
+      "2026-10-31T00:00Z",
+      "2026-10-31T06:00Z",
+      "2026-10-31T12:00Z",
+      "2026-10-31T18:00Z",
+      "2026-11-01T00:00Z"
+     ],
+     "layers": {
+      "fill": {
+       "file": "fill.webp",
+       "lo": 0,
+       "hi": 75,
+       "scale": "linear"
+      },
+      "mslp": {
+       "file": "mslp.webp",
+       "lo": 990,
+       "hi": 1030,
+       "scale": "linear"
+      },
+      "wind": {
+       "file": "wind.webp",
+       "amp": 25
+      }
+     },
+     "isobars": true,
+     "particles": true,
+     "bbox": [
+      -20.0,
+      -36.0,
+      54.0,
+      38.0
+     ],
+     "captions": [
+      {
+       "at": "2026-10-26T00:00Z",
+       "text": "Purple and red: deep moisture. Grey and green: dry air"
+      }
+     ],
+     "focus": [],
+     "package": "p/20261026T00Z/2026-10-26-rain-belt-1",
+     "bytes": 1091600
+    },
+    {
+     "title": "Day and night across the continent",
+     "fill": "t2",
+     "label": "Temperature (2 m)",
+     "units": "C",
+     "palette": "temp",
+     "kind": "instant",
+     "grid": {
+      "west": -20.0,
+      "north": 38.0,
+      "res": 0.5,
+      "nx": 149,
+      "ny": 149
+     },
+     "frames": [
+      "2026-10-26T00:00Z",
+      "2026-10-26T06:00Z",
+      "2026-10-26T12:00Z",
+      "2026-10-26T18:00Z",
+      "2026-10-27T00:00Z",
+      "2026-10-27T06:00Z",
+      "2026-10-27T12:00Z",
+      "2026-10-27T18:00Z",
+      "2026-10-28T00:00Z",
+      "2026-10-28T06:00Z",
+      "2026-10-28T12:00Z",
+      "2026-10-28T18:00Z",
+      "2026-10-29T00:00Z",
+      "2026-10-29T06:00Z",
+      "2026-10-29T12:00Z",
+      "2026-10-29T18:00Z",
+      "2026-10-30T00:00Z",
+      "2026-10-30T06:00Z",
+      "2026-10-30T12:00Z",
+      "2026-10-30T18:00Z",
+      "2026-10-31T00:00Z",
+      "2026-10-31T06:00Z",
+      "2026-10-31T12:00Z",
+      "2026-10-31T18:00Z",
+      "2026-11-01T00:00Z"
+     ],
+     "layers": {
+      "fill": {
+       "file": "fill.webp",
+       "lo": -10,
+       "hi": 50,
+       "scale": "linear"
+      }
+     },
+     "isobars": false,
+     "particles": false,
+     "bbox": [
+      -20.0,
+      -36.0,
+      54.0,
+      38.0
+     ],
+     "captions": [
+      {
+       "at": "2026-10-26T00:00Z",
+       "text": "Watch the deserts heat up by day and cool at night"
+      }
+     ],
+     "focus": [],
+     "package": "p/20261026T00Z/2026-10-26-rain-belt-2",
+     "bytes": 255902
+    }
+   ],
+   "rank": 6
+  }
+ ]
+}

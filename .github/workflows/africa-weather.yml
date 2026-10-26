@@ -1,0 +1,55 @@
+name: Africa Weather Explorer and existing site
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '20 8,20 * * *'
+  push:
+    branches: [main, claude/dakhla-heat-mapping-eti6k0]
+    paths:
+      - 'weather/**'
+      - 'weather-source/**'
+      - '.github/workflows/africa-weather.yml'
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: africa-weather-pages
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          cache-dependency-glob: weather-source/uv.lock
+      - run: uv sync --python 3.12 --frozen
+        working-directory: weather-source
+      - name: Refresh Africa forecasts
+        working-directory: weather-source
+        shell: bash
+        run: |
+          set +e
+          uv run python -m sweep --no-ai --out ../weather/data
+          result=$?
+          if [ "$result" -ne 0 ] && [ "$result" -ne 3 ]; then exit "$result"; fi
+      - name: Package existing site and Weather Explorer together
+        run: |
+          mkdir -p _public
+          rsync -a --exclude='.git/' --exclude='.github/' --exclude='_public/' --exclude='weather-source/' --exclude='.cache/' --exclude='__pycache__/' ./ _public/
+          touch _public/.nojekyll
+          test -f _public/index.html
+          test -f _public/weather/index.html
+          test -f _public/weather/data/feed.json
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _public
+      - uses: actions/deploy-pages@v4
+        id: deploy
