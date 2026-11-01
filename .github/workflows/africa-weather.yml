@@ -42,7 +42,7 @@ jobs:
       - name: Package existing site and Weather Explorer together
         run: |
           mkdir -p _public
-          rsync -a --exclude='.git/' --exclude='.github/' --exclude='_public/' --exclude='weather-source/' --exclude='.cache/' --exclude='__pycache__/' ./ _public/
+          rsync -a --exclude='.git/' --exclude='.github/' --exclude='.claude/' --exclude='_public/' --exclude='weather-source/' --exclude='.cache/' --exclude='__pycache__/' ./ _public/
           touch _public/.nojekyll
           test -f _public/index.html
           test -f _public/weather/index.html
