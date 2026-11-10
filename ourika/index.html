@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#06090a">
+<title>Ourika Watch · Live watershed intelligence, High Atlas</title>
+<meta name="description" content="Live situational awareness for the Ourika watershed (High Atlas, Morocco): flash-flood watch, rain and snow forecasts, river discharge, earthquakes and satellite imagery on a 3D terrain map.">
+<link rel="stylesheet" href="../vendor/maplibre-gl-5.6.2.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="map" aria-label="Map of the Ourika watershed"></div>
+
+<header class="topbar">
+  <a class="brand" href="./" aria-label="Ourika Watch">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 24 11 9l5 8 4-6 9 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M5 28c4-2 6 2 10 0s6-2 12 0" fill="none" stroke="var(--water)" stroke-width="2" stroke-linecap="round"/></svg>
+    <span><b>OURIKA WATCH</b><i>Watershed intelligence · High Atlas</i></span>
+  </a>
+  <div class="status" role="status">
+    <span class="kv"><i>LOCAL</i><b id="clock-local">--:--:--</b></span>
+    <span class="kv"><i>ZULU</i><b id="clock-utc">--:--:--</b></span>
+    <span class="kv feeds" id="feeds" title="Live feed status"></span>
+    <button id="alert-chip" class="chip lvl-0" title="Basin flash-flood watch level">— —</button>
+    <button id="btn-about" class="ghost">? Method</button>
+  </div>
+</header>
+
+<button id="btn-layers" class="drawer-btn left" aria-controls="layers">Layers</button>
+<button id="btn-intel" class="drawer-btn right" aria-controls="intel">Intel</button>
+
+<aside id="layers" class="panel left" aria-label="Map layers">
+  <h2>Layers <span id="layer-total"></span></h2>
+  <div id="layer-list"></div>
+  <div class="satdate" id="satdate">
+    <span>Imagery date</span>
+    <button id="sat-prev" aria-label="Previous day">◀</button>
+    <b id="sat-label"></b>
+    <button id="sat-next" aria-label="Next day">▶</button>
+  </div>
+  <h2>Colour sub-basins by</h2>
+  <div class="seg" id="metric" role="group" aria-label="Sub-basin colouring">
+    <button data-m="watch" class="on">Watch</button>
+    <button data-m="r24">Rain 24h</button>
+    <button data-m="r72">Rain 72h</button>
+    <button data-m="snow">Snow</button>
+  </div>
+  <div id="legend" class="legend"></div>
+</aside>
+
+<aside id="intel" class="panel right" aria-label="Basin intelligence">
+  <section id="card-selected" class="card selected" hidden></section>
+  <section class="card" id="card-status">
+    <h3>Flash-flood watch <small>next 48 h</small></h3>
+    <div id="status-body" class="skeleton">Loading forecast…</div>
+  </section>
+  <section class="card">
+    <h3>Conditions now <small id="now-time"></small></h3>
+    <div id="now-body" class="skeleton">Loading…</div>
+  </section>
+  <section class="card">
+    <h3>Rain <small>basin mean, mm / h</small></h3>
+    <canvas id="chart-rain" height="120"></canvas>
+    <div id="rain-days" class="days"></div>
+  </section>
+  <section class="card">
+    <h3>River discharge <small>GloFAS at Aghbalou, m³/s</small></h3>
+    <canvas id="chart-flow" height="120"></canvas>
+    <p id="flow-note" class="note"></p>
+  </section>
+  <section class="card">
+    <h3>Snow line <small>freezing level vs terrain</small></h3>
+    <canvas id="chart-snow" height="120"></canvas>
+    <p id="snow-note" class="note"></p>
+  </section>
+  <section class="card">
+    <h3>Seismic <small>within 300 km</small></h3>
+    <div id="quake-body" class="skeleton">Loading…</div>
+  </section>
+  <section class="card">
+    <h3>Terrain <small>Copernicus GLO-30</small></h3>
+    <div id="terrain-stats" class="stats"></div>
+    <canvas id="chart-profile" height="110"></canvas>
+    <p class="note">Main-stem long profile, outlet to source. Bars: basin area per 200 m band.</p>
+    <canvas id="chart-hyps" height="90"></canvas>
+  </section>
+</aside>
+
+<div class="viewctl" role="group" aria-label="View">
+  <div class="seg" id="dim"><button data-d="2d" class="on">2D</button><button data-d="3d">3D</button></div>
+  <div class="seg" id="basemap"><button data-b="night" class="on">Night</button><button data-b="sat">Sat</button><button data-b="topo">Topo</button></div>
+  <button id="btn-home" class="ghost" title="Fit the basin">⌂ Basin</button>
+  <button id="btn-region" class="ghost" title="Zoom out to the seismic region">◎ Region</button>
+</div>
+
+<footer class="ticker">
+  <span id="cursor" class="cursor">— , —</span>
+  <div class="ticker-track"><div id="ticker-items"></div></div>
+  <span class="live"><i></i>LIVE</span>
+</footer>
+
+<dialog id="about">
+  <button class="close" id="about-close" aria-label="Close">×</button>
+  <h2>Ourika Watch — how it works</h2>
+  <p>A live dashboard for the Ourika watershed upstream of the Aghbalou gauge: a steep High Atlas basin south of Marrakech, known for violent summer flash floods.</p>
+  <h3>What is measured, what is modelled</h3>
+  <ul>
+    <li><b>Basin, sub-basins, rivers, profile</b> — derived from the Copernicus GLO-30 elevation model (D8 flow routing). The delineated area is <span id="about-area"></span> km².</li>
+    <li><b>Rain, snow, temperature, wind</b> — Open-Meteo forecast, sampled at each sub-basin’s mean elevation. Model output, not gauge readings.</li>
+    <li><b>River discharge</b> — GloFAS global flood model via Open-Meteo, on a 5 km cell. It follows trends; absolute values on a basin this small are rough.</li>
+    <li><b>Earthquakes</b> — USGS catalogue, live.</li>
+    <li><b>Satellite</b> — NASA GIBS daily MODIS imagery.</li>
+    <li><b>Villages, roads, buildings</b> — Overture Maps. “Exposed” buildings lie within <span id="about-buf"></span> m of a channel draining at least <span id="about-chan"></span> km².</li>
+  </ul>
+  <h3>Watch levels</h3>
+  <p>Each sub-basin is screened on forecast rain over the next 48 hours. The level is the highest that any rule reaches:</p>
+  <table id="about-thresholds"></table>
+  <p>These are screening thresholds chosen for steep, fast-responding terrain. They are not calibrated against gauges and are <b>not an official warning</b>. For decisions, follow Morocco’s Direction Générale de la Météorologie (vigilance bulletins) and the Tensift basin agency.</p>
+  <p class="muted">Inspired by the open-source <a href="https://github.com/simplifaisoul/osiris" rel="noopener">OSIRIS</a> dashboard. Map © MapLibre; basemaps © CARTO, Esri, OpenTopoMap, OpenStreetMap contributors; terrain tiles: Mapzen / AWS.</p>
+</dialog>
+
+<script src="../vendor/maplibre-gl-5.6.2.js"></script>
+<script type="module" src="app.js"></script>
+</body>
+</html>

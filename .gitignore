@@ -15,3 +15,6 @@ kepler_config.json
 
 # OS noise
 .DS_Store
+
+# Ourika DEM tiles (re-downloaded by the pipeline)
+ourika/pipeline/.cache/
