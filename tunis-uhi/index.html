@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+</head>
+<body>
+<title>Tunis Heat Twin</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap">
+<style>
+/* Layout: a four-step stepper over a two-column workbench — satellite map left, readings right; one column on phones. */
+:root {
+  --bg: #eef2f5; --surface: #ffffff; --sunken: #e3e9ee;
+  --ink: #14202b; --ink-2: #4a5a69; --ink-3: #7b8996; --line: #d3dbe2;
+  --accent: #0d6b88; --accent-ink: #ffffff; --accent-soft: #d8ebf1;
+  --warm: #c2452f; --cool: #2b78b8; --grid: #e2e8ed;
+  --font-display: "Space Grotesk", "Inter", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0e151b; --surface: #162029; --sunken: #1d2a35;
+  --ink: #e7edf2; --ink-2: #a9b6c2; --ink-3: #7d8b98; --line: #2a3945;
+  --accent: #58bcd9; --accent-ink: #06212b; --accent-soft: #173644;
+  --warm: #ee7d63; --cool: #6fb1e6; --grid: #24313c; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0e151b; --surface: #162029; --sunken: #1d2a35;
+  --ink: #e7edf2; --ink-2: #a9b6c2; --ink-3: #7d8b98; --line: #2a3945;
+  --accent: #58bcd9; --accent-ink: #06212b; --accent-soft: #173644;
+  --warm: #ee7d63; --cool: #6fb1e6; --grid: #24313c; color-scheme: dark }
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.5 var(--font-body); }
+.wrap { max-width: 1180px; margin: 0 auto; padding-block: 22px 40px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; flex-direction: column; gap: 18px; }
+h1 { font: 600 26px/1.15 var(--font-display); margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+h2 { font: 600 17px/1.25 var(--font-display); margin: 0; text-wrap: balance; }
+h3 { font: 600 11px/1.3 var(--font-body); margin: 0; text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-3); }
+p { margin: 0; }
+a { color: var(--accent); }
+.lede { color: var(--ink-2); max-width: 68ch; }
+header { display: flex; flex-direction: column; gap: 6px; }
+
+.steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.steps button { font: inherit; text-align: left; cursor: pointer; color: var(--ink-2); background: var(--surface);
+  border: 1px solid var(--line); border-radius: 8px; padding: 9px 12px; display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.steps button small { font-size: 11px; color: var(--ink-3); letter-spacing: 0.04em; }
+.steps button b { font: 600 14px/1.25 var(--font-display); color: var(--ink); }
+.steps button[aria-selected="true"] { background: var(--accent); border-color: var(--accent); }
+.steps button[aria-selected="true"] b, .steps button[aria-selected="true"] small { color: var(--accent-ink); }
+button:focus-visible, input:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.bench { display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+.mapcol { display: flex; flex-direction: column; gap: 10px; min-width: 0; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 12px); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.chips button { font: 500 13px/1 var(--font-body); cursor: pointer; padding: 7px 11px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--surface); color: var(--ink-2); }
+.chips button[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--ink); }
+.chips label { margin-left: auto; color: var(--ink-2); font-size: 13px; display: flex; gap: 6px; align-items: center; cursor: pointer; }
+.mapbox { position: relative; border-radius: 10px; overflow: hidden; border: 1px solid var(--line); background: var(--sunken); }
+#map { display: block; width: 100%; aspect-ratio: 353 / 375; cursor: crosshair; }
+#map.draw { touch-action: none; }
+.legend { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--ink-2); }
+.legend .bar { height: 10px; border-radius: 5px; border: 1px solid var(--line); }
+.legend .ends { display: flex; justify-content: space-between; font-variant-numeric: tabular-nums; }
+.legend .cats { display: flex; flex-wrap: wrap; gap: 4px 12px; }
+.sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+
+.panel { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.panel section { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.panel .intro { color: var(--ink-2); }
+.figs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+.figs div { padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.figs div + div { border-left: 1px solid var(--line); }
+.figs b { font: 600 20px/1.1 var(--font-display); font-variant-numeric: tabular-nums; }
+.figs span { font-size: 12px; color: var(--ink-2); }
+.chart { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 10px 6px; }
+.chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+.chart text { font: 11px var(--font-body); fill: var(--ink-2); font-variant-numeric: tabular-nums; }
+.chart text.strong { fill: var(--ink); font-weight: 600; }
+.chart .gl { stroke: var(--grid); stroke-width: 1; }
+.chart .ax { stroke: var(--ink-3); stroke-width: 1; }
+.key { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12px; color: var(--ink-2); }
+.key i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 5px; }
+.note { font-size: 13px; color: var(--ink-2); border-left: 2px solid var(--line); padding-left: 10px; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+th, td { text-align: right; padding: 5px 8px; border-bottom: 1px solid var(--line); }
+th:first-child, td:first-child { text-align: left; }
+th { font-size: 12px; font-weight: 500; color: var(--ink-3); }
+.control { display: flex; flex-direction: column; gap: 6px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px; }
+.control .row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.control input[type=range] { flex: 1; min-width: 120px; accent-color: var(--accent); }
+.control output { font: 600 15px var(--font-display); font-variant-numeric: tabular-nums; min-width: 4ch; text-align: right; }
+.btn { font: 500 13px var(--font-body); cursor: pointer; padding: 7px 11px; border-radius: 7px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
+.zoom { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 12px; align-items: center; }
+#inset { width: 150px; height: 150px; border-radius: 8px; border: 1px solid var(--line); background: var(--sunken); }
+.verdict { font: 600 22px/1.2 var(--font-display); font-variant-numeric: tabular-nums; }
+#tip { position: fixed; z-index: 30; pointer-events: none; background: var(--ink); color: var(--bg); font-size: 12px; line-height: 1.45;
+  padding: 6px 9px; border-radius: 6px; max-width: 240px; font-variant-numeric: tabular-nums; }
+footer { border-top: 1px solid var(--line); padding-top: 14px; color: var(--ink-2); font-size: 13px; display: flex; flex-direction: column; gap: 8px; max-width: 86ch; }
+@media (max-width: 860px) {
+  .bench { grid-template-columns: minmax(0, 1fr); }
+  .mapcol { position: static; }
+  .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  h1 { font-size: 22px; }
+}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Tunis Heat Twin</h1>
+    <p class="lede">The surface temperature of Greater Tunis seen by Landsat 8, explained by land cover, then used to test what planting trees would do. Each step follows the DTT4SD hands-on notebook by Bruno Ćaleta (Oikon).</p>
+  </header>
+
+  <nav class="steps" role="tablist" aria-label="Stages" id="steps"></nav>
+
+  <div class="bench">
+    <div class="mapcol">
+      <div class="chips" id="chips"></div>
+      <div class="mapbox"><canvas id="map" aria-label="Map of the study area"></canvas></div>
+      <div class="legend" id="legend"></div>
+    </div>
+    <div class="panel" id="panel"></div>
+  </div>
+
+  <footer>
+    <p><b>Data.</b> Landsat 8 Collection 1 Level-1, band 10, from the Google Cloud public archive (USGS). ESA WorldCover 2021 v200, 10 m (© ESA WorldCover project, CC BY 4.0). Grid: 90 m, UTM zone 32N, 10.00–10.35° E, 36.65–36.95° N.</p>
+    <p><b>How this differs from the notebook.</b> The notebook runs on Google Earth Engine with Landsat Level-2 temperature, Dynamic World probabilities, summer 2025 and a live feed. This page is built without an Earth Engine account. It uses the open 2021 Landsat archive, computes temperature from the thermal band with an NDVI emissivity correction and no atmospheric correction, and uses the share of each WorldCover class inside a 90 m cell where the notebook uses Dynamic World probabilities. Land cover is one 2021 map, so the shadow step cannot refresh it.</p>
+    <p>Method and teaching material: <a href="https://github.com/brunocalet/DTT4SD-Tunis-UHI">brunocalet/DTT4SD-Tunis-UHI</a>, DTT4SD workshop, Tunis, 10 November 2026 (text and figures CC BY 4.0, code MIT). The temperatures are of surfaces at about 10:55 local time, not of the air.</p>
+  </footer>
+</div>
+<div id="tip" hidden></div>
+
+<script src="data.js"></script>
+<script>
+(() => {
+const D = window.UHI_DATA, { nx, ny } = D.grid, N = nx * ny, K = D.classes.length;
+const $ = s => document.querySelector(s);
+const bytes = b => { const s = atob(b), a = new Uint8Array(s.length); for (let i = 0; i < s.length; i++) a[i] = s.charCodeAt(i); return a; };
+const NAMES = { trees: "Trees", shrub: "Shrub", grass: "Grass", crops: "Crops", built: "Built-up", bare: "Bare", water: "Water", wetland: "Wetland" };
+const COLORS = { trees: "#1b7a3a", shrub: "#d9a521", grass: "#9cbf3f", crops: "#e08fd2", built: "#d43a2f", bare: "#a8a29a", water: "#2f6fc2", wetland: "#2aa5a0" };
+const kWater = D.classes.indexOf("water"), kTrees = D.classes.indexOf("trees");
+const GIVE = ["grass", "crops", "shrub", "built", "bare"].map(c => D.classes.indexOf(c));
+
+/* ---------- data ---------- */
+const frac = bytes(D.frac);
+const unpack = b => { const i = new Int16Array(bytes(b).buffer), f = new Float32Array(N); for (let k = 0; k < N; k++) f[k] = i[k] === -32768 ? NaN : i[k] / 100; return f; };
+const lst = unpack(D.model_day.lst), lstNew = unpack(D.newest.lst);
+const land = new Uint8Array(N), dom = new Uint8Array(N);
+for (let i = 0; i < N; i++) { land[i] = frac[kWater * N + i] < 128; let b = 0; for (let k = 1; k < K; k++) if (frac[k * N + i] > frac[b * N + i]) b = k; dom[i] = b; }
+const F = { n: D.forest.n_trees, roots: new Int32Array(bytes(D.forest.roots).buffer), feat: new Int8Array(bytes(D.forest.feat).buffer),
+  thr: new Float32Array(bytes(D.forest.thr).buffer), left: new Int32Array(bytes(D.forest.left).buffer),
+  right: new Int32Array(bytes(D.forest.right).buffer), val: new Float32Array(bytes(D.forest.val).buffer) };
+function predict(x) { let s = 0; for (let t = 0; t < F.n; t++) { let n = F.roots[t], f; while ((f = F.feat[n]) >= 0) n = x[f] <= F.thr[n] ? F.left[n] : F.right[n]; s += F.val[n]; } return s / F.n; }
+const cellX = (i, x) => { for (let k = 0; k < K; k++) x[k] = frac[k * N + i] / 255; return x; };
+const fit = new Float32Array(N).fill(NaN), xb = new Float32Array(K);
+for (let i = 0; i < N; i++) if (land[i]) fit[i] = predict(cellX(i, xb));
+const masked = a => a.map((v, i) => land[i] ? v : NaN);
+const obsLand = masked(lst), obsNewLand = masked(lstNew);
+const res = obsLand.map((v, i) => v - fit[i]), diff = obsNewLand.map((v, i) => v - fit[i]);
+const pct = (a, ps) => { const s = Array.from(a).filter(Number.isFinite).sort((p, q) => p - q); return ps.map(p => s[Math.round(p / 100 * (s.length - 1))]); };
+const mean = a => { let s = 0, n = 0; for (const v of a) if (Number.isFinite(v)) { s += v; n++; } return s / n; };
+const [p2, p50, p98] = pct(lst, [2, 50, 98]);
+const LO = Math.round(p2), HI = Math.round(p98);
+const rgb = {}; for (const k of ["model_day", "newest"]) { rgb[k] = new Image(); rgb[k].onload = () => draw(); rgb[k].src = "data:image/jpeg;base64," + D[k].rgb; }
+
+/* ---------- twin state ---------- */
+const twin = { rect: D.grid.intervention.slice(), gain: 0.3, green: fit.slice(), delta: new Float32Array(N).fill(NaN), stats: null };
+function plant() {
+  const [c0, r0, c1, r1] = twin.rect, x = new Float32Array(K);
+  twin.green = fit.slice(); twin.delta.fill(NaN);
+  const before = new Float64Array(K), after = new Float64Array(K); let n = 0, tb = 0, ta = 0;
+  for (let r = r0; r <= r1; r++) for (let c = c0; c <= c1; c++) {
+    const i = r * nx + c; if (!land[i]) continue;
+    cellX(i, x); for (let k = 0; k < K; k++) before[k] += x[k];
+    const t = Math.min(x[kTrees] + twin.gain, 1), added = t - x[kTrees];
+    let tot = 0; for (const k of GIVE) tot += x[k];
+    const keep = Math.max(tot - added, 0) / Math.max(tot, 1e-6);
+    for (const k of GIVE) x[k] *= keep; x[kTrees] = t;
+    for (let k = 0; k < K; k++) after[k] += x[k];
+    const p = predict(x); twin.green[i] = p; twin.delta[i] = p - fit[i]; tb += fit[i]; ta += p; n++;
+  }
+  twin.stats = { n, ha: n * D.grid.scale * D.grid.scale / 1e4, before: Array.from(before, v => v / n), after: Array.from(after, v => v / n), tb: tb / n, ta: ta / n };
+}
+plant();
+
+/* ---------- colour ---------- */
+const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+const ramp = stops => { const c = stops.map(hex), lut = new Uint8Array(768); for (let i = 0; i < 256; i++) { const p = i / 255 * (c.length - 1), a = Math.min(c.length - 2, Math.floor(p)), f = p - a; for (let k = 0; k < 3; k++) lut[i * 3 + k] = c[a][k] + f * (c[a + 1][k] - c[a][k]); } return lut; };
+const HEAT_STOPS = ["#0b0724", "#3b0f70", "#7b2382", "#b63679", "#e65164", "#fb8761", "#fec287", "#fcf4b8"];
+const DIV_STOPS = ["#1f5fa8", "#6ea6d4", "#d5d9dc", "#e58a6a", "#b0232d"];
+const HEAT = ramp(HEAT_STOPS), DIV = ramp(DIV_STOPS);
+const css = stops => `linear-gradient(90deg, ${stops.join(",")})`;
+const off = document.createElement("canvas"); off.width = nx; off.height = ny; const octx = off.getContext("2d");
+function paint(a, lut, lo, hi) { const im = octx.createImageData(nx, ny), d = im.data; for (let i = 0; i < N; i++) { const v = a[i]; if (!Number.isFinite(v)) continue; const t = Math.max(0, Math.min(255, Math.round((v - lo) / (hi - lo) * 255))) * 3; d[i * 4] = lut[t]; d[i * 4 + 1] = lut[t + 1]; d[i * 4 + 2] = lut[t + 2]; d[i * 4 + 3] = 255; } octx.putImageData(im, 0, 0); }
+function paintCover() { const im = octx.createImageData(nx, ny), d = im.data, c = D.classes.map(k => hex(COLORS[k])); for (let i = 0; i < N; i++) { const q = c[dom[i]]; d[i * 4] = q[0]; d[i * 4 + 1] = q[1]; d[i * 4 + 2] = q[2]; d[i * 4 + 3] = 255; } octx.putImageData(im, 0, 0); }
+
+/* ---------- stages and layers ---------- */
+const day = D.model_day.day, dayNew = D.newest.day;
+const fmtDay = d => new Date(d + "T00:00:00Z").toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
+const heatLegend = t => ({ title: t, grad: HEAT_STOPS, lo: LO + " °C", mid: (LO + HI) / 2 + " °C", hi: HI + " °C" });
+const divLegend = (t, r, l, h) => ({ title: t, grad: DIV_STOPS, lo: "−" + r + " °C · " + l, mid: "0", hi: h + " · +" + r + " °C" });
+const LAYERS = {
+  rgb: { label: "True colour", base: "model_day", legend: { title: `Landsat 8 true colour, ${fmtDay(day)}` } },
+  lst: { label: "Surface temperature", base: "model_day", paint: () => paint(lst, HEAT, LO, HI), legend: heatLegend(`Land surface temperature, ${fmtDay(day)}`), val: i => lst[i] },
+  cover: { label: "Land cover", base: "model_day", paint: paintCover, legend: { title: "Largest land-cover class in each 90 m cell (WorldCover 2021)", cats: true } },
+  obs: { label: "Observed", base: "model_day", paint: () => paint(obsLand, HEAT, LO, HI), legend: heatLegend(`Observed temperature on land, ${fmtDay(day)}`), val: i => obsLand[i] },
+  fit: { label: "Model", base: "model_day", paint: () => paint(fit, HEAT, LO, HI), legend: heatLegend("Temperature the model expects from land cover"), val: i => fit[i] },
+  res: { label: "Observed − model", base: "model_day", paint: () => paint(res, DIV, -6, 6), legend: divLegend("Observed minus model", 6, "cooler than its land cover explains", "hotter"), val: i => res[i], signed: 1 },
+  rgb2: { label: "True colour", base: "newest", legend: { title: `Landsat 8 true colour, ${fmtDay(dayNew)}` } },
+  obs2: { label: "Observed", base: "newest", paint: () => paint(obsNewLand, HEAT, LO, HI), legend: heatLegend(`Observed on ${fmtDay(dayNew)}, on the August colour scale`), val: i => obsNewLand[i] },
+  exp: { label: "Expected", base: "newest", paint: () => paint(fit, HEAT, LO, HI), legend: heatLegend("What the August model expects"), val: i => fit[i] },
+  diff: { label: "Observed − expected", base: "newest", paint: () => paint(diff, DIV, -25, 25), legend: divLegend("Observed minus expected", 25, "cooler than expected", "hotter"), val: i => diff[i], signed: 1 },
+  green: { label: "With trees", base: "model_day", paint: () => paint(twin.green, HEAT, LO, HI), legend: heatLegend("Model temperature after planting"), val: i => twin.green[i] },
+  delta: { label: "Change", base: "model_day", paint: () => paint(twin.delta, DIV, -3, 3), legend: divLegend("Change inside the planted area", 3, "cooler", "hotter"), val: i => twin.delta[i], signed: 1 },
+};
+const STAGES = [
+  { id: "observe", n: "Observe", t: "One clear overpass", layers: ["rgb", "lst", "cover"], on: "lst" },
+  { id: "model", n: "Digital model", t: "Heat from land cover", layers: ["obs", "fit", "res"], on: "fit" },
+  { id: "shadow", n: "Digital shadow", t: "The newest overpass", layers: ["rgb2", "obs2", "exp", "diff"], on: "diff" },
+  { id: "twin", n: "Digital twin", t: "What if we plant trees?", layers: ["cover", "fit", "green", "delta"], on: "delta" },
+];
+const state = { stage: STAGES[0], layer: "lst", names: true };
+
+/* ---------- map ---------- */
+const map = $("#map"), ctx = map.getContext("2d");
+let drag = null;
+function drawRect(c, sx, sy, ox, oy, rect, lw) {
+  const [c0, r0, c1, r1] = rect, x = (c0 - ox) * sx, y = (r0 - oy) * sy, w = (c1 - c0 + 1) * sx, h = (r1 - r0 + 1) * sy;
+  c.lineWidth = lw + 2; c.strokeStyle = "rgba(0,0,0,.75)"; c.strokeRect(x, y, w, h);
+  c.lineWidth = lw; c.strokeStyle = "#ffffff"; c.strokeRect(x, y, w, h);
+}
+function draw() {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2), W = Math.round(map.clientWidth * dpr), H = Math.round(W * ny / nx);
+  if (!W) return;
+  if (map.width !== W || map.height !== H) { map.width = W; map.height = H; }
+  const L = LAYERS[state.layer], img = rgb[L.base];
+  ctx.fillStyle = "#10161c"; ctx.fillRect(0, 0, W, H);
+  if (img.complete && img.naturalWidth) { ctx.globalAlpha = L.paint ? 0.45 : 1; ctx.imageSmoothingEnabled = true; ctx.drawImage(img, 0, 0, W, H); ctx.globalAlpha = 1; }
+  if (L.paint) { L.paint(); ctx.imageSmoothingEnabled = false; ctx.drawImage(off, 0, 0, W, H); }
+  const sx = W / nx, sy = H / ny;
+  if (state.stage.id === "twin") drawRect(ctx, sx, sy, 0, 0, drag ? drag.rect : twin.rect, 1.5 * dpr);
+  if (state.names) {
+    ctx.font = `600 ${11 * dpr}px Inter, system-ui, sans-serif`; ctx.textBaseline = "middle"; ctx.lineJoin = "round";
+    const taken = [];
+    for (const [name, c, r] of D.grid.places) {
+      const x = c * sx, y = r * sy, w0 = ctx.measureText(name).width + 12 * dpr, x0 = x + w0 > W ? x - w0 : x - 4 * dpr;
+      if (taken.some(t => x0 < t[0] + t[2] && x0 + w0 + 4 * dpr > t[0] && Math.abs(y - t[1]) < 14 * dpr)) continue;
+      taken.push([x0, y, w0 + 4 * dpr]); ctx.fillStyle = "#fff"; ctx.strokeStyle = "rgba(0,0,0,.8)"; ctx.lineWidth = 3 * dpr;
+      ctx.beginPath(); ctx.arc(x, y, 2.2 * dpr, 0, 7); ctx.stroke(); ctx.fill();
+      const tw = ctx.measureText(name).width, tx = x + tw + 8 * dpr > W ? x - tw - 6 * dpr : x + 6 * dpr;
+      ctx.strokeText(name, tx, y); ctx.fillText(name, tx, y);
+    }
+  }
+  const bar = 5000 / D.grid.scale * sx, bx = 12 * dpr, by = H - 14 * dpr;   // 5 km scale bar
+  ctx.strokeStyle = "rgba(0,0,0,.8)"; ctx.lineWidth = 5 * dpr; ctx.beginPath(); ctx.moveTo(bx, by); ctx.lineTo(bx + bar, by); ctx.stroke();
+  ctx.strokeStyle = "#fff"; ctx.lineWidth = 2 * dpr; ctx.beginPath(); ctx.moveTo(bx, by); ctx.lineTo(bx + bar, by); ctx.stroke();
+  ctx.font = `600 ${11 * dpr}px Inter, system-ui, sans-serif`; ctx.textBaseline = "alphabetic"; ctx.lineWidth = 3 * dpr; ctx.strokeStyle = "rgba(0,0,0,.8)"; ctx.fillStyle = "#fff";
+  ctx.strokeText("5 km", bx, by - 6 * dpr); ctx.fillText("5 km", bx, by - 6 * dpr);
+  drawInset();
+}
+function drawInset() {
+  const c = $("#inset"); if (!c) return;
+  const dpr = Math.min(window.devicePixelRatio || 1, 2), S = Math.round(150 * dpr); c.width = S; c.height = S;
+  const [c0, r0, c1, r1] = twin.rect, span = Math.max(c1 - c0, r1 - r0) + 13, ox = (c0 + c1 + 1) / 2 - span / 2, oy = (r0 + r1 + 1) / 2 - span / 2, k = S / span;
+  const x = c.getContext("2d"), img = rgb.model_day, f = img.naturalWidth / nx;
+  x.fillStyle = "#10161c"; x.fillRect(0, 0, S, S);
+  if (img.naturalWidth) { x.globalAlpha = LAYERS[state.layer].paint ? 0.6 : 1; x.drawImage(img, ox * f, oy * f, span * f, span * f, 0, 0, S, S); x.globalAlpha = 1; }
+  if (LAYERS[state.layer].paint) { x.imageSmoothingEnabled = false; x.drawImage(off, ox, oy, span, span, 0, 0, S, S); }
+  drawRect(x, k, k, ox, oy, twin.rect, 1.5 * dpr);
+}
+const cellAt = e => { const b = map.getBoundingClientRect(); return [Math.max(0, Math.min(nx - 1, Math.floor((e.clientX - b.left) / b.width * nx))), Math.max(0, Math.min(ny - 1, Math.floor((e.clientY - b.top) / b.height * ny)))]; };
+const tip = $("#tip");
+function showTip(html, e) { tip.innerHTML = html; tip.hidden = false; const w = tip.offsetWidth, h = tip.offsetHeight; tip.style.left = Math.max(6, Math.min(window.innerWidth - w - 6, e.clientX + 14)) + "px"; tip.style.top = Math.max(6, e.clientY + 16 + h > window.innerHeight ? e.clientY - h - 10 : e.clientY + 16) + "px"; }
+const deg = (v, signed) => Number.isFinite(v) ? (signed && v > 0 ? "+" : "") + v.toFixed(1).replace("-", "−") + " °C" : "no data";
+map.addEventListener("pointermove", e => {
+  const [c, r] = cellAt(e), i = r * nx + c, L = LAYERS[state.layer];
+  if (drag) { drag.rect = [Math.min(drag.c, c), Math.min(drag.r, r), Math.max(drag.c, c), Math.max(drag.r, r)]; draw(); }
+  const top = D.classes.map((k, j) => [k, frac[j * N + i] / 255]).sort((a, b) => b[1] - a[1]).filter(d => d[1] >= 0.05).slice(0, 3);
+  showTip((L.val ? `<b>${L.label}: ${deg(L.val(i), L.signed)}</b><br>` : "") + top.map(([k, v]) => `<span class="sw" style="background:${COLORS[k]}"></span>${NAMES[k]} ${Math.round(v * 100)} %`).join("<br>"), e);
+});
+map.addEventListener("pointerleave", () => { tip.hidden = true; });
+map.addEventListener("pointerdown", e => { if (state.stage.id !== "twin") return; const [c, r] = cellAt(e); drag = { c, r, rect: [c, r, c, r] }; map.setPointerCapture(e.pointerId); });
+const endDrag = () => { if (!drag) return; const [c0, r0, c1, r1] = drag.rect; let n = 0; for (let r = r0; r <= r1; r++) for (let c = c0; c <= c1; c++) n += land[r * nx + c]; if (n && (c1 > c0 || r1 > r0)) { twin.rect = drag.rect; plant(); renderTwin(); } drag = null; draw(); };
+map.addEventListener("pointerup", endDrag); map.addEventListener("pointercancel", endDrag);
+new ResizeObserver(draw).observe(map);
+
+/* ---------- small charts ---------- */
+const esc = s => String(s).replace(/"/g, "&quot;");
+const ticks = (lo, hi, n) => { const st = [1, 2, 5, 10, 20, 50].find(s => (hi - lo) / s <= n) || 50, out = []; for (let v = Math.ceil(lo / st) * st; v <= hi; v += st) out.push(v); return out; };
+function scatter(series, label) {
+  const W = 360, H = 300, m = { l: 40, r: 10, t: 8, b: 34 }, all = series.flatMap(s => [...s.obs, ...s.pred]);
+  const lo = Math.floor(Math.min(...all)), hi = Math.ceil(Math.max(...all)), w = W - m.l - m.r, h = H - m.t - m.b;
+  const X = v => m.l + (v - lo) / (hi - lo) * w, Y = v => m.t + h - (v - lo) / (hi - lo) * h, tk = ticks(lo, hi, 6);
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(label)}">`;
+  for (const v of tk) s += `<line class="gl" x1="${X(v)}" x2="${X(v)}" y1="${m.t}" y2="${m.t + h}"/><line class="gl" x1="${m.l}" x2="${m.l + w}" y1="${Y(v)}" y2="${Y(v)}"/><text x="${X(v)}" y="${m.t + h + 14}" text-anchor="middle">${v}</text><text x="${m.l - 6}" y="${Y(v) + 4}" text-anchor="end">${v}</text>`;
+  s += `<line class="ax" x1="${X(lo)}" y1="${Y(lo)}" x2="${X(hi)}" y2="${Y(hi)}"/>`;
+  for (const q of series) for (let i = 0; i < q.obs.length; i++) s += `<circle cx="${X(q.obs[i]).toFixed(1)}" cy="${Y(q.pred[i]).toFixed(1)}" r="1.8" fill="var(${q.color})" fill-opacity=".45" data-tip="${esc(q.name)}<br>observed ${q.obs[i].toFixed(1)} °C<br>predicted ${q.pred[i].toFixed(1)} °C"/>`;
+  s += `<text x="${m.l + w / 2}" y="${H - 4}" text-anchor="middle">observed (°C)</text><text transform="translate(11 ${m.t + h / 2}) rotate(-90)" text-anchor="middle">predicted (°C)</text>`;
+  s += `<text x="${X(hi) - 4}" y="${Y(hi) + 14}" text-anchor="end">perfect model</text></svg>`;
+  return s;
+}
+function hbars(rows, unit, label) {            // rows: [name, value, colour]
+  const W = 360, rh = 24, m = { l: 78, r: 48 }, H = rows.length * rh + 4, max = Math.max(...rows.map(r => r[1]));
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(label)}">`;
+  rows.forEach(([n, v, c], i) => { const y = i * rh + 4, w = Math.max(2, v / max * (W - m.l - m.r));
+    s += `<text x="${m.l - 8}" y="${y + 12}" text-anchor="end">${n}</text><rect x="${m.l}" y="${y + 2}" width="${w}" height="14" rx="3" fill="${c}" data-tip="${esc(n)}: ${v.toFixed(1)}${unit}"/><text class="strong" x="${m.l + w + 6}" y="${y + 13}">${v.toFixed(0)}${unit}</text>`; });
+  return s + "</svg>";
+}
+function dots(rows, label) {                   // rows: [name, mean LST, colour, n]
+  const W = 360, rh = 24, m = { l: 78, r: 16, b: 30 }, H = rows.length * rh + m.b + 4, lo = Math.floor(Math.min(...rows.map(r => r[1])) - 0.5), hi = Math.ceil(Math.max(...rows.map(r => r[1])) + 0.5);
+  const X = v => m.l + (v - lo) / (hi - lo) * (W - m.l - m.r);
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(label)}">`;
+  for (const v of ticks(lo, hi, 6)) s += `<line class="gl" x1="${X(v)}" x2="${X(v)}" y1="2" y2="${H - m.b}"/><text x="${X(v)}" y="${H - m.b + 14}" text-anchor="middle">${v}</text>`;
+  rows.forEach(([n, v, c, cnt], i) => { const y = i * rh + 16; s += `<text x="${m.l - 8}" y="${y + 4}" text-anchor="end">${n}</text><circle cx="${X(v)}" cy="${y}" r="6" fill="${c}" stroke="var(--surface)" stroke-width="2" data-tip="${esc(n)}: mean ${v.toFixed(1)} °C<br>${cnt} sampled cells"/><text class="strong" x="${X(v) + 11}" y="${y + 4}">${v.toFixed(1)}</text>`; });
+  return s + `<text x="${m.l + (W - m.l - m.r) / 2}" y="${H - 2}" text-anchor="middle">mean surface temperature (°C)</text></svg>`;
+}
+function overpassBars() {
+  const o = D.overpasses, W = 360, H = 130, m = { l: 30, r: 6, t: 16, b: 22 }, bw = (W - m.l - m.r) / o.length, h = H - m.t - m.b;
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Cloud-free share of the study area for each 2021 overpass">`;
+  for (const v of [0, 50, 100]) s += `<line class="gl" x1="${m.l}" x2="${W - m.r}" y1="${m.t + h - v / 100 * h}" y2="${m.t + h - v / 100 * h}"/><text x="${m.l - 5}" y="${m.t + h - v / 100 * h + 4}" text-anchor="end">${v}</text>`;
+  o.forEach((d, i) => { const x = m.l + i * bw + 1, bh = Math.max(1, d.clear / 100 * h), pick = d.day === day || d.day === dayNew;
+    s += `<rect x="${x}" y="${m.t + h - bh}" width="${bw - 2}" height="${bh}" rx="2" fill="var(${pick ? "--accent" : "--ink-3"})" fill-opacity="${pick ? 1 : 0.55}" data-tip="${fmtDay(d.day)}<br>${d.clear.toFixed(0)} % of the area cloud-free"/>`;
+    if (pick) s += `<text class="strong" x="${x + bw / 2}" y="${m.t + h - bh - 4}" text-anchor="${d.day === dayNew ? "end" : "middle"}">${d.day === day ? "model day" : "newest clear"}</text>`; });
+  ["Jan", "Apr", "Jul", "Oct"].forEach((mo, j) => { const i = o.findIndex(d => +d.day.slice(5, 7) >= j * 3 + 1); s += `<text x="${m.l + i * bw}" y="${H - 6}">${mo}</text>`; });
+  return s + "</svg>";
+}
+
+/* ---------- panels ---------- */
+const sample = [...new Int32Array(bytes(D.split.train_idx).buffer), ...new Int32Array(bytes(D.split.test_idx).buffer)];
+const byClass = D.classes.map((k, j) => { const v = sample.filter(i => dom[i] === j).map(i => lst[i]); return [NAMES[k], mean(v), COLORS[k], v.length]; }).filter(r => r[3] >= 20).sort((a, b) => a[1] - b[1]);
+const figs = rows => `<div class="figs">${rows.map(([v, l]) => `<div><b>${v}</b><span>${l}</span></div>`).join("")}</div>`;
+const T = D.test.scores, C = D.check, meanNew = mean(C.obs), meanExp = mean(C.pred);
+const PANELS = {
+  observe: () => `
+    <section><h2>One clear summer overpass gives the temperature of every surface</h2>
+      <p class="intro">Landsat 8 crossed Tunis at ${D.model_day.time_utc} UTC on ${fmtDay(day)}, the clearest summer overpass of 2021. Its thermal band records the heat each 100 m of ground sends out. Converted to °C and with clouds removed, it shows the sea and the lagoons as the coolest surfaces and a spread of more than 8 °C across the land.</p>
+      ${figs([[p2.toFixed(1) + " °C", "2nd percentile"], [p50.toFixed(1) + " °C", "median"], [p98.toFixed(1) + " °C", "98th percentile"]])}</section>
+    <section><h3>Which 2021 overpasses were clear? Cloud-free share of the area (%)</h3><div class="chart">${overpassBars()}</div></section>
+    <section><h3>Heat by land cover, 4,000 random land cells</h3><div class="chart">${dots(byClass, "Mean surface temperature by largest land-cover class")}</div>
+      <p class="note">In August the harvested, dry cropland around the city is hotter at mid-morning than the built-up core. Tree cover is the coolest land surface.</p></section>`,
+  model: () => `
+    <section><h2>A Random Forest explains ${Math.round(T.r2 * 100)} % of the heat pattern from land cover alone</h2>
+      <p class="intro">The model sees eight numbers per cell: the share of trees, shrub, grass, crops, built-up, bare ground, water and wetland. It learns from ${D.split.train.toLocaleString("en")} random land cells and is tested on ${D.split.test.toLocaleString("en")} it has never seen. Switch the map to <b>Observed − model</b> to see where the surface is hotter or cooler than its land cover explains.</p>
+      ${figs([[T.r2.toFixed(2), "R² on test cells"], [T.rmse.toFixed(1) + " °C", "typical error (RMSE)"], [T.mae.toFixed(1) + " °C", "mean absolute error"]])}</section>
+    <section><h3>Test cells: predicted against observed</h3><div class="chart">${scatter([{ name: fmtDay(day), obs: D.test.obs, pred: D.test.pred, color: "--cool" }], "Predicted against observed temperature for the test cells")}</div></section>
+    <section><h3>Which input does the forest rely on most? Share of importance</h3><div class="chart">${hbars(Object.entries(D.importance).sort((a, b) => b[1] - a[1]).map(([k, v]) => [NAMES[k], v, COLORS[k]]), " %", "Importance of each land-cover share")}</div></section>`,
+  shadow: () => `
+    <section><h2>On a winter day the August model is ${Math.abs(C.bias).toFixed(0)} °C too hot</h2>
+      <p class="intro">A shadow runs the same chain with no human choice: take the newest overpass that is at least half clear, compute its temperature, apply the model, compare. In the open archive that overpass is ${fmtDay(dayNew)}. The model knows only land cover, so it still expects the heat of its own day.</p>
+      ${figs([[meanNew.toFixed(1) + " °C", "mean observed"], [meanExp.toFixed(1) + " °C", "mean expected"], [deg(C.bias, 1), "model error"]])}</section>
+    <section><h3>Same model, two days</h3><div class="key"><span><i style="background:var(--warm)"></i>${fmtDay(day)}, the model's own day</span><span><i style="background:var(--cool)"></i>${fmtDay(dayNew)}, a day it has never seen</span></div>
+      <div class="chart">${scatter([{ name: fmtDay(day), obs: D.test.obs, pred: D.test.pred, color: "--warm" }, { name: fmtDay(dayNew), obs: C.obs, pred: C.pred, color: "--cool" }], "Predicted against observed temperature on two days")}</div>
+      <p class="note">A shadow shows this gap as soon as the data arrive. It does not fix it. Fixing it takes new data and re-training, which is where the twin begins.</p></section>`,
+  twin: () => `
+    <section><h2>Plant trees in an area and ask the model</h2>
+      <p class="intro">Inside the outlined area the share of trees goes up. Grass, crops, shrub, built-up and bare ground shrink in proportion, so the shares still add up to 1. The same forest then predicts the temperature again. The default is the notebook's block of dense housing between Gammarth and La Marsa.</p>
+      <div class="control"><div class="row"><label for="gain">Added share of trees</label><input type="range" id="gain" min="0.1" max="0.9" step="0.1" value="${twin.gain}"><output id="gainOut" for="gain"></output></div>
+        <div class="row"><span style="color:var(--ink-2);font-size:13px">Drag on the map to outline another area.</span><button class="btn" id="reset" type="button">Use the notebook's area</button></div></div></section>
+    <section><div class="zoom"><canvas id="inset" aria-label="Close-up of the planted area"></canvas><div id="verdict"></div></div></section>
+    <section><h3>Average land cover of the area</h3><div id="twinTable"></div>
+      <p class="note">This is a simulation by a model of one August morning. To close the loop the city plants the trees, the shadow observes the area at every overpass, and the model is re-trained on what really happened.</p></section>`,
+};
+function renderTwin() {
+  const s = twin.stats, d = s.ta - s.tb; if (!$("#verdict")) return;
+  $("#gainOut").textContent = "+" + twin.gain.toFixed(1);
+  $("#verdict").innerHTML = `<div class="verdict">${deg(d, 1)}</div><p>expected change over ${s.ha < 10 ? s.ha.toFixed(1) : Math.round(s.ha).toLocaleString("en")} ha of land<br><span style="color:var(--ink-2)">${s.tb.toFixed(1)} °C today → ${s.ta.toFixed(1)} °C with trees</span></p>`;
+  const rows = D.classes.map((k, j) => [k, s.before[j], s.after[j]]).filter(r => r[1] >= 0.005 || r[2] >= 0.005);
+  $("#twinTable").innerHTML = `<table><thead><tr><th>Class</th><th>Today</th><th>With trees</th></tr></thead><tbody>${rows.map(([k, b, a]) => `<tr><td><span class="sw" style="background:${COLORS[k]}"></span>${NAMES[k]}</td><td>${Math.round(b * 100)} %</td><td>${Math.round(a * 100)} %</td></tr>`).join("")}</tbody></table>`;
+}
+function renderLegend() {
+  const g = LAYERS[state.layer].legend; let h = `<span>${g.title}</span>`;
+  if (g.grad) h += `<div class="bar" style="background:${css(g.grad)}"></div><div class="ends"><span>${g.lo}</span><span>${g.mid}</span><span>${g.hi}</span></div>`;
+  if (g.cats) h += `<div class="cats">${D.classes.map(k => `<span><span class="sw" style="background:${COLORS[k]}"></span>${NAMES[k]}</span>`).join("")}</div>`;
+  $("#legend").innerHTML = h;
+}
+function renderChips() {
+  $("#chips").innerHTML = state.stage.layers.map(l => `<button type="button" data-layer="${l}" aria-pressed="${l === state.layer}">${LAYERS[l].label}</button>`).join("") +
+    `<label><input type="checkbox" id="names" ${state.names ? "checked" : ""}> Place names</label>`;
+}
+function setLayer(l) { state.layer = l; renderChips(); renderLegend(); draw(); }
+function setStage(id, push) {
+  state.stage = STAGES.find(s => s.id === id) || STAGES[0]; state.layer = state.stage.on;
+  $("#steps").innerHTML = STAGES.map((s, i) => `<button type="button" role="tab" data-stage="${s.id}" aria-selected="${s === state.stage}"><small>Step ${i + 1} · ${s.n}</small><b>${s.t}</b></button>`).join("");
+  $("#panel").innerHTML = PANELS[state.stage.id]();
+  map.classList.toggle("draw", state.stage.id === "twin");
+  renderChips(); renderLegend(); renderTwin(); draw();
+  if (push) try { history.replaceState(null, "", "#" + state.stage.id); } catch (e) {}
+}
+document.addEventListener("click", e => {
+  const s = e.target.closest("[data-stage]"), l = e.target.closest("[data-layer]");
+  if (s) setStage(s.dataset.stage, true); else if (l) setLayer(l.dataset.layer);
+  else if (e.target.id === "reset") { twin.rect = D.grid.intervention.slice(); twin.gain = 0.3; $("#gain").value = 0.3; plant(); renderTwin(); draw(); }
+});
+document.addEventListener("input", e => {
+  if (e.target.id === "gain") { twin.gain = +e.target.value; plant(); renderTwin(); draw(); }
+  if (e.target.id === "names") { state.names = e.target.checked; draw(); }
+});
+document.addEventListener("pointerover", e => { const t = e.target.closest && e.target.closest("[data-tip]"); if (t) showTip(t.dataset.tip, e); else if (e.target !== map) tip.hidden = true; });
+window.addEventListener("hashchange", () => setStage(location.hash.slice(1)));
+setStage(location.hash.slice(1));
+})();
+</script>
+</body>
+</html>

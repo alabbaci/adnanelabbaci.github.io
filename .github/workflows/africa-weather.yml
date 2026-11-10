@@ -8,6 +8,7 @@ on:
     paths:
       - 'weather/**'
       - 'weather-source/**'
+      - 'tunis-uhi/**'
       - '.github/workflows/africa-weather.yml'
 permissions:
   contents: read

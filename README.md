@@ -1,3 +1,7 @@
+> **Also in this repo:** [🌡️ Tunis Heat Twin](tunis-uhi/README.md), an interactive
+> urban-heat-island digital twin of Tunis from Landsat 8 and ESA WorldCover
+> ([app](tunis-uhi/index.html)).
+
 > **Also in this repo:** [⚡ Morocco Energy Forecasts](energy/README.md), a
 > zero-cost daily forecasting platform for electricity load, solar PV and
 > weather in Morocco ([dashboard](energy/index.html)).
