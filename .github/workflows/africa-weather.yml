@@ -33,6 +33,9 @@ jobs:
           cache-dependency-glob: weather-source/uv.lock
       - run: uv sync --python 3.12 --frozen
         working-directory: weather-source
+      - name: Install ecCodes (GRIB decoding for the forecast sweep)
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq libeccodes-dev
+        continue-on-error: true
       - name: Refresh Africa forecasts
         working-directory: weather-source
         shell: bash
@@ -40,7 +43,12 @@ jobs:
           set +e
           uv run python -m sweep --no-ai --out ../weather/data
           result=$?
-          if [ "$result" -ne 0 ] && [ "$result" -ne 3 ]; then exit "$result"; fi
+          # A failed refresh must not block the rest of the site: publish the
+          # last committed forecast data instead and flag it on the run.
+          if [ "$result" -ne 0 ] && [ "$result" -ne 3 ]; then
+            echo "::warning::Africa forecast refresh failed (exit $result); deploying the last committed weather data."
+            git checkout -- ../weather/data
+          fi
       - name: Package existing site and Weather Explorer together
         run: |
           mkdir -p _public
