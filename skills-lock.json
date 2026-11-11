@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "skills": {
+    "geomaster": {
+      "source": "k-dense-ai/scientific-agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/geomaster/SKILL.md",
+      "computedHash": "b573e321d5ef1a248f4924e5d955fd16d65ee87196e60ee76c2b651cdd1b4427"
+    }
+  }
+}
