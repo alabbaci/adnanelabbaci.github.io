@@ -9,6 +9,10 @@
 > [🪁 Dakhla Watch](dakhla/README.md), the same live dashboard rebuilt for
 > Dakhla, its peninsula and lagoon: wind, swell, heat, dust and seismic
 > watch ([dashboard](dakhla/index.html)).
+>
+> [🏙 Dakhla Urban Observatory](observatory/README.md), a guided 3D
+> presentation of city indicators by zone, with six years of
+> satellite-measured vegetation ([presentation](observatory/index.html)).
 
 # 3D Heat Traps & Pedestrian Exposure in Dakhla
 

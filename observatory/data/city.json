@@ -1,0 +1,73 @@
+{
+ "name": "Dakhla",
+ "zones": 18,
+ "population": 161723,
+ "population_year": 2024,
+ "population_source": "RGPH 2024 city total, distributed by residential building volume",
+ "area_km2": 28.13,
+ "buildings": 3953,
+ "centre": [
+  -15.94136,
+  23.7038
+ ],
+ "bbox": [
+  -16.00294,
+  23.6268,
+  -15.8907,
+  23.80072
+ ],
+ "city_values": {
+  "population": 161723,
+  "density": 5749,
+  "built_share": 7.2,
+  "street_density": 10.7,
+  "green_per_capita": 2.73
+ },
+ "years": [
+  2021,
+  2022,
+  2023,
+  2024,
+  2025,
+  2026
+ ],
+ "vegetation": {
+  "2021": {
+   "share": 1.63,
+   "m2": 456800
+  },
+  "2022": {
+   "share": 1.46,
+   "m2": 410900
+  },
+  "2023": {
+   "share": 1.59,
+   "m2": 445900
+  },
+  "2024": {
+   "share": 1.57,
+   "m2": 441200
+  },
+  "2025": {
+   "share": 1.67,
+   "m2": 468400
+  },
+  "2026": {
+   "share": 1.76,
+   "m2": 494700
+  }
+ },
+ "sentinel": {
+  "tile": "28QDM",
+  "season": "March to May",
+  "ndvi_min": 0.2,
+  "scenes_used": {
+   "2021": 36,
+   "2022": 14,
+   "2023": 17,
+   "2024": 19,
+   "2025": 19,
+   "2026": 17
+  }
+ }
+}

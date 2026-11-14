@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#221c33">
+<title>Dakhla Urban Observatory · Present</title>
+<meta name="description" content="A guided 3D presentation of Dakhla: population, density, built-up land, streets and six years of satellite-measured vegetation, zone by zone.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M4 24 16 6l12 18Z' fill='none' stroke='%23e2794f' stroke-width='3' stroke-linejoin='round'/><circle cx='16' cy='19' r='3' fill='%23e2794f'/></svg>">
+<link rel="stylesheet" href="../vendor/maplibre-gl-5.6.2.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="presenting">
+<div id="map" aria-label="3D map of Dakhla"></div>
+<div class="vignette" aria-hidden="true"></div>
+
+<header class="bar">
+  <a class="brand" href="./">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 24 16 6l12 18Z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><circle cx="16" cy="19" r="3" fill="currentColor"/></svg>
+    <span><b>Dakhla Urban Observatory</b><i>Open-data city indicators</i></span>
+  </a>
+  <nav class="crumbs" aria-label="Breadcrumb"><span>Dakhla</span><b>Present</b></nav>
+  <div class="bar-right">
+    <button id="btn-present" class="pill">▶ Play the tour</button>
+    <button id="btn-method" class="pill ghost">Method</button>
+  </div>
+</header>
+
+<aside id="panel-indicator" class="glass panel-left" aria-label="Indicator">
+  <div class="ind-head">
+    <h2 id="ind-title">—</h2>
+    <label class="year"><span class="sr">Year</span><select id="year-select" aria-label="Year"></select></label>
+  </div>
+  <p id="ind-top" class="ind-top"></p>
+  <div id="legend" class="legend"></div>
+  <p class="cityval">City value <b id="ind-city">—</b></p>
+  <p id="ind-note" class="note"></p>
+  <p class="scope" id="scope"></p>
+  <div id="chips" class="chips" role="tablist" aria-label="Indicators"></div>
+</aside>
+
+<aside id="panel-rank" class="glass panel-right" aria-label="Zone ranking">
+  <h3>Zone ranking</h3>
+  <p id="rank-sub" class="rank-sub"></p>
+  <ol id="rank" class="rank"></ol>
+</aside>
+
+<section id="zone-card" class="glass zone-card" hidden aria-live="polite"></section>
+
+<div class="dock glass" role="group" aria-label="Timeline and view">
+  <button id="btn-play" class="play" aria-label="Play years">▶</button>
+  <div id="years" class="years" role="tablist" aria-label="Years"></div>
+  <div class="seg" id="mode" role="group" aria-label="View mode">
+    <button data-mode="sim" class="on">Simulation</button><button data-mode="map">Map</button>
+  </div>
+</div>
+
+<div id="loading" class="loading"><span></span>Building the city…</div>
+<div id="tip" class="tip" hidden></div>
+
+<section id="stage" class="stage" aria-live="polite">
+  <div class="stage-year" id="stage-year"></div>
+  <div class="stage-copy">
+    <p class="kicker" id="stage-kicker">Urban Observatory</p>
+    <h1 id="stage-title">Dakhla</h1>
+    <p class="lede" id="stage-lede"></p>
+    <div class="stats" id="stage-stats"></div>
+  </div>
+  <div class="stage-ctl glass">
+    <span id="stage-count">1 / 7</span>
+    <button id="stage-prev" aria-label="Previous scene">←</button>
+    <button id="stage-pause">❚❚ Pause</button>
+    <button id="stage-next" aria-label="Next scene">→</button>
+    <button id="stage-close" aria-label="Close the tour">✕</button>
+  </div>
+  <div class="progress"><i id="stage-bar"></i></div>
+</section>
+
+<p class="credit" id="credit"></p>
+
+<dialog id="method">
+  <button class="close" id="method-close" aria-label="Close">×</button>
+  <h2>How these numbers are made</h2>
+  <p>Dakhla has no openly published neighbourhood boundaries or neighbourhood statistics. Everything here is computed from open data, and each figure says how.</p>
+  <h3>Zones</h3>
+  <p>The <span id="m-zones"></span> zones are analysis units, not administrative districts. Building footprints are clustered, each cluster takes the land nearest its centre, and the result is clipped to the built-up area. A zone is named after its longest named street, or its position relative to the centre of the built city.</p>
+  <h3>Indicators</h3>
+  <ul id="m-indicators"></ul>
+  <h3>Limits</h3>
+  <ul>
+    <li>Population by zone is <b>modelled</b>: the 2024 census total for the city is shared out by residential building volume. It is not a census count per zone.</li>
+    <li>The building layer is coarse in places: several footprints cover a whole block. Counts of buildings are therefore low; areas and volumes are more reliable.</li>
+    <li>Vegetation is what a 10 m satellite pixel can see in spring. Small gardens and single trees fall below it.</li>
+    <li>Only vegetation has a year-by-year record. The other indicators are single snapshots, and the timeline says so.</li>
+  </ul>
+  <p class="muted" id="m-sources"></p>
+</dialog>
+
+<script src="../vendor/maplibre-gl-5.6.2.js"></script>
+<script type="module" src="app.js"></script>
+</body>
+</html>

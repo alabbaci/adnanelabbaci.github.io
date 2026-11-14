@@ -10,6 +10,8 @@ on:
       - 'weather-source/**'
       - 'ourika/**'
       - 'dakhla/**'
+      - 'observatory/**'
+      - 'data/processed/**'
       - 'vendor/**'
       - '.github/workflows/africa-weather.yml'
 permissions:
@@ -53,7 +55,7 @@ jobs:
       - name: Package existing site and Weather Explorer together
         run: |
           mkdir -p _public
-          rsync -a --exclude='.git/' --exclude='.github/' --exclude='.claude/' --exclude='_public/' --exclude='weather-source/' --exclude='ourika/pipeline/' --exclude='dakhla/pipeline/' --exclude='.cache/' --exclude='__pycache__/' ./ _public/
+          rsync -a --exclude='.git/' --exclude='.github/' --exclude='.claude/' --exclude='_public/' --exclude='weather-source/' --exclude='ourika/pipeline/' --exclude='dakhla/pipeline/' --exclude='observatory/pipeline/' --exclude='.cache/' --exclude='__pycache__/' ./ _public/
           touch _public/.nojekyll
           test -f _public/index.html
           test -f _public/weather/index.html
@@ -62,6 +64,8 @@ jobs:
           test -f _public/ourika/data/watershed.geojson
           test -f _public/dakhla/index.html
           test -f _public/dakhla/data/sectors.geojson
+          test -f _public/observatory/index.html
+          test -f _public/observatory/data/zones.geojson
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
