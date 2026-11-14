@@ -18,3 +18,4 @@ kepler_config.json
 
 # Ourika DEM tiles (re-downloaded by the pipeline)
 ourika/pipeline/.cache/
+dakhla/pipeline/.cache/

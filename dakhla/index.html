@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#06090a">
+<title>Dakhla Watch · Live coastal intelligence, Dakhla peninsula</title>
+<meta name="description" content="Live situational awareness for Dakhla and its lagoon: wind, heat, rain and swell watch, sea state, dust, earthquakes and satellite imagery on a 3D map of the peninsula.">
+<link rel="stylesheet" href="../vendor/maplibre-gl-5.6.2.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="map" aria-label="Map of the Dakhla peninsula and lagoon"></div>
+
+<header class="topbar">
+  <a class="brand" href="./" aria-label="Dakhla Watch">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M6 21 20 5c2 6 2 11-1 16Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M19 21 12 21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M4 27c4-2 6 2 10 0s6-2 14 0" fill="none" stroke="var(--water)" stroke-width="2" stroke-linecap="round"/></svg>
+    <span><b>DAKHLA WATCH</b><i>Coastal intelligence · Dakhla peninsula</i></span>
+  </a>
+  <div class="status" role="status">
+    <span class="kv"><i>LOCAL</i><b id="clock-local">--:--:--</b></span>
+    <span class="kv"><i>ZULU</i><b id="clock-utc">--:--:--</b></span>
+    <span class="kv feeds" id="feeds" title="Live feed status"></span>
+    <button id="alert-chip" class="chip lvl-0" title="Area coastal watch level">— —</button>
+    <button id="btn-about" class="ghost">? Method</button>
+  </div>
+</header>
+
+<button id="btn-layers" class="drawer-btn left" aria-controls="layers">Layers</button>
+<button id="btn-intel" class="drawer-btn right" aria-controls="intel">Intel</button>
+
+<aside id="layers" class="panel left" aria-label="Map layers">
+  <h2>Layers <span id="layer-total"></span></h2>
+  <div id="layer-list"></div>
+  <div class="satdate" id="satdate">
+    <span>Imagery date</span>
+    <button id="sat-prev" aria-label="Previous day">◀</button>
+    <b id="sat-label"></b>
+    <button id="sat-next" aria-label="Next day">▶</button>
+  </div>
+  <h2>Colour sectors by</h2>
+  <div class="seg" id="metric" role="group" aria-label="Sector colouring">
+    <button data-m="watch" class="on">Watch</button>
+    <button data-m="wind">Wind</button>
+    <button data-m="heat">Heat</button>
+    <button data-m="rain">Rain</button>
+  </div>
+  <div id="legend" class="legend"></div>
+</aside>
+
+<aside id="intel" class="panel right" aria-label="Area intelligence">
+  <section id="card-selected" class="card selected" hidden></section>
+  <section class="card" id="card-status">
+    <h3>Coastal watch <small>next 48 h</small></h3>
+    <div id="status-body" class="skeleton">Loading forecast…</div>
+  </section>
+  <section class="card">
+    <h3>Conditions now <small id="now-time"></small></h3>
+    <div id="now-body" class="skeleton">Loading…</div>
+  </section>
+  <section class="card">
+    <h3>Wind <small>area mean, km/h · gust envelope</small></h3>
+    <canvas id="chart-wind" height="120"></canvas>
+    <div id="wind-days" class="days"></div>
+    <p id="wind-note" class="note"></p>
+  </section>
+  <section class="card">
+    <h3>Sea state <small>Atlantic off Dakhla, wave height m</small></h3>
+    <canvas id="chart-sea" height="120"></canvas>
+    <p id="sea-note" class="note"></p>
+  </section>
+  <section class="card">
+    <h3>Heat &amp; dust <small>air temperature, °C</small></h3>
+    <canvas id="chart-heat" height="120"></canvas>
+    <p id="heat-note" class="note"></p>
+  </section>
+  <section class="card">
+    <h3>Seismic <small id="quake-radius"></small></h3>
+    <div id="quake-body" class="skeleton">Loading…</div>
+  </section>
+  <section class="card">
+    <h3>Terrain <small>Copernicus GLO-30</small></h3>
+    <div id="terrain-stats" class="stats"></div>
+    <canvas id="chart-profile" height="110"></canvas>
+    <p class="note">Peninsula spine, southern tip to neck: highest ground (line) and mean ground (dashed) per 250 m slice. Bars: peninsula area per 5 m band.</p>
+    <canvas id="chart-hyps" height="90"></canvas>
+  </section>
+</aside>
+
+<div class="viewctl" role="group" aria-label="View">
+  <div class="seg" id="dim"><button data-d="2d" class="on">2D</button><button data-d="3d">3D</button></div>
+  <div class="seg" id="basemap"><button data-b="night" class="on">Night</button><button data-b="sat">Sat</button><button data-b="topo">Topo</button></div>
+  <button id="btn-home" class="ghost" title="Fit the watch area">⌂ Area</button>
+  <button id="btn-city" class="ghost" title="Zoom to the city">▣ City</button>
+  <button id="btn-region" class="ghost" title="Zoom out to the seismic region">◎ Region</button>
+</div>
+
+<footer class="ticker">
+  <span id="cursor" class="cursor">— , —</span>
+  <div class="ticker-track"><div id="ticker-items"></div></div>
+  <span class="live"><i></i>LIVE</span>
+</footer>
+
+<dialog id="about">
+  <button class="close" id="about-close" aria-label="Close">×</button>
+  <h2>Dakhla Watch — how it works</h2>
+  <p>A live dashboard for Dakhla, its peninsula and the lagoon behind it: a low, narrow strip of desert between the open Atlantic and a sheltered bay, where the hazards are wind, swell, Saharan heat and dust, and the rare downpour.</p>
+  <h3>What is measured, what is modelled</h3>
+  <ul>
+    <li><b>Peninsula, lagoon, sectors, shoreline</b> — cut from the Overture Maps coastline along the axis of the peninsula. The peninsula covers <span id="about-pen"></span> km², the lagoon <span id="about-lag"></span> km².</li>
+    <li><b>Elevation, spine profile</b> — Copernicus GLO-30 elevation model.</li>
+    <li><b>Wind, temperature, rain</b> — Open-Meteo forecast, one point per sector. Model output, not station readings.</li>
+    <li><b>Waves, swell, sea temperature, tide</b> — Open-Meteo marine models at one open-Atlantic point west of the city. The lagoon is sheltered and is not modelled.</li>
+    <li><b>Dust, PM10, aerosol</b> — CAMS global atmospheric composition forecast via Open-Meteo.</li>
+    <li><b>Earthquakes</b> — USGS catalogue, live.</li>
+    <li><b>Satellite</b> — NASA GIBS daily sea-surface temperature (MUR) and MODIS true colour.</li>
+    <li><b>Localities, roads, buildings</b> — Overture Maps. “Near shore” buildings lie within <span id="about-buf"></span> m of a shoreline.</li>
+  </ul>
+  <h3>Watch levels</h3>
+  <p>Each sector is screened on the forecast for the next 48 hours. The level is the highest that any rule reaches; the wave rule applies to the sectors facing the open Atlantic.</p>
+  <table id="about-thresholds"></table>
+  <p>These are screening thresholds chosen for an exposed, arid coast. They are not calibrated against stations and are <b>not an official warning</b>. For decisions, follow the vigilance bulletins of the Direction Générale de la Météorologie and the port authority’s notices.</p>
+  <p class="muted">Built on the same engine as <a href="../ourika/">Ourika Watch</a>, itself inspired by the open-source <a href="https://github.com/simplifaisoul/osiris" rel="noopener">OSIRIS</a> dashboard. Map © MapLibre; basemaps © CARTO, Esri, OpenTopoMap, OpenStreetMap contributors; terrain tiles: Mapzen / AWS.</p>
+</dialog>
+
+<script src="../vendor/maplibre-gl-5.6.2.js"></script>
+<script type="module" src="app.js"></script>
+</body>
+</html>

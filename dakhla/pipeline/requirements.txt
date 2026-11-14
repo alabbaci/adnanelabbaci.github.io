@@ -1,0 +1,7 @@
+pyarrow
+s3fs
+geopandas
+shapely
+pandas
+rasterio
+numpy
