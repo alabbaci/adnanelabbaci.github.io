@@ -419,7 +419,7 @@ function fillMethod() {
   const c = state.city;
   $('#m-zones').textContent = c.zones;
   $('#m-indicators').innerHTML = INDICATORS.map((i) => `<li><b>${i.label}</b> (${i.unit}${i.years ? `, ${c.years[0]}–${c.years[c.years.length - 1]}` : `, ${i.year}`}) — ${i.how}</li>`).join('');
-  $('#m-sources').innerHTML = `Sources: © Overture Maps Foundation and OpenStreetMap contributors (buildings, streets, coastline); Copernicus Sentinel-2 L2A (${Object.values(c.sentinel.scenes_used).reduce((a, b) => a + b, 0)} scenes, tile ${c.sentinel.tile}, ${c.sentinel.season}); RGPH 2024 for the city total. Map engine: MapLibre GL JS. The presentation format is inspired by the <a href="https://obs.autos/" rel="noopener">Urban Observatory</a> platform by Mohamed Abdelrahman Ebrahim; the code, design and data here are separate work.`;
+  $('#m-sources').innerHTML = `Sources: © Overture Maps Foundation and OpenStreetMap contributors (buildings, streets, coastline); Copernicus Sentinel-2 L2A (${Object.values(c.sentinel.scenes_used).reduce((a, b) => a + b, 0)} scenes, tile ${c.sentinel.tile}, ${c.sentinel.season}); RGPH 2024 for the city total. Map engine: MapLibre GL JS.`;
   $('#credit').innerHTML = 'Zones and indicators computed from Overture Maps, Copernicus Sentinel-2 and the RGPH 2024 city total. Zones are analysis units, not official districts.';
 }
 async function boot() {
