@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One week in Toubkal National Park</title>
+<meta name="description" content="Animated 3D view of Toubkal National Park (High Atlas, Morocco), hour by hour: walking conditions at 12 places, model weather at 14 points, river flow at 4, the sun from its true position.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script type="importmap">
+{"imports": {"three": "../vendor/three/three-0.170.0.module.min.js"}}
+</script>
+</head>
+<body>
+
+<div id="stage" role="img" aria-label="Animated 3D view of Toubkal National Park through one week"></div>
+<div id="labels"></div>
+
+<div id="loading"><div class="spin"></div><p id="loadmsg">Loading the park · Chargement du parc</p></div>
+
+<header id="title" class="win bare" data-win="title">
+  <h1>One week in Toubkal National Park</h1>
+  <div class="sub"><span>Une semaine au parc national de Toubkal</span><button class="min" aria-label="Minimize" aria-expanded="true">−</button></div>
+  <div class="body">
+    <p id="lede"></p>
+    <p id="ledeFr" class="fr"></p>
+    <p id="notice" class="notice" hidden></p>
+  </div>
+</header>
+
+<section id="clock" aria-live="off">
+  <div class="date"><b id="cDay">–</b> <span id="cDate"></span></div>
+  <div class="fr" id="cDateFr"></div>
+  <div class="time" id="cTime"></div>
+  <canvas id="sunarc" width="220" height="46" aria-hidden="true"></canvas>
+  <div class="sun" id="cSun"></div>
+  <div class="fr" id="cSunFr"></div>
+</section>
+<div id="beatWrap"><div class="beat" id="beat" hidden></div></div>
+
+<aside class="col left">
+  <section class="win" data-win="score">
+    <div class="ph"><div><h2>Good walking hours</h2><div class="fr">Heures favorables à la marche</div></div><button class="min" aria-label="Minimize" aria-expanded="true">−</button></div>
+    <div class="body">
+      <div class="big"><span id="cum">0</span><small id="cumOf"></small></div>
+      <p class="hint" id="cumSub"></p>
+      <div class="daybars" id="dayBars"></div>
+    </div>
+  </section>
+  <section class="win" data-win="rank">
+    <div class="ph"><div><h2>Best conditions in this period</h2><div class="fr">Où les conditions sont les meilleures</div></div><button class="min" aria-label="Minimize" aria-expanded="true">−</button></div>
+    <div class="body"><ol class="race" id="race"></ol></div>
+  </section>
+</aside>
+
+<aside class="col right">
+  <section class="win" data-win="temp">
+    <div class="ph"><div><h2>Air temperature, weather model</h2><div class="fr">Température de l'air, modèle météo</div></div><button class="min" aria-label="Minimize" aria-expanded="true">−</button></div>
+    <div class="body">
+      <div class="pair">
+        <div><div class="big hi" id="tHi">–</div><div class="cap">Jbel Toubkal, 4,167 m</div></div>
+        <div><div class="big lo" id="tLo">–</div><div class="cap">Imlil, 1,740 m</div></div>
+      </div>
+      <div class="chart"><canvas id="chTemp"></canvas><i class="cur"></i></div>
+      <div class="row3"><span>Freezing level · Isotherme 0 °C</span><b id="frz">–</b></div>
+      <h3>Precipitation, mean of 14 points (mm/h)<span class="fr">Précipitations, moyenne des 14 points</span></h3>
+      <div class="chart short"><canvas id="chRain"></canvas><i class="cur"></i></div>
+    </div>
+  </section>
+  <section class="win" data-win="flow">
+    <div class="ph"><div><h2>Ourika discharge, Aghbalou</h2><div class="fr">Débit de l'Ourika, modèle GloFAS</div></div><button class="min" aria-label="Minimize" aria-expanded="true">−</button></div>
+    <div class="body">
+      <div class="big flow"><span id="qMain">–</span><small>m³/s</small></div>
+      <div class="chart"><canvas id="chFlow"></canvas><i class="cur"></i></div>
+      <ul class="flows" id="flows"></ul>
+    </div>
+  </section>
+</aside>
+
+<section class="win" id="legend" data-win="legend" data-start="min">
+  <div class="ph"><div><h2>Legend and layers</h2><div class="fr">Légende et couches</div></div><button class="min" aria-label="Minimize" aria-expanded="true">−</button></div>
+  <div class="body">
+    <h3>Walking<span class="fr">Marche</span></h3>
+    <button class="lay" data-layer="beacons" aria-pressed="true"><i class="sw beam"></i><span>Walking conditions, 0 to 100<span class="fr">Conditions de marche</span></span></button>
+    <button class="lay" data-layer="routes" aria-pressed="true"><i class="sw route"></i><span>Trek route, hikers<span class="fr">Itinéraire, randonneurs</span></span></button>
+    <button class="lay" data-layer="trails" aria-pressed="true"><i class="sw trail"></i><span>Mapped paths<span class="fr">Sentiers cartographiés</span></span></button>
+    <h3>Weather<span class="fr">Météo</span></h3>
+    <button class="lay" data-layer="weather" aria-pressed="true"><i class="sw wx">°C</i><span>Model point: °C, wind<span class="fr">Point du modèle : °C, vent</span></span></button>
+    <button class="lay" data-layer="precip" aria-pressed="true"><i class="sw rain"></i><span>Rain, snow, clouds<span class="fr">Pluie, neige, nuages</span></span></button>
+    <button class="lay" data-layer="snow" aria-pressed="true"><i class="sw snow"></i><span>Snow on the ground (model)<span class="fr">Neige au sol (modèle)</span></span></button>
+    <h3>Water<span class="fr">Eau</span></h3>
+    <button class="lay" data-layer="gauges" aria-pressed="true"><i class="sw gauge"></i><span>River model point<span class="fr">Point du modèle de débit</span></span></button>
+    <button class="lay" data-layer="rivers" aria-pressed="true"><i class="sw river"></i><span>Rivers, lakes, flow<span class="fr">Oueds, lacs, sens d'écoulement</span></span></button>
+    <h3>Getting around<span class="fr">Accès</span></h3>
+    <button class="lay" data-layer="roads" aria-pressed="true"><i class="sw road"></i><span>Road, cars<span class="fr">Route, voitures</span></span></button>
+    <button class="lay" data-layer="lifts" aria-pressed="true"><i class="sw lift"></i><span>Ski lift, Oukaïmeden<span class="fr">Remontée mécanique</span></span></button>
+    <h3>Park<span class="fr">Parc</span></h3>
+    <button class="lay" data-layer="boundary" aria-pressed="true"><i class="sw fence"></i><span>Park boundary<span class="fr">Limite du parc</span></span></button>
+    <h3>Map<span class="fr">Carte</span></h3>
+    <button class="lay" data-layer="labels" aria-pressed="true"><i class="sw aa">Aa</i><span>Labels<span class="fr">Étiquettes</span></span></button>
+    <button class="lay" data-layer="sky" aria-pressed="true"><i class="sw star"></i><span>Stars and sun<span class="fr">Étoiles et soleil</span></span></button>
+    <p class="hint"><b>Click a row to hide or show it.</b><span class="fr">Un clic sur une ligne masque ou affiche la couche.</span></p>
+  </div>
+</section>
+
+<div id="compass" aria-hidden="true">
+  <svg id="north" width="30" height="30" viewBox="-15 -15 30 30"><circle r="13" fill="rgba(8,14,24,.7)" stroke="rgba(159,176,191,.4)"/><g id="needle"><path d="M0-10 4 2H-4Z" fill="#EAF2F8"/><path d="M0 9 3 2H-3Z" fill="#51606E"/><text y="-11.5" text-anchor="middle" font-size="0">N</text></g></svg>
+  <div id="scale"><i></i><span>5 km</span></div>
+</div>
+
+<div id="chips">
+  <button id="tgLegend" class="chip" aria-expanded="false" aria-controls="legend">Legend<span class="x"> and layers · Légende</span></button>
+  <button id="tgNotes" class="chip">Sources<span class="x"> and notes · Sources et notes</span></button>
+</div>
+<div id="tools">
+  <button id="tgReset">Reset windows · Réinitialiser</button>
+  <button id="tgMin">Minimize all · Tout réduire</button>
+  <button id="tgOrbit" aria-pressed="true">Auto orbit<span class="x"> · Rotation</span></button>
+</div>
+
+<section id="notes" hidden>
+  <button class="close" aria-label="Close">×</button>
+  <h2>Sources and notes</h2>
+  <p><b>What is measured and what is modelled.</b> Toubkal National Park publishes no visitor counters, no open weather-station feed and no open river gauges, so nothing on this page is a field measurement. Weather comes from the Open-Meteo forecast archive (global and regional models, hourly); river flow from GloFAS, the Copernicus flood model, read through the Open-Meteo Flood API (daily values, joined by a straight line). Both are read live by your browser when the page opens.</p>
+  <p><b>Model points.</b> Each of the 14 points is the nearest model cell, with the temperature corrected to the height of the point. The grid is several kilometres wide, so neighbours such as the Toubkal refuge and the summit share the same rain and wind and differ only in temperature. Wind is the 10 m wind in the valleys, the 700 hPa wind (about 3,100 m) at Tizi n'Tacheddirt and the 600 hPa wind (about 4,300 m) on Toubkal, Ouanoukrim and Tizi n'Ouanoums. Rain turns to snow in the scene when the corrected temperature is 1 °C or less.</p>
+  <p><b>Walking conditions, 0 to 100.</b> A screening index worked out every hour from the model: 100 × wind × cold × rain × cloud. Wind counts in full up to 5 m/s and falls to nothing at 20 m/s; felt temperature (wind chill) counts in full from −5 to 28 °C and falls to nothing at −25 °C and at 40 °C; precipitation falls to nothing at 4 mm/h; full cloud takes off a quarter. An hour is “good” when it is daylight and the index is 70 or more, “fair” from 40. Beam height: the mean of the day's daylight hours; colour: good, fair or poor now. The index knows nothing of snow and ice underfoot, avalanche, rockfall, river crossings or your own fitness. <b>It is not a mountain forecast and not safety advice.</b></p>
+  <p><b>Illustrations.</b> Hikers, cars and sparks are drawn, not counted: hikers follow daylight and the walking index of the route, cars follow daylight. Nobody publishes how many people walk these paths or when the Oukaïmeden lifts run. Snow on the ground is the model's snow depth spread by elevation, not a satellite image.</p>
+  <p><b>Rivers.</b> GloFAS works on cells of about 5 km. On catchments this small it follows the rise and fall of a river but its absolute discharge is rough. The level on each staff is the flow against the median of the last 90 days, which sits at mid-height.</p>
+  <p><b>Map.</b> Copernicus GLO-30 elevation, drawn every 100 m, heights stretched 1.5×. Park boundary, roads, paths, rivers, lakes, lifts and peaks from Overture Maps (OpenStreetMap data), release <span id="nRel"></span>. Walking routes are the shortest way along mapped paths between the named points. Times are Morocco standard time (UTC+1; clocks go back one hour during Ramadan). The sun and its shadows are computed for the centre of the map.</p>
+  <p class="fr">Ni compteurs de visiteurs, ni stations météo ou hydrométriques ouvertes au parc national de Toubkal : rien ici n'est une mesure de terrain. La météo vient de l'archive de prévisions Open-Meteo (horaire), les débits du modèle GloFAS de Copernicus (journalier). L'indice de marche, de 0 à 100, combine chaque heure le vent, le froid ressenti, les précipitations et la nébulosité ; une heure est « favorable » de jour à partir de 70. Il ignore la neige et la glace au sol, les avalanches et les chutes de pierres : ce n'est ni un bulletin de montagne ni un conseil de sécurité. Randonneurs, voitures et étincelles sont des illustrations. Heure du Maroc (UTC+1).</p>
+  <p id="nData"></p>
+  <p>Independent visualisation, not an official product of the Agence Nationale des Eaux et Forêts, the park, the Direction Générale de la Météorologie or the Tensift basin agency. For decisions in the mountains, ask the Bureau des Guides in Imlil and follow the DGM bulletins. Idea and layout after <a href="https://tomazbercic.github.io/tnp-dashboard/" rel="noopener">One week in Triglav National Park</a> by Tomaž Berčič. Copernicus DEM GLO-30 © DLR e.V. 2010–2014 and © Airbus Defence and Space GmbH 2014–2018, provided under COPERNICUS by the European Union and ESA. Weather data by <a href="https://open-meteo.com/" rel="noopener">Open-Meteo.com</a> (CC BY 4.0). © Overture Maps Foundation, © OpenStreetMap contributors. Made with the help of Claude (Anthropic). No cookies, no tracking.</p>
+</section>
+
+<div id="dock">
+  <button id="play" class="primary">Pause</button>
+  <button id="speed" aria-label="Playback speed">1×</button>
+  <div class="picker">
+    <button id="period" aria-haspopup="true" aria-expanded="false">–</button>
+    <div id="pickerBox" hidden>
+      <h3>Period · Période</h3>
+      <div class="presets">
+        <button data-preset="7">Last 7 days<span class="fr">7 derniers jours</span></button>
+        <button data-preset="14">Last 14 days<span class="fr">14 derniers jours</span></button>
+        <button data-preset="30">Last 30 days<span class="fr">30 derniers jours</span></button>
+        <button data-preset="next">Next 7 days, forecast<span class="fr">7 prochains jours, prévision</span></button>
+      </div>
+      <div class="range">
+        <label>From · Du <input type="date" id="dFrom"></label>
+        <label>To · Au <input type="date" id="dTo"></label>
+      </div>
+      <button id="apply" class="primary">Show period · Afficher</button>
+      <p class="hint" id="pickHint"></p>
+    </div>
+  </div>
+  <div id="timeline" role="slider" tabindex="0" aria-label="Time in the period" aria-valuemin="0" aria-valuenow="0">
+    <canvas id="tl"></canvas><i id="tlHead"></i>
+  </div>
+</div>
+
+<footer id="credit">Unofficial visualisation · Model data: Open-Meteo, GloFAS · Copernicus GLO-30 · © Overture Maps, © OpenStreetMap · after <a href="https://tomazbercic.github.io/tnp-dashboard/" rel="noopener">Triglav NP dashboard</a> by T. Berčič · <a href="https://github.com/alabbaci/adnanelabbaci.github.io/tree/main/toubkal" rel="noopener">source · code</a></footer>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

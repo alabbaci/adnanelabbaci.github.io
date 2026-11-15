@@ -5,6 +5,10 @@
 > [🏔 Ourika Watch](ourika/README.md), a live flash-flood, snow, river and
 > seismic dashboard for the Ourika watershed in the High Atlas
 > ([dashboard](ourika/index.html)).
+>
+> [⛰ One week in Toubkal National Park](toubkal/README.md), an animated 3D
+> view of the park hour by hour: walking conditions, model weather, river
+> flow and the sun from its true position ([dashboard](toubkal/index.html)).
 
 # 3D Heat Traps & Pedestrian Exposure in Dakhla
 
