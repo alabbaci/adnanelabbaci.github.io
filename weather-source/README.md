@@ -4,7 +4,9 @@ The browser app is in `../weather/`; the existing Dakhla homepage is unchanged.
 
 Run `uv sync --python 3.12 --frozen`, then `uv run python -m sweep --no-ai --out ../weather/data` from this directory to regenerate the forecast. Exit 3 means the latest run is already included.
 
-The Africa workflow deploys the entire existing static website plus `/weather/` at 08:20 and 20:20 UTC. It does not commit runtime forecast assets back to Git. A failed refresh stops deployment and preserves the last successful live version.
+The Africa workflow (`.github/workflows/africa-weather.yml`) is the site's only publisher: it deploys the entire existing static website plus `/weather/` from `main` at 08:20 and 20:20 UTC, on every push to `main`, after each Morocco energy forecast run, and on manual runs. It does not commit runtime forecast assets back to Git. If a forecast refresh fails, the site is still deployed with the forecast data committed on `main` and the run carries a warning.
+
+The workflow deploys through the `github-pages` environment, which only accepts runs from branches on its allowed list. Scheduled runs and the post-energy-forecast runs execute on the repository's default branch, so that branch must be allowed (simplest: make `main` the default branch).
 
 ## GitHub Pages and Namecheap
 

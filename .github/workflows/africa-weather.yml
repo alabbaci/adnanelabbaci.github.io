@@ -3,15 +3,15 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '20 8,20 * * *'
+  # This workflow is the only publisher of the site (Pages source: GitHub
+  # Actions), so every change on main has to go through it.
   push:
-    branches: [main, claude/dakhla-heat-mapping-eti6k0]
-    paths:
-      - 'weather/**'
-      - 'weather-source/**'
-      - 'ourika/**'
-      - 'toubkal/**'
-      - 'vendor/**'
-      - '.github/workflows/africa-weather.yml'
+    branches: [main]
+  # The energy forecast commits to main with the Actions token, which does not
+  # start push workflows; publish its new data when it finishes.
+  workflow_run:
+    workflows: ['Morocco energy forecast']
+    types: [completed]
 permissions:
   contents: read
   pages: write
@@ -21,13 +21,18 @@ concurrency:
   cancel-in-progress: false
 jobs:
   publish:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     environment:
       name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
+      url: ${{ steps.deploy.outputs.page_url || steps.deploy_retry.outputs.page_url }}
     steps:
+      # Always publish main, whichever branch the run was started from
+      # (schedules and workflow_run fire on the default branch).
       - uses: actions/checkout@v4
+        with:
+          ref: main
       - uses: astral-sh/setup-uv@v6
         with:
           enable-cache: true
@@ -64,8 +69,24 @@ jobs:
           test -f _public/toubkal/data/scene.json
           test -f _public/vendor/three/three-0.170.0.module.min.js
       - uses: actions/configure-pages@v5
+      # One artifact name per attempt: deploy-pages refuses to choose when a
+      # re-run leaves two artifacts with the same name on the run.
       - uses: actions/upload-pages-artifact@v3
         with:
+          name: github-pages-${{ github.run_attempt }}
           path: _public
       - uses: actions/deploy-pages@v4
         id: deploy
+        continue-on-error: true
+        with:
+          artifact_name: github-pages-${{ github.run_attempt }}
+      # The artifact listing can lag the upload by a moment, which fails the
+      # deploy with "No artifacts named ... were found"; try once more.
+      - name: Wait before retrying the deployment
+        if: steps.deploy.outcome == 'failure'
+        run: sleep 30
+      - uses: actions/deploy-pages@v4
+        id: deploy_retry
+        if: steps.deploy.outcome == 'failure'
+        with:
+          artifact_name: github-pages-${{ github.run_attempt }}
