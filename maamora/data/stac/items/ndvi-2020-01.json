@@ -1,0 +1,97 @@
+{
+ "type": "Feature",
+ "stac_version": "1.0.0",
+ "id": "ndvi-2020-01",
+ "collection": "maamora-ndvi",
+ "stac_extensions": [
+  "https://stac-extensions.github.io/projection/v1.1.0/schema.json"
+ ],
+ "bbox": [
+  -6.83,
+  33.955,
+  -5.86,
+  34.42
+ ],
+ "geometry": {
+  "type": "Polygon",
+  "coordinates": [
+   [
+    [
+     -6.83,
+     34.42
+    ],
+    [
+     -5.859505,
+     34.42
+    ],
+    [
+     -5.859505,
+     33.954493
+    ],
+    [
+     -6.83,
+     33.954493
+    ],
+    [
+     -6.83,
+     34.42
+    ]
+   ]
+  ]
+ },
+ "properties": {
+  "datetime": null,
+  "start_datetime": "2020-01-01T00:00:00Z",
+  "end_datetime": "2020-01-31T23:59:59Z",
+  "proj:epsg": 3857,
+  "proj:shape": [
+   737,
+   1271
+  ],
+  "proj:transform": [
+   85.0,
+   0,
+   -760312.1221180585,
+   0,
+   -85.0,
+   4085338.155815181
+  ],
+  "maamora:forest_mean_ndvi": 0.531,
+  "maamora:forest_cover": 1.0,
+  "maamora:source_scenes": [
+   "S2B_29SQT_20200112_3_L2A",
+   "S2A_29SQT_20200107_3_L2A",
+   "S2A_29SQT_20200117_3_L2A"
+  ],
+  "maamora:composite": "maximum value"
+ },
+ "assets": {
+  "ndvi": {
+   "href": "../../ndvi/2020-01.png",
+   "type": "image/png",
+   "roles": [
+    "data"
+   ],
+   "title": "Monthly NDVI, 8 bit packed",
+   "raster:bands": [
+    {
+     "nodata": 0,
+     "scale": 0.004724409448818898,
+     "offset": -0.20472440944881892
+    }
+   ]
+  }
+ },
+ "links": [
+  {
+   "rel": "collection",
+   "href": "../collection.json",
+   "type": "application/json"
+  },
+  {
+   "rel": "root",
+   "href": "../collection.json",
+   "type": "application/json"
+  }
+ ]
+}
