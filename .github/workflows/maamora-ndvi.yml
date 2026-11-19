@@ -1,0 +1,52 @@
+name: Maâmora NDVI
+
+on:
+  schedule:
+    - cron: "41 6 * * 1,4"    # Mondays and Thursdays, 06:41 UTC
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "maamora/pipeline/**"
+      - ".github/workflows/maamora-ndvi.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: maamora-ndvi
+  cancel-in-progress: false
+
+env:
+  PUBLISH_BRANCH: main
+
+jobs:
+  ndvi:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.PUBLISH_BRANCH }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: maamora/pipeline/requirements.txt
+
+      - run: pip install -r maamora/pipeline/requirements.txt
+
+      # Months already in maamora/data are reused; only the last two are
+      # rebuilt, so a normal run reads a handful of Sentinel-2 scenes.
+      - run: python -u -W ignore maamora/pipeline/run_workflow.py
+
+      - name: Commit NDVI update
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add maamora/data
+          git diff --cached --quiet && exit 0
+          git commit -m "maamora: NDVI update $(date -u +%F)"
+          git pull --rebase origin "$PUBLISH_BRANCH"
+          git push origin "HEAD:$PUBLISH_BRANCH"

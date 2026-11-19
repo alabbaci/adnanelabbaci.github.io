@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f3eee3">
+<title>Maâmora Watch · NDVI monitoring of the Kénitra cork oak forest</title>
+<meta name="description" content="Monthly Sentinel-2 NDVI of the Maâmora forest near Kénitra, Morocco: greenness against normal, canopy trend and mapped canopy loss and gain since 2019.">
+<link rel="stylesheet" href="../vendor/maplibre-gl-5.6.2.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<aside class="side" aria-label="Controls and readings">
+  <header class="mast">
+    <p class="eyebrow">Kénitra · Morocco · 34.2°N 6.4°W</p>
+    <h1>Maâmora Watch</h1>
+    <p class="lede">Greenness of the Maâmora cork oak forest, measured from Sentinel-2 every month since 2019.</p>
+  </header>
+
+  <section class="flow" aria-label="How this page is produced">
+    <h2>Workflow <button id="btn-about" class="link">Method and limits</button></h2>
+    <ol id="flow"></ol>
+  </section>
+
+  <section>
+    <h2>Map shows</h2>
+    <div class="tabs" id="views" role="tablist" aria-label="Map view">
+      <button role="tab" data-v="ndvi" aria-selected="true">NDVI</button>
+      <button role="tab" data-v="anomaly" aria-selected="false">Vs normal</button>
+      <button role="tab" data-v="compare" aria-selected="false">Compare</button>
+      <button role="tab" data-v="trend" aria-selected="false">Trend</button>
+      <button role="tab" data-v="change" aria-selected="false">Change</button>
+    </div>
+    <p id="view-note" class="note"></p>
+    <label class="row" id="compare-row" hidden>
+      <span>Against</span>
+      <select id="compare-month" aria-label="Month to compare against"></select>
+    </label>
+    <div id="legend" class="legend"></div>
+    <div class="row opts">
+      <label><input type="checkbox" id="opt-outlines" checked> Change outlines</label>
+      <label><input type="checkbox" id="opt-sat"> Satellite base</label>
+      <label class="op">Opacity <input type="range" id="opt-opacity" min="20" max="100" value="92" aria-label="Layer opacity"></label>
+    </div>
+  </section>
+
+  <section>
+    <h2 id="read-title">Reading</h2>
+    <div id="readout" class="kpis"></div>
+    <p id="scenes" class="note"></p>
+  </section>
+
+  <section id="sel" hidden>
+    <h2>Selected <button id="sel-clear" class="link">Clear</button></h2>
+    <div id="sel-body"></div>
+  </section>
+
+  <section>
+    <h2>Canopy change <small id="change-sub"></small></h2>
+    <div id="change-summary" class="kpis two"></div>
+    <div class="tabs small" id="change-filter" role="tablist" aria-label="Change list filter">
+      <button role="tab" data-c="canopy_loss" aria-selected="true">Loss</button>
+      <button role="tab" data-c="canopy_gain" aria-selected="false">Gain</button>
+    </div>
+    <ol id="change-list" class="features"></ol>
+  </section>
+
+  <footer>
+    <p>Contains modified Copernicus Sentinel data, read from the Element 84 Sentinel-2 COG archive on AWS. Forest polygons from Overture Maps (OpenStreetMap contributors). Outputs are catalogued as <a href="data/stac/collection.json">STAC items</a>.</p>
+    <p id="generated"></p>
+    <p><a href="../">Other projects</a></p>
+  </footer>
+</aside>
+
+<main class="stage">
+  <div id="map" aria-label="Map of the Maâmora forest"></div>
+  <div id="probe" class="probe" hidden></div>
+  <div id="loading" class="loading">Loading NDVI series…</div>
+  <div class="dock" aria-label="Time series">
+    <div class="dock-head">
+      <button id="play" class="play" aria-label="Play months">▶</button>
+      <button id="prev" class="step" aria-label="Previous month">‹</button>
+      <b id="month-label">—</b>
+      <button id="next" class="step" aria-label="Next month">›</button>
+      <span class="key"><i class="k-forest"></i>Forest mean <i class="k-norm"></i>Normal 2019–2023 <span id="key-cell" hidden><i class="k-cell"></i><span id="key-cell-label">Selected</span></span></span>
+    </div>
+    <svg id="chart" role="img" aria-label="Monthly mean NDVI of the forest"></svg>
+    <div id="chart-tip" class="tip" hidden></div>
+  </div>
+</main>
+
+<dialog id="about">
+  <h2>Method and limits</h2>
+  <p>This page follows the pattern of Microsoft's <a href="https://techcommunity.microsoft.com/blog/microsoft-planetary-computer-blog/join-us-in-using-ai-workflow-preview-feature-in-microsoft-planetary-computer-pro/4571817">AI Workflow for Planetary Computer Pro</a>: fix an area and a time range, pull the matching imagery from a catalogue, split the area into processing units, run the analysis, and catalogue the outputs as STAC items. Its change layer borrows the output shape of the <a href="https://labs.ai.azure.com/innovations/mars/">MARS</a> model: vector polygons, each with a category and a confidence.</p>
+  <p><b>MARS itself is not used here.</b> It extracts buildings, roads and railways and does not measure vegetation, and AI Workflow is a private preview that needs an Azure subscription with GPU quota. The analysis on this page is the NDVI index and plain statistics, run on open data.</p>
+  <h3>How the numbers are made</h3>
+  <ul>
+    <li><b>NDVI</b> = (near infrared − red) / (near infrared + red) from Sentinel-2 bands 8 and 4. Each month uses up to three of the clearest scenes; clouds, shadows and snow are removed with the scene classification band, and the highest NDVI per pixel is kept.</li>
+    <li><b>Vs normal</b> compares a month with the mean of the same calendar month over 2019–2023. Five years is a short reference and it includes dry years.</li>
+    <li><b>Trend</b> and <b>Change</b> use July–September only. In the dry season the grass layer is brown, so NDVI then mostly reflects tree canopy.</li>
+    <li><b>Change polygons</b> are patches of at least 3 ha where summer NDVI moved by 0.12 or more between the first three summers and the latest one. Confidence compares that movement with the spread of change across the whole forest.</li>
+  </ul>
+  <h3>What it cannot tell you</h3>
+  <ul>
+    <li>NDVI measures greenness, not tree health or species. A loss polygon can be a eucalyptus harvest, a fire, dieback, clearing or drought stress; the page does not know which.</li>
+    <li>The forest outline comes from OpenStreetMap polygons and is not the official forestry boundary. It includes eucalyptus, pine and acacia plantations as well as cork oak.</li>
+    <li>Pixels are about 70 m. Single trees and narrow tracks are not resolved.</li>
+    <li>Nothing here has been checked on the ground.</li>
+  </ul>
+  <form method="dialog"><button>Close</button></form>
+</dialog>
+
+<script src="../vendor/maplibre-gl-5.6.2.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -21,3 +21,6 @@ ourika/pipeline/.cache/
 
 # Toubkal DEM tiles and Overture extracts (re-downloaded by the pipeline)
 toubkal/pipeline/.cache/
+
+# Maâmora scene metadata cache (rebuilt by the pipeline)
+maamora/pipeline/.cache/

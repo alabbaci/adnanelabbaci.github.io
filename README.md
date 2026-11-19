@@ -9,6 +9,10 @@
 > [⛰ One week in Toubkal National Park](toubkal/README.md), an animated 3D
 > view of the park hour by hour: walking conditions, model weather, river
 > flow and the sun from its true position ([dashboard](toubkal/index.html)).
+>
+> [🌳 Maâmora Watch](maamora/README.md), monthly Sentinel-2 NDVI of the
+> Maâmora cork oak forest near Kénitra, with mapped canopy loss and gain
+> since 2019 ([dashboard](maamora/index.html)).
 
 # 3D Heat Traps & Pedestrian Exposure in Dakhla
 
