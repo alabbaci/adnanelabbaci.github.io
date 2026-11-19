@@ -189,16 +189,9 @@ def scene_meta(sid, meta):
     if sid not in meta:
         try:
             p = json.loads(http(scene_url(sid) + sid + ".json"))["properties"]
-            base = float(p.get("s2:processing_baseline", "0") or 0)
-            meta[sid] = {
-                "cloud": p.get("eo:cloud_cover", 100.0),
-                "datetime": p.get("datetime"),
-                # From baseline 04.00 ESA adds 1000 to every digital number. Element 84
-                # removes it again for most scenes and says so in this flag.
-                "offset": 1000 if base >= 4.0 and not p.get("earthsearch:boa_offset_applied", False) else 0,
-            }
+            meta[sid] = {"cloud": p.get("eo:cloud_cover", 100.0), "datetime": p.get("datetime")}
         except Exception as e:                      # a scene without metadata is skipped
-            meta[sid] = {"cloud": 100.0, "datetime": None, "offset": 0, "error": str(e)[:80]}
+            meta[sid] = {"cloud": 100.0, "datetime": None, "error": str(e)[:80]}
     return meta[sid]
 
 
@@ -252,12 +245,14 @@ def clear_mask(scenes):
     return np.isin(mosaic(scenes, "SCL", 20.0, np.uint8), CLEAR_SCL)
 
 
-def scene_ndvi(scenes, clear, meta):
+def scene_ndvi(scenes, clear):
+    # No reflectance offset is subtracted. From processing baseline 04.00 ESA adds
+    # 1000 to every digital number, but the COGs in this archive already have it
+    # removed: the darkest pixels of every scene used sit far below 1000, also where
+    # the item's "earthsearch:boa_offset_applied" flag says false.
     with ThreadPoolExecutor(2) as ex:
         red, nir = ex.map(lambda b: mosaic(scenes, b, 10.0, np.float32), ("B04", "B08"))
-    off = meta[scenes["QT"]]["offset"]
     ok = clear & (red > 0) & (nir > 0)
-    red, nir = np.maximum(red - off, 1), np.maximum(nir - off, 1)
     return np.where(ok, (nir - red) / (nir + red), np.nan).astype(np.float32)
 
 
@@ -309,8 +304,11 @@ def build_month(ym, meta, forest_utm, keep):
     for d in cand:
         if len(picked) == MAX_SCENES or d["frac"] < 0.05:
             break
-        if picked and ((d["clear"] & forest_utm & ~covered).sum() / nf) < 0.01 and covered.sum() / nf > 0.98:
-            break                                   # nothing new to add
+        # A scene is taken even when the forest is already covered: one pass that the
+        # classification calls clear can still be hazy or dusty, and the maximum over
+        # several passes drops it. Scenes that add almost nothing are left out.
+        if picked and d["frac"] < 0.3 and ((d["clear"] & forest_utm & ~covered).sum() / nf) < 0.01:
+            continue
         picked.append(d)
         covered |= d["clear"] & forest_utm
     info = {"listed": len(dates), "screened": len(cand), "used": [d["scenes"]["QT"] for d in picked],
@@ -318,7 +316,7 @@ def build_month(ym, meta, forest_utm, keep):
     if not picked:
         return None, info
     with ThreadPoolExecutor(3) as ex:
-        stack = list(ex.map(lambda d: scene_ndvi(d["scenes"], d["clear"], meta), picked))
+        stack = list(ex.map(lambda d: scene_ndvi(d["scenes"], d["clear"]), picked))
     comp = stack[0]
     for s in stack[1:]:                             # maximum value composite: clouds and haze lower NDVI
         comp = np.fmax(comp, s)
@@ -376,31 +374,35 @@ def main():
         prev = json.load(open(sp)).get("scenes", {})
     refresh = set(months[-REFRESH_MONTHS:]) if REFRESH_MONTHS else set()
     cube, scenes = {}, {}
-    for ym in months:
+
+    def one(ym):
         png = os.path.join(OUT, "ndvi", ym + ".png")
         if os.path.exists(png) and ym not in refresh and ym in prev:
             q = load_png(png)
             if q.shape == (H, W):
-                cube[ym], scenes[ym] = unpack(q), prev[ym]
-                continue
+                return ym, unpack(q), prev[ym]
         try:
             m, info = build_month(ym, meta, forest_utm, keep)
         except Exception as e:
             if os.path.exists(png) and ym in prev:             # keep the last good month
                 log(ym, "failed, keeping previous:", str(e)[:100])
-                cube[ym], scenes[ym] = unpack(load_png(png)), prev[ym]
-                continue
+                return ym, unpack(load_png(png)), prev[ym]
             raise
-        save_meta(meta)
-        scenes[ym] = info
         if m is None:
             log(ym, "no usable scene")
             if os.path.exists(png):
                 os.remove(png)
-            continue
+            return ym, None, info
         save_png(png, pack(m))
-        cube[ym] = unpack(pack(m))
         log(ym, f"{len(info['used'])}/{info['listed']} scenes, forest cover {np.isfinite(m[forest]).mean():.0%}")
+        return ym, unpack(pack(m)), info
+
+    with ThreadPoolExecutor(int(os.environ.get("MAAMORA_JOBS", "3"))) as ex:
+        for ym, m, info in ex.map(one, months):
+            scenes[ym] = info
+            if m is not None:
+                cube[ym] = m
+    save_meta(meta)
 
     have = [ym for ym in months if ym in cube]
     T = len(have)
@@ -469,7 +471,12 @@ def main():
     dv = delta[np.isfinite(delta)]
     sigma = float(1.4826 * np.median(np.abs(dv - np.median(dv)))) if len(dv) else 0.05
     sigma = max(sigma, 0.01)
-    conf_px = 2 * phi(np.abs(np.nan_to_num(delta)) / sigma) - 1
+    # Confidence: how far the change stands out from the spread of change across the
+    # forest, scaled down where the summer before does not show it as well.
+    conf_px = 2 * phi(np.abs(np.nan_to_num(delta)) / (2 * sigma)) - 1
+    prev_delta = np.nan_to_num(sstack[-2] - ref) if len(syears) > nb + 1 else np.nan_to_num(delta)
+    persist = (np.sign(prev_delta) == np.sign(np.nan_to_num(delta))) & (np.abs(prev_delta) >= CHANGE_T / 2)
+    conf_px = conf_px * (0.6 + 0.4 * persist)
     feats = []
     for cat, mask in (("canopy_loss", delta <= -CHANGE_T), ("canopy_gain", delta >= CHANGE_T)):
         mask = ndimage.binary_opening(np.nan_to_num(mask, nan=0).astype(bool), iterations=1)
@@ -492,6 +499,7 @@ def main():
                               "category": cat,
                               "confidence": round(float(conf_px[sel].mean()), 2),
                               "area_ha": round(float(ha[i - 1]), 1),
+                              "confirmed_previous_summer": round(float(persist[sel].mean()), 2),
                               "delta_ndvi": round(float(np.nanmean(delta[sel])), 3),
                               "ndvi_before": r3(np.nanmean(ref[sel])), "ndvi_after": r3(series[-1]),
                               "step_year": int(syears[k + 1]) if k is not None else None,

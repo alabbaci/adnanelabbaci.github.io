@@ -131,3 +131,4 @@ dialog form button { background: var(--ink); color: var(--paper); padding: 7px 1
   body { display: flex; flex-direction: column-reverse; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+.cols { display: grid; grid-template-columns: 1fr auto auto; gap: 10px; margin: 0 0 4px; padding: 0 10px; font-size: 11px; color: var(--ink-3); }

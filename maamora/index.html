@@ -26,7 +26,7 @@
     <h2>Map shows</h2>
     <div class="tabs" id="views" role="tablist" aria-label="Map view">
       <button role="tab" data-v="ndvi" aria-selected="true">NDVI</button>
-      <button role="tab" data-v="anomaly" aria-selected="false">Vs normal</button>
+      <button role="tab" data-v="anomaly" aria-selected="false">Anomaly</button>
       <button role="tab" data-v="compare" aria-selected="false">Compare</button>
       <button role="tab" data-v="trend" aria-selected="false">Trend</button>
       <button role="tab" data-v="change" aria-selected="false">Change</button>
@@ -62,6 +62,7 @@
       <button role="tab" data-c="canopy_loss" aria-selected="true">Loss</button>
       <button role="tab" data-c="canopy_gain" aria-selected="false">Gain</button>
     </div>
+    <p class="cols"><span>Area</span><span>NDVI change</span><span>Confidence</span></p>
     <ol id="change-list" class="features"></ol>
   </section>
 
@@ -96,9 +97,9 @@
   <h3>How the numbers are made</h3>
   <ul>
     <li><b>NDVI</b> = (near infrared − red) / (near infrared + red) from Sentinel-2 bands 8 and 4. Each month uses up to three of the clearest scenes; clouds, shadows and snow are removed with the scene classification band, and the highest NDVI per pixel is kept.</li>
-    <li><b>Vs normal</b> compares a month with the mean of the same calendar month over 2019–2023. Five years is a short reference and it includes dry years.</li>
+    <li><b>Anomaly</b> compares a month with the mean of the same calendar month over 2019–2023. Five years is a short reference and it includes dry years.</li>
     <li><b>Trend</b> and <b>Change</b> use July–September only. In the dry season the grass layer is brown, so NDVI then mostly reflects tree canopy.</li>
-    <li><b>Change polygons</b> are patches of at least 3 ha where summer NDVI moved by 0.12 or more between the first three summers and the latest one. Confidence compares that movement with the spread of change across the whole forest.</li>
+    <li><b>Change polygons</b> are patches of at least 3 ha where summer NDVI moved by 0.12 or more between the first three summers and the latest one. Confidence compares that movement with the spread of change across the whole forest, and is cut by up to 40% where the previous summer does not show the change too.</li>
   </ul>
   <h3>What it cannot tell you</h3>
   <ul>
