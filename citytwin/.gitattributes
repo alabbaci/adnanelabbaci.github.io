@@ -1,0 +1,5 @@
+# Keep GitHub's language bar honest: the published viewer is generated output,
+# and the screenshots are documentation, not source code.
+index.html linguist-generated=true
+docs/assets/* linguist-documentation
+docs/metrics.json linguist-documentation

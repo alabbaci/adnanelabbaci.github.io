@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="260" viewBox="0 0 720 260" font-family="-apple-system,'Helvetica Neue',Inter,Segoe UI,Roboto,sans-serif">
+<rect width="720" height="260" fill="#fbfaf7"/>
+<text x="24" y="30" font-size="15" font-weight="650" fill="#1c1f23">Height completion — blocked cross-validation</text>
+<text x="24" y="47" font-size="11" fill="#6a7076">831 labels, 5 folds of 300 m spatial blocks · MAE in metres</text>
+<line x1="260.0" y1="54" x2="260.0" y2="226" stroke="#e4e2db" stroke-width="1"/>
+<text x="260.0" y="242" font-size="10" fill="#6a7076" text-anchor="middle">0.0</text>
+<line x1="360.0" y1="54" x2="360.0" y2="226" stroke="#e4e2db" stroke-width="1"/>
+<text x="360.0" y="242" font-size="10" fill="#6a7076" text-anchor="middle">0.1</text>
+<line x1="460.0" y1="54" x2="460.0" y2="226" stroke="#e4e2db" stroke-width="1"/>
+<text x="460.0" y="242" font-size="10" fill="#6a7076" text-anchor="middle">0.2</text>
+<line x1="560.0" y1="54" x2="560.0" y2="226" stroke="#e4e2db" stroke-width="1"/>
+<text x="560.0" y="242" font-size="10" fill="#6a7076" text-anchor="middle">0.3</text>
+<line x1="660.0" y1="54" x2="660.0" y2="226" stroke="#e4e2db" stroke-width="1"/>
+<text x="660.0" y="242" font-size="10" fill="#6a7076" text-anchor="middle">0.4</text>
+<text x="248" y="70.4" font-size="11.5" fill="#1c1f23" text-anchor="end">rule · class median (shipped)</text>
+<rect x="260" y="54" width="347.8" height="26" rx="3" fill="#1f4e79"/>
+<text x="615.8" y="70.4" font-size="11" font-weight="600" fill="#1c1f23">0.36 m</text>
+<text x="248" y="122.4" font-size="11.5" fill="#1c1f23" text-anchor="end">random forest · blocked CV</text>
+<rect x="260" y="106" width="347.8" height="26" rx="3" fill="#c26a33"/>
+<text x="615.8" y="122.4" font-size="11" font-weight="600" fill="#1c1f23">0.36 m</text>
+<text x="248" y="174.4" font-size="11.5" fill="#1c1f23" text-anchor="end">random forest · random CV (reference)</text>
+<rect x="260" y="158" width="347.8" height="26" rx="3" fill="#a9a49a"/>
+<text x="615.8" y="174.4" font-size="11" font-weight="600" fill="#1c1f23">0.36 m</text>
+<text x="24" y="258" font-size="10" fill="#6a7076">Δ MAE +0.00 m → learned model does not beat the rule; the explainable rule is shipped by default.</text>
+</svg>

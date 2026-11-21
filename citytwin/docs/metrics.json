@@ -1,0 +1,208 @@
+{
+  "aoi": {
+    "name": "Dakhla",
+    "bbox": [
+      -15.966016,
+      23.678805,
+      -15.917395,
+      23.737807
+    ]
+  },
+  "version": "0.5.0",
+  "generated": "2026-11-21",
+  "data": {
+    "aoi": "Dakhla",
+    "aoi_slug": "dakhla",
+    "bbox_wgs84": [
+      -15.966016,
+      23.678805,
+      -15.917395,
+      23.737807
+    ],
+    "source": "s3://overturemaps-us-west-2/release/2026-11-18.0/",
+    "release": "2026-11-18.0",
+    "source_name": "Overture Maps Foundation (OpenStreetMap + Microsoft ML Buildings)",
+    "license": "ODbL-1.0",
+    "attribution": "\u00a9 OpenStreetMap contributors, Microsoft, Overture Maps Foundation",
+    "counts": {
+      "buildings": 3106,
+      "buildings_with_height": 831,
+      "buildings_by_source": {
+        "Microsoft ML Buildings": 1923,
+        "OpenStreetMap": 1183
+      },
+      "green_polygons": 19,
+      "trees": 5,
+      "streets": 4329
+    }
+  },
+  "height": {
+    "strategy": "class-median-0.5.0",
+    "metrics": {
+      "mae": 0.36,
+      "rmse": 1.59,
+      "r2": -0.05,
+      "bias": -0.35,
+      "n": 831,
+      "coverage_80": 0.939,
+      "coverage_shipped": 0.955
+    },
+    "interval_quantile_m": 3.0,
+    "interval_level": 0.8,
+    "table": {
+      "commercial": 5.5,
+      "hotel": 8.0,
+      "other": 6.0,
+      "public": 6.0,
+      "residential": 6.0,
+      "retail": 7.0
+    },
+    "benchmark": {
+      "decision": "rule",
+      "delta_mae_m": 0.0,
+      "rule": {
+        "mae": 0.36,
+        "rmse": 1.59,
+        "r2": -0.05,
+        "bias": -0.35,
+        "n": 831,
+        "coverage_80": 0.939,
+        "coverage_shipped": 0.955
+      },
+      "model": {
+        "mae": 0.36,
+        "rmse": 1.59,
+        "r2": -0.05,
+        "bias": -0.35,
+        "n": 831,
+        "coverage_80": 0.939
+      },
+      "model_random_folds": {
+        "mae": 0.36,
+        "rmse": 1.57,
+        "r2": -0.018,
+        "bias": -0.34,
+        "n": 831
+      },
+      "model_coverage_80": 0.939,
+      "importance": [
+        {
+          "feature": "n_vertices",
+          "permutation_importance_mae_m": 0.013
+        },
+        {
+          "feature": "area_m2",
+          "permutation_importance_mae_m": 0.01
+        },
+        {
+          "feature": "perimeter_m",
+          "permutation_importance_mae_m": 0.008
+        },
+        {
+          "feature": "compactness",
+          "permutation_importance_mae_m": 0.008
+        },
+        {
+          "feature": "mean_neighbour_area_m2",
+          "permutation_importance_mae_m": 0.006
+        },
+        {
+          "feature": "dist_tree_m",
+          "permutation_importance_mae_m": 0.003
+        }
+      ]
+    }
+  },
+  "typology": {
+    "n_clusters": 3,
+    "silhouette": 0.249,
+    "silhouette_by_k": {
+      "3": 0.25,
+      "4": 0.237,
+      "5": 0.263,
+      "6": 0.255,
+      "7": 0.267,
+      "8": 0.252
+    },
+    "stability_ari_mean": 0.974,
+    "stability_ari_min": 0.942,
+    "stability_repeats": 10,
+    "sample_fraction": 0.8,
+    "feature_set": [
+      "log_area",
+      "compactness",
+      "aspect_ratio",
+      "log_neighbours",
+      "log_neighbour_area",
+      "dist_centre_km",
+      "dist_green_m",
+      "dist_road_m"
+    ],
+    "interpretation": "ARI near 1 across subsamples means the typology is reproducible. A low silhouette is expected for a continuous urban fabric and means the clusters are soft boundaries rather than natural classes \u2014 they summarise morphology, they do not classify buildings."
+  },
+  "exposure": {
+    "cells": 199,
+    "area_ha": 1243.8,
+    "mean_hei": 50.1,
+    "median_hei": 51.5,
+    "max_hei": 78.3,
+    "hotspot_threshold": 64.7,
+    "hotspot_cells": 20,
+    "hotspot_area_ha": 125.0,
+    "hotspot_share_pct": 10.1,
+    "buildings_in_hotspots": 502,
+    "mean_height_m": 6.1,
+    "green_share": 0.009
+  },
+  "sensitivity": {
+    "n_samples": 500,
+    "seed": 7,
+    "spearman_median": 0.938,
+    "spearman_p05": 0.692,
+    "top_decile_jaccard_median": 0.6,
+    "top_decile_jaccard_p05": 0.25,
+    "interpretation": "Spearman rho compares the full cell ranking under resampled weights with the baseline ranking; the Jaccard score compares the top-decile hotspot sets. Medians near 1 mean the ranking survives plausible re-weighting; the 5th percentiles show how far cells near the threshold can still move."
+  },
+  "uncertainty": {
+    "n_draws": 200,
+    "seed": 11,
+    "intervals": "80% (percentile 5-95 of the redrawn height distribution)",
+    "hotspot_jaccard_mean": 0.503,
+    "hotspot_jaccard_p05": 0.379,
+    "cells_hotspot_prob_ge_0_8": 11,
+    "hei_interval_width_median": 10.0,
+    "interpretation": "The Jaccard score compares the 90th-percentile hotspot set of each draw with the observed-height hotspot set. Low values mean the decision layer is not identified by the current height data alone."
+  },
+  "by_typology": [
+    {
+      "typology": "T1",
+      "typology_name": "T1 block-scale footprints \u00b7 low",
+      "buildings": 1034,
+      "mean_hei": 56.24,
+      "mean_height_m": 6.17,
+      "share_pct": 33.3
+    },
+    {
+      "typology": "T2",
+      "typology_name": "T2 sparse periphery \u00b7 low",
+      "buildings": 528,
+      "mean_hei": 54.98,
+      "mean_height_m": 6.11,
+      "share_pct": 17.0
+    },
+    {
+      "typology": "T3",
+      "typology_name": "T3 dense fine-grain fabric \u00b7 low",
+      "buildings": 1544,
+      "mean_hei": 54.0,
+      "mean_height_m": 6.04,
+      "share_pct": 49.7
+    }
+  ],
+  "artefacts": {
+    "cityjson_buildings": 3106,
+    "cityjson_open_shells": 0,
+    "glb_triangles": 52848,
+    "glb_bytes": 2854836
+  }
+}
