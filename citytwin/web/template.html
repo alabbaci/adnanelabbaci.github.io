@@ -1,0 +1,1047 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>citytwin — geospatial digital twin of Dakhla</title>
+<style>
+  :root{
+    --ink:#191d22; --ink-soft:#3c434c; --muted:#6c737b; --faint:#98a0a8;
+    --line:#e3e0d8; --line-strong:#d2cec4;
+    --paper:#faf8f3; --panel:#fffefb; --canvas:#f5f2eb;
+    --accent:#1d4e79; --accent-2:#b4552d; --accent-soft:#eaf0f6;
+    --green:#bcd8b6; --signal:#8e24aa;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;background:var(--paper);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Inter,"Segoe UI",Roboto,sans-serif;
+    font-feature-settings:"tnum" 0;
+    display:flex;flex-direction:column;min-height:100vh;-webkit-font-smoothing:antialiased}
+  header{padding:20px 26px 16px;border-bottom:1px solid var(--line);background:var(--panel);
+    display:flex;justify-content:space-between;align-items:flex-start;gap:28px}
+  .masthead{min-width:0}
+  .kicker{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);
+    font-weight:650;margin:0 0 7px;display:flex;align-items:center;gap:8px}
+  .kicker::before{content:"";width:16px;height:1px;background:var(--accent);opacity:.6}
+  .brandline{display:flex;align-items:flex-end;gap:10px;margin:1px 0 0}
+  .brand{font-size:36px;font-weight:700;letter-spacing:-.03em;line-height:1;
+    color:var(--ink)}
+  .brand-tag{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--accent);font-weight:650;line-height:1.3;padding:0 0 2px 10px;
+    border-left:1px solid var(--line-strong);white-space:nowrap}
+  h1{margin:6px 0 0;font-size:17px;font-weight:560;letter-spacing:-.005em;
+    line-height:1.25;color:var(--ink-soft)}
+  .lede{margin:9px 0 0;padding:0 0 0 16px;max-width:70ch;color:var(--muted);
+    font-size:12.2px;line-height:1.5}
+  .lede li{margin:2px 0}
+  .lede li::marker{color:var(--line-strong)}
+  .lede b{color:var(--ink-soft);font-weight:640}
+  .source{margin:7px 0 0;font-size:10.6px;line-height:1.5;color:var(--faint)}
+  .source a{color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line-strong)}
+  .source a:hover{color:var(--ink-soft)}
+  .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:13px}
+  .chip{background:#fff;color:var(--ink-soft);border:1px solid var(--line);
+    border-radius:999px;padding:3px 9px;font-size:10.8px;font-weight:520;letter-spacing:.01em}
+  .chip b{color:var(--accent);font-weight:650}
+
+  .inspector{width:264px;flex:0 0 264px;border:1px solid var(--line);border-radius:12px;
+    background:linear-gradient(180deg,#fff,#fcfaf5);padding:11px 13px 12px;
+    box-shadow:0 1px 0 rgba(24,28,33,.03)}
+  .inspector h2{margin:0 0 7px;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--muted);font-weight:650;display:flex;align-items:center;gap:6px}
+  .inspector h2::before{content:"";width:8px;height:8px;border-radius:2px;background:var(--signal);flex:0 0 8px}
+  .inspector h2 button{margin-left:auto}
+  #inspector.sel{box-shadow:inset 3px 0 0 var(--signal)}
+  .inspector h2 button{border:none;background:none;color:var(--faint);font-size:10.5px;
+    padding:0;cursor:pointer;letter-spacing:0;text-transform:none}
+  .inspector h2 button:hover{color:var(--accent-2)}
+  .empty{color:var(--faint);font-size:11.5px;line-height:1.55;margin:0}
+  .kv{display:grid;grid-template-columns:78px 1fr;gap:3px 8px;font-size:11.5px;line-height:1.45}
+  .kv dt{color:var(--muted)}
+  .kv dd{margin:0;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+  .kv dd strong{color:var(--ink);font-weight:640}
+  .inspect-id{font-size:13px;font-weight:650;margin:0 0 8px;letter-spacing:-.01em}
+  .inspect-id span{color:var(--faint);font-weight:500;font-size:11px;margin-left:6px}
+  .facts{list-style:none;margin:0;padding:0;font-size:11.5px;line-height:1.45}
+  .facts li{display:grid;grid-template-columns:62px 1fr;gap:8px;padding:4px 0;
+    border-bottom:1px solid #f2efe8}
+  .facts li:last-child{border-bottom:0}
+  .facts .k{color:var(--muted)}
+  .facts .v{color:var(--ink-soft);font-variant-numeric:tabular-nums}
+  .facts .v strong{color:var(--ink);font-weight:640}
+  .hints{margin:6px 0 0;padding:0 0 0 14px;color:var(--muted);font-size:11.5px;
+    line-height:1.5}
+  .hints li{margin:2px 0}
+  .hints li::marker{color:var(--line-strong)}
+  .empty-lead{margin:0;color:var(--ink-soft);font-size:11.8px;font-weight:600}
+
+  main{flex:1;display:grid;grid-template-columns:1.32fr 1fr;gap:16px;padding:16px 20px 10px;min-height:0}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;display:flex;
+    flex-direction:column;min-height:0;overflow:hidden;box-shadow:0 1px 2px rgba(24,28,33,.04),
+    0 10px 26px -22px rgba(24,28,33,.28)}
+  .panel-head{display:flex;align-items:center;justify-content:space-between;gap:14px;
+    padding:11px 15px;border-bottom:1px solid var(--line);background:#fff}
+  .panel-head>div:first-child{min-width:0}
+  .panel-title{font-size:12.5px;font-weight:650;letter-spacing:.005em}
+  .panel-note{font-size:10.8px;color:var(--muted);margin-top:2px}
+  .canvas-wrap{position:relative;flex:1;min-height:0;background:var(--canvas)}
+  canvas{display:block;width:100%;height:100%;cursor:crosshair}
+
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;
+    background:#fff}
+  .seg button{font:inherit;font-size:11px;border:0;border-right:1px solid var(--line);
+    background:#fff;color:var(--muted);padding:5px 9px;cursor:pointer;letter-spacing:.005em}
+  .seg button:last-child{border-right:0}
+  .seg button[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent);font-weight:640}
+  .seg button:hover{color:var(--ink)}
+  .ctl{display:flex;align-items:center;gap:9px;font-size:11px;color:var(--muted)}
+  .ctl label{white-space:nowrap}
+  .ctl input[type=range]{width:76px;accent-color:var(--accent)}
+  .ctl button{font:inherit;font-size:11px;border:1px solid var(--line);background:#fff;
+    color:var(--ink-soft);border-radius:8px;padding:5px 9px;cursor:pointer}
+  .ctl button:hover{border-color:var(--line-strong);color:var(--ink)}
+
+  .panel-foot{display:flex;align-items:center;justify-content:space-between;gap:16px;
+    padding:6px 13px;border-top:1px solid var(--line);background:#fff;flex:0 0 auto;
+    height:86px;box-sizing:border-box}
+  .legend{display:flex;align-items:center;gap:13px 15px;flex-wrap:wrap;font-size:10.4px;
+    line-height:1.35;min-width:0}
+  .legend h4{margin:0;font-size:9.6px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--muted);font-weight:650;white-space:nowrap}
+  .legend .row{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+  .legend .val{color:var(--muted);font-variant-numeric:tabular-nums}
+  .sw{width:14px;height:8px;border-radius:2px;display:inline-block;flex:0 0 14px}
+  .foot-tools{display:flex;align-items:center;gap:10px;flex:0 0 auto}
+  .foot-tools canvas{display:block;cursor:default}
+  #planCompass,#isoCompass{width:62px;height:62px}
+  #planScale,#isoScale{width:96px;height:22px}
+  .foot-crs{font-size:9.4px;letter-spacing:.06em;color:var(--faint);white-space:nowrap}
+  #bearing{font-size:10px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+
+  footer{border-top:1px solid var(--line);padding:8px 22px;color:var(--muted);font-size:10.8px;
+    display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;background:var(--panel)}
+  footer span{white-space:nowrap}
+  footer a{color:var(--ink-soft);text-decoration:none;border-bottom:1px solid var(--line-strong)}
+  footer a:hover{color:var(--ink)}
+  #coords{font-variant-numeric:tabular-nums;color:var(--ink-soft)}
+
+  .tip{position:fixed;pointer-events:none;background:#14181d;color:#fff;font-size:10.8px;
+    padding:7px 9px;border-radius:8px;opacity:0;transition:opacity .12s;max-width:262px;z-index:9;
+    line-height:1.5;box-shadow:0 10px 24px -14px rgba(0,0,0,.6)}
+  .tip strong{font-weight:640}
+  .tip .t-dim{color:#aab3bd}
+
+  @media (max-width:980px){
+    header{flex-direction:column}
+    .inspector{width:100%;flex:1 1 auto}
+    main{grid-template-columns:1fr;grid-template-rows:1.1fr .9fr}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="masthead">
+    <p class="kicker">Dakhla · Río de Oro peninsula</p>
+    <div class="brandline">
+      <span class="brand">citytwin</span>
+      <span class="brand-tag">geospatial<br>digital twin</span>
+    </div>
+    <h1>Building fabric and heat exposure, in plan and LoD1 3-D</h1>
+    <ul class="lede">
+      <li><b>Fabric</b> — <span id="ledeFabric"></span></li>
+      <li><b>Exposure</b> — <span id="ledeExposure"></span></li>
+      <li><b>Selection</b> — one shared state; both maps outline the pick in violet.</li>
+    </ul>
+    <p class="source">Data: <a href="https://overturemaps.org/" target="_blank" rel="noopener">Overture Maps</a> <span id="release"></span> (<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© OpenStreetMap contributors</a> + Microsoft ML Buildings), ODbL 1.0 · heights: rule baseline · no proprietary data.</p>
+    <div class="chips" id="chips"></div>
+  </div>
+  <aside class="inspector" id="inspector">
+    <h2>Selection <button id="clearSel" hidden>clear · esc</button></h2>
+    <div id="inspectBody">
+      <p class="empty-lead">Nothing selected yet</p>
+      <ul class="hints">
+        <li>Click a building in either map.</li>
+        <li>Click a cell background to select the 250 m cell.</li>
+        <li>Press <b>Esc</b>, or clear above, to reset.</li>
+      </ul>
+    </div>
+  </aside>
+</header>
+
+<main>
+  <section class="panel">
+    <div class="panel-head">
+      <div>
+        <div class="panel-title">Plan view · north up</div>
+        <div class="panel-note">250 m cells · footprints · green space · scroll to zoom · drag to pan</div>
+      </div>
+      <div class="ctl">
+        <div class="seg" id="modeSeg" role="group" aria-label="Colour">
+          <button data-mode="hei" aria-pressed="true">Exposure</button>
+          <button data-mode="height" aria-pressed="false">Height</button>
+          <button data-mode="typology" aria-pressed="false">Typology</button>
+        </div>
+      </div>
+    </div>
+    <div class="canvas-wrap">
+      <canvas id="plan" aria-label="Plan view of building footprints and exposure grid"></canvas>
+    </div>
+    <div class="panel-foot">
+      <div class="legend" id="planLegend"></div>
+      <div class="foot-tools">
+        <canvas id="planCompass" aria-label="North arrow, plan is north-up"></canvas>
+        <canvas id="planScale" aria-label="Scale bar"></canvas>
+        <span class="foot-crs">EPSG:32628</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <div>
+        <div class="panel-title">LoD1 3-D view</div>
+        <div class="panel-note">drag to orbit · scroll to zoom · follows the plan’s centre</div>
+      </div>
+      <div class="ctl">
+        <label for="exag">Vertical <span id="exagVal">2.2×</span></label>
+        <input id="exag" type="range" min="0.8" max="4" step="0.1" value="2.2">
+        <button id="spin">Orbit</button>
+        <button id="reset">Reset</button>
+      </div>
+    </div>
+    <div class="canvas-wrap">
+      <canvas id="iso" aria-label="Isometric 3-D view of the LoD1 city model"></canvas>
+    </div>
+    <div class="panel-foot">
+      <div class="legend" id="isoLegend"></div>
+      <div class="foot-tools">
+        <canvas id="isoCompass" aria-label="Compass, rotates with the view"></canvas>
+        <span id="bearing">N 055°</span>
+        <canvas id="isoScale" aria-label="Approximate scale bar"></canvas>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span id="foot-left"></span>
+  <span id="coords">—</span>
+  <span id="foot-right"></span>
+</footer>
+<div class="tip" id="tip"></div>
+
+<script id="payload" type="application/json">__DATA__</script>
+<script>
+(function(){
+  "use strict";
+  window.onerror = function(message, source, line){
+    document.documentElement.dataset.jserror = String(message)+' @'+line;
+    return false;
+  };
+  const DATA = JSON.parse(document.getElementById('payload').textContent);
+  const PLAN = document.getElementById('plan');
+  const ISO = document.getElementById('iso');
+  const TIP = document.getElementById('tip');
+  const PLAN_COMPASS = document.getElementById('planCompass');
+  const ISO_COMPASS = document.getElementById('isoCompass');
+  const PLAN_SCALE = document.getElementById('planScale');
+  const ISO_SCALE = document.getElementById('isoScale');
+  const planCtx = PLAN.getContext('2d');
+  const isoCtx = ISO.getContext('2d');
+
+  const HEI_RAMP = ['#fff4e6','#fdd0a2','#fd8d3c','#e6550d','#a63603'];
+  const HEIGHT_RAMP = ['#356f88','#5f9d90','#a9b48a','#d19a52','#a84430'];
+  const TYPO_COLOURS = ['#4e79a7','#f28e2b','#59a14f','#b07aa1','#76b7b2','#edc948','#9c755f'];
+  const ACCENT = '#b4552d';
+  const SIGNAL = '#8e24aa';      // selection only — a violet no base ramp uses
+  const INK = '#191d22';
+
+  const state = {
+    mode: 'hei',
+    exaggeration: 2.2,
+    phi: -0.62,          // camera azimuth about the vertical axis, radians
+    zoom: 1.0,
+    hoverB: -1, hoverC: -1,
+    selB: -1, selC: -1,
+    cursor: null
+  };
+
+  const B = DATA.bounds;                       // local metres, [minx,miny,maxx,maxy]
+  const W = B[2]-B[0], H = B[3]-B[1];
+  const SIN_E = 0.5, COS_E = 0.866;            // 30° camera elevation
+  const CX = (B[0]+B[2])/2, CY = (B[1]+B[3])/2;
+  // Shared focus: the world point both maps keep at their centre. The city is
+  // several kilometres long, so zooming has to be about a place, not the extent.
+  state.fx = CX; state.fy = CY;
+  const ZOOM_MIN = 0.65, ZOOM_MAX = 12;
+
+  const params = new URLSearchParams(location.search);
+  const requested = params.get('mode');
+  if(['hei','height','typology'].includes(requested)) state.mode = requested;
+  if(params.has('cell')){
+    const n = parseInt(params.get('cell'),10);
+    if(Number.isInteger(n) && n >= 0 && n < DATA.cells.length) state.selC = n;
+  }
+  if(params.has('sel')){
+    const n = parseInt(params.get('sel'),10);
+    if(Number.isInteger(n) && n >= 0 && n < DATA.buildings.length) state.selB = n;
+  }
+
+  if(params.has('exag')){
+    const n = parseFloat(params.get('exag'));
+    if(isFinite(n)) state.exaggeration = Math.max(0.8, Math.min(4, n));
+  }
+  if(params.has('zoom')){
+    const n = parseFloat(params.get('zoom'));
+    if(isFinite(n)) state.zoom = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, n));
+    // a zoomed link opens on its selection
+    if(state.selB >= 0){ state.fx = DATA.buildings[state.selB].cx; state.fy = DATA.buildings[state.selB].cy; }
+    else if(state.selC >= 0){
+      const r = DATA.cells[state.selC].r;
+      state.fx = (r[0][0]+r[2][0])/2; state.fy = (r[0][1]+r[2][1])/2;
+    }
+  }
+
+  // ---------- helpers ----------
+  function size(canvas){
+    const rect = canvas.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.max(1, Math.round(rect.width*dpr));
+    canvas.height = Math.max(1, Math.round(rect.height*dpr));
+    const ctx = canvas.getContext('2d');
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    return {w:rect.width, h:rect.height};
+  }
+  function colourFor(value, ramp, min, max){
+    if(!isFinite(value)) return '#c9c6bf';
+    const t = Math.max(0, Math.min(1, (value-min)/(max-min||1)));
+    return ramp[Math.min(ramp.length-1, Math.floor(t*ramp.length))];
+  }
+  function rgb(hex){ const n = parseInt(hex.slice(1),16); return [(n>>16)&255,(n>>8)&255,n&255]; }
+  function shade(hex, factor){
+    const [r,g,b] = rgb(hex);
+    return 'rgb('+Math.round(r*factor)+','+Math.round(g*factor)+','+Math.round(b*factor)+')';
+  }
+  function alpha(hex, a){ const [r,g,b] = rgb(hex); return 'rgba('+r+','+g+','+b+','+a+')'; }
+  function pointInRing(px, py, ring){
+    let inside = false;
+    for(let i=0, j=ring.length-1; i<ring.length; j=i++){
+      const xi=ring[i][0], yi=ring[i][1], xj=ring[j][0], yj=ring[j][1];
+      if(((yi>py)!==(yj>py)) && (px < (xj-xi)*(py-yi)/((yj-yi)||1e-9)+xi)) inside = !inside;
+    }
+    return inside;
+  }
+  function fmtCoord(n){ return Math.round(n).toLocaleString('en-US').replace(/,/g,' '); }
+
+  // ---------- plan projection: north up, east right ----------
+  function planTransform(w, h){
+    const pad = 26;
+    const s = Math.min((w-2*pad)/(W||1), (h-2*pad)/(H||1)) * state.zoom;
+    return {
+      s,
+      x: x => w/2 + (x-state.fx)*s,
+      y: y => h/2 - (y-state.fy)*s,
+      toWorld: (px, py) => [state.fx + (px-w/2)/s, state.fy - (py-h/2)/s]
+    };
+  }
+
+  // footprint extent (not the padded AOI) decides the 3-D framing
+  const CITY_B = (function(){
+    let x0=Infinity, y0=Infinity, x1=-Infinity, y1=-Infinity;
+    for(const b of DATA.buildings){
+      if(b.cx<x0) x0=b.cx; if(b.cx>x1) x1=b.cx;
+      if(b.cy<y0) y0=b.cy; if(b.cy>y1) y1=b.cy;
+    }
+    return [x0,y0,x1,y1];
+  })();
+
+  // ---------- axonometric projection ----------
+  // Screen basis: right = (cos phi, -sin phi), ground-up = (sin phi, cos phi).
+  // A point maps to X = d·right, Y = -(d·up * sin(elev) + z * cos(elev)).
+  function project(x, y, z){
+    const dx = x-state.fx, dy = y-state.fy, ca = Math.cos(state.phi), sa = Math.sin(state.phi);
+    const X = dx*ca - dy*sa;
+    const up = dx*sa + dy*ca;
+    return [X*0.99, -(up*SIN_E + z*state.exaggeration*COS_E)];
+  }
+  function isoTransform(w, h){
+    const pad = Math.max(26, Math.min(w,h)*0.07);
+    let minX=Infinity, maxX=-Infinity, minY=Infinity, maxY=-Infinity;
+    for(const x of [CITY_B[0],CITY_B[2]]) for(const y of [CITY_B[1],CITY_B[3]]) for(const z of [0]){
+      const p = project(x,y,z);
+      minX = Math.min(minX,p[0]); maxX = Math.max(maxX,p[0]);
+      minY = Math.min(minY,p[1]); maxY = Math.max(maxY,p[1]);
+    }
+    const s = Math.min((w-2*pad)/(maxX-minX||1), (h-2*pad)/(maxY-minY||1)) * state.zoom * 1.06;
+    // project() is relative to the focus, so the focus sits at the canvas centre
+    return {s, X: sx => w/2+sx*s, Y: sy => h/2+sy*s};
+  }
+
+  // ---------- plan drawing ----------
+  function drawPlan(){
+    const {w,h} = size(PLAN);
+    planCtx.clearRect(0,0,w,h);
+    planCtx.fillStyle = '#f6f3ec';
+    planCtx.fillRect(0,0,w,h);
+    const T = planTransform(w,h);
+
+    // cells
+    for(let c=0; c<DATA.cells.length; c++){
+      const cell = DATA.cells[c];
+      const pts = cell.r.map(p => [T.x(p[0]), T.y(p[1])]);
+      planCtx.beginPath();
+      pts.forEach((p,i)=> i ? planCtx.lineTo(p[0],p[1]) : planCtx.moveTo(p[0],p[1]));
+      planCtx.closePath();
+      const isHot = (cell.hp || 0) >= 0.8;
+      const isSel = (c === state.selC) || (state.selB >= 0 && DATA.buildings[state.selB].ci === cell.i);
+      if(state.mode === 'hei'){
+        planCtx.globalAlpha = 0.62;
+        planCtx.fillStyle = colourFor(cell.hei, HEI_RAMP, DATA.meta.hei_range[0], DATA.meta.hei_range[1]);
+        planCtx.fill();
+        planCtx.globalAlpha = 1;
+      } else {
+        planCtx.fillStyle = 'rgba(255,255,255,.5)';
+        planCtx.fill();
+      }
+      planCtx.strokeStyle = isSel ? ACCENT : (isHot ? '#8c2d04' : 'rgba(120,115,105,.32)');
+      planCtx.lineWidth = isSel ? 2.4 : (isHot ? 1.7 : 0.8);
+      planCtx.stroke();
+    }
+
+    // green
+    planCtx.fillStyle = '#c9e0bd';
+    planCtx.globalAlpha = 0.9;
+    for(const poly of DATA.green){
+      planCtx.beginPath();
+      poly.forEach((p,i)=>{ const X=T.x(p[0]), Y=T.y(p[1]); i?planCtx.lineTo(X,Y):planCtx.moveTo(X,Y); });
+      planCtx.closePath(); planCtx.fill();
+    }
+    planCtx.globalAlpha = 1;
+
+    // streets
+    planCtx.strokeStyle = 'rgba(214,209,199,.95)';
+    planCtx.lineWidth = Math.max(1, T.s*4.5);
+    for(const line of DATA.streets){
+      planCtx.beginPath();
+      line.forEach((p,i)=>{ const X=T.x(p[0]), Y=T.y(p[1]); i?planCtx.lineTo(X,Y):planCtx.moveTo(X,Y); });
+      planCtx.stroke();
+    }
+
+    // buildings
+    const selected = state.selB;
+    for(let i=0;i<DATA.buildings.length;i++){
+      const b = DATA.buildings[i];
+      const pts = b.r.map(p => [T.x(p[0]), T.y(p[1])]);
+      planCtx.beginPath();
+      pts.forEach((p,k)=> k?planCtx.lineTo(p[0],p[1]):planCtx.moveTo(p[0],p[1]));
+      planCtx.closePath();
+      let fill = '#464d58';
+      if(state.mode === 'height') fill = colourFor(b.h, HEIGHT_RAMP, DATA.meta.height_range[0], DATA.meta.height_range[1]);
+      else if(state.mode === 'typology') fill = TYPO_COLOURS[b.t % TYPO_COLOURS.length];
+      
+      planCtx.fillStyle = fill;
+      planCtx.globalAlpha *= state.mode === 'hei' ? 0.9 : 0.95;
+      planCtx.fill();
+      planCtx.globalAlpha = 1;
+      if(i === selected){
+        planCtx.strokeStyle = ACCENT; planCtx.lineWidth = 2.2; planCtx.stroke();
+      } else if(i === state.hoverB){
+        planCtx.strokeStyle = 'rgba(20,24,29,.85)'; planCtx.lineWidth = 1.2; planCtx.stroke();
+      } else if(T.s > 4){
+        planCtx.strokeStyle = 'rgba(255,255,255,.5)'; planCtx.lineWidth = 0.5; planCtx.stroke();
+      }
+    }
+
+    // a paper wash outside the selected cell keeps the selection crisp without muting every building
+    if(state.selB < 0 && state.selC >= 0){
+      const cell = DATA.cells[state.selC];
+      planCtx.save();
+      planCtx.beginPath();
+      planCtx.rect(0,0,w,h);
+      cell.r.forEach((p,i)=>{
+        const X=T.x(p[0]), Y=T.y(p[1]);
+        i ? planCtx.lineTo(X,Y) : planCtx.moveTo(X,Y);
+      });
+      planCtx.closePath();
+      planCtx.fillStyle = 'rgba(250,248,243,.74)';
+      planCtx.fill('evenodd');
+      planCtx.restore();
+      planCtx.beginPath();
+      cell.r.forEach((p,i)=>{
+        const X=T.x(p[0]), Y=T.y(p[1]);
+        i ? planCtx.lineTo(X,Y) : planCtx.moveTo(X,Y);
+      });
+      planCtx.closePath();
+      planCtx.strokeStyle = 'rgba(255,255,255,.96)'; planCtx.lineWidth = 5; planCtx.stroke();
+      planCtx.strokeStyle = SIGNAL; planCtx.lineWidth = 3; planCtx.stroke();
+    }
+
+    // redraw the active footprint last so neighbour overlaps cannot hide it
+    const active = selected >= 0 ? selected : state.hoverB;
+    if(active >= 0){
+      const b = DATA.buildings[active];
+      const pts = b.r.map(p => [T.x(p[0]), T.y(p[1])]);
+      planCtx.beginPath();
+      pts.forEach((p,k)=> k?planCtx.lineTo(p[0],p[1]):planCtx.moveTo(p[0],p[1]));
+      planCtx.closePath();
+      if(selected >= 0){
+        planCtx.fillStyle = 'rgba(142,36,170,.18)'; planCtx.fill();
+        planCtx.strokeStyle = 'rgba(255,255,255,.96)'; planCtx.lineWidth = 5.2; planCtx.stroke();
+        planCtx.strokeStyle = SIGNAL; planCtx.lineWidth = 2.7; planCtx.stroke();
+      } else {
+        planCtx.strokeStyle = 'rgba(142,36,170,.85)'; planCtx.lineWidth = 1.4; planCtx.stroke();
+      }
+    }
+
+    drawLegend();
+    drawPlanDial();
+    drawPlanScale();
+  }
+
+  function dialCanvas(canvas){
+    const {w,h} = size(canvas);
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0,0,w,h);
+    return {ctx,w,h};
+  }
+
+  // north rose in the plan footer: the plan never rotates, so the rose never turns
+  function drawPlanDial(){
+    const {ctx,w,h} = dialCanvas(PLAN_COMPASS);
+    const cx = w/2, cy = h/2-3, r = Math.min(w,h)/2-11;
+    ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2);
+    ctx.fillStyle = '#fff'; ctx.fill();
+    ctx.strokeStyle = 'rgba(25,29,34,.22)'; ctx.lineWidth = 1; ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(cx, cy-r-1);
+    ctx.lineTo(cx-3.4, cy+3); ctx.lineTo(cx, cy-0.4); ctx.lineTo(cx+3.4, cy+3);
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(25,29,34,.82)'; ctx.fill();
+    ctx.fillStyle = 'rgba(25,29,34,.68)';
+    ctx.font = '600 8px -apple-system,Helvetica Neue,Inter,sans-serif';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+    ctx.fillText('N', cx, h-2);
+  }
+
+  function scaleBar(canvas, pxPerMetre, approx){
+    const {ctx,w,h} = dialCanvas(canvas);
+    let m = 10;
+    for(const c of [10,25,50,100,200,500]) if(c*pxPerMetre <= w-12) m = c;
+    const px = Math.min(w-12, m*pxPerMetre);
+    const x0 = (w-px)/2, y0 = h-6;
+    ctx.strokeStyle = 'rgba(25,29,34,.62)'; ctx.lineWidth = 1.1;
+    ctx.beginPath();
+    ctx.moveTo(x0,y0); ctx.lineTo(x0+px,y0);
+    ctx.moveTo(x0,y0-3); ctx.lineTo(x0,y0+3);
+    ctx.moveTo(x0+px,y0-3); ctx.lineTo(x0+px,y0+3);
+    ctx.stroke();
+    ctx.fillStyle = 'rgba(25,29,34,.72)';
+    ctx.font = '8.5px -apple-system,Helvetica Neue,Inter,sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText((approx ? '≈ ' : '') + m + ' m', w/2, y0-5);
+  }
+
+  function drawPlanScale(){
+    const rect = PLAN.getBoundingClientRect();
+    const T = planTransform(rect.width, rect.height);
+    scaleBar(PLAN_SCALE, T.s, false);
+  }
+
+  function drawLegend(){
+    const el = document.getElementById('planLegend');
+    if(state.mode === 'typology'){
+      el.innerHTML = '<h4>Urban typology</h4>' + DATA.meta.typologies.map((name,i) =>
+        '<div class="row"><span class="sw" style="background:'+TYPO_COLOURS[i%TYPO_COLOURS.length]+'"></span>'+name+'</div>').join('');
+      return;
+    }
+    const ramp = state.mode === 'height' ? HEIGHT_RAMP : HEI_RAMP;
+    const range = state.mode === 'height' ? DATA.meta.height_range : DATA.meta.hei_range;
+    const label = state.mode === 'height' ? 'Building height (m)' : 'Heat exposure index (0–100)';
+    const note = state.mode === 'hei'
+      ? '<div class="lg-note">dark outline = hotspot cell (&ge;80% of draws)</div>' : '';
+    el.innerHTML = '<h4>'+label+'</h4>' + ramp.map((c,i)=>{
+      const lo = range[0] + (range[1]-range[0])*i/ramp.length;
+      return '<div class="row"><span class="sw" style="background:'+c+'"></span><span class="val">'+
+        lo.toFixed(0)+'</span></div>';
+    }).join('') + note;
+  }
+
+  // ---------- iso drawing ----------
+  let isoHits = [];   // [{i, x, y}] in CSS pixels, rebuilt every draw
+  function drawIso(){
+    const {w,h} = size(ISO);
+    isoCtx.clearRect(0,0,w,h);
+    const sky = isoCtx.createLinearGradient(0,0,0,h);
+    sky.addColorStop(0,'#f8f5ee'); sky.addColorStop(1,'#efebe1');
+    isoCtx.fillStyle = sky; isoCtx.fillRect(0,0,w,h);
+    const T = isoTransform(w,h);
+
+    // ground cells
+    for(let c=0;c<DATA.cells.length;c++){
+      const cell = DATA.cells[c];
+      isoCtx.beginPath();
+      cell.r.forEach((p,j)=>{ const q=project(p[0],p[1],0); const X=T.X(q[0]),Y=T.Y(q[1]); j?isoCtx.lineTo(X,Y):isoCtx.moveTo(X,Y); });
+      isoCtx.closePath();
+      const isSel = (c===state.selC) || (state.selB>=0 && DATA.buildings[state.selB].ci===cell.i);
+      if(state.mode === 'hei'){
+        const hot = isFinite(cell.hp) && cell.hp >= 0.8;
+        isoCtx.fillStyle = isSel
+          ? alpha(SIGNAL, 0.2)
+          : hot
+            ? alpha(colourFor(cell.hei, HEI_RAMP, DATA.meta.hei_range[0], DATA.meta.hei_range[1]), 0.2)
+            : 'rgba(239,235,226,.72)';
+      } else {
+        isoCtx.fillStyle = isSel ? 'rgba(180,85,45,.16)' : 'rgba(239,235,226,.72)';
+      }
+      isoCtx.fill();
+      isoCtx.strokeStyle = isSel ? alpha(SIGNAL,.95) : 'rgba(120,115,105,.16)';
+      isoCtx.lineWidth = isSel ? 2.2 : 0.7;
+      isoCtx.stroke();
+    }
+
+    // far-to-near ordering using the ground-up coordinate
+    const order = DATA.buildings.map((b,i)=>({i,b,up:(function(){
+      const dx=b.cx-CX, dy=b.cy-CY;
+      return dx*Math.sin(state.phi)+dy*Math.cos(state.phi);
+    })()})).sort((a,b)=>b.up-a.up);
+
+    isoHits = [];
+    const ca = Math.cos(state.phi), sa = Math.sin(state.phi);
+
+    for(const item of order){
+      const b = item.b, ring = b.r;
+      const base = ring.map(p=>project(p[0],p[1],0));
+      const top  = ring.map(p=>project(p[0],p[1],b.h));
+
+      let colour;
+      if(state.mode === 'typology') colour = TYPO_COLOURS[b.t % TYPO_COLOURS.length];
+      else colour = colourFor(b.h, HEIGHT_RAMP, DATA.meta.height_range[0], DATA.meta.height_range[1]);
+      const isSel = item.i === state.selB;
+      const isHov = item.i === state.hoverB;
+      const dim = state.selB < 0 && state.selC >= 0 && b.ci !== DATA.cells[state.selC].i;
+
+      const faces = [];
+      for(let k=0;k<ring.length;k++){
+        const k2=(k+1)%ring.length;
+        const depth=(base[k][1]+base[k2][1])*0.5;
+        const ang=Math.atan2(base[k2][1]-base[k][1], base[k2][0]-base[k][0]);
+        faces.push({k,k2,depth,ang});
+      }
+      faces.sort((a,b)=>a.depth-b.depth);
+
+      for(const f of faces){
+        const q=[base[f.k],base[f.k2],top[f.k2],top[f.k]];
+        const light = 0.54 + 0.34*Math.abs(Math.cos(f.ang - 0.7));
+        isoCtx.beginPath();
+        q.forEach((p,j)=>{ const X=T.X(p[0]),Y=T.Y(p[1]); j?isoCtx.lineTo(X,Y):isoCtx.moveTo(X,Y); });
+        isoCtx.closePath();
+        isoCtx.globalAlpha = dim ? 0.45 : 1;
+        isoCtx.fillStyle = isSel ? shade(SIGNAL, light*0.95) : (isHov ? shade(colour, light*0.86) : shade(colour, light));
+        isoCtx.fill();
+        isoCtx.globalAlpha = 1;
+      }
+
+      // roof
+      isoCtx.beginPath();
+      top.forEach((p,j)=>{ const X=T.X(p[0]),Y=T.Y(p[1]); j?isoCtx.lineTo(X,Y):isoCtx.moveTo(X,Y); });
+      isoCtx.closePath();
+      isoCtx.globalAlpha = dim ? 0.5 : 1;
+      isoCtx.fillStyle = isSel ? SIGNAL : shade(colour,1.08);
+      isoCtx.fill();
+      isoCtx.globalAlpha = 1;
+      if(isSel){
+        isoCtx.strokeStyle = 'rgba(255,255,255,.98)'; isoCtx.lineWidth = 3.2; isoCtx.stroke();
+        isoCtx.strokeStyle = shade(SIGNAL,.75); isoCtx.lineWidth = 1.5; isoCtx.stroke();
+      } else {
+        isoCtx.strokeStyle = 'rgba(28,30,34,.16)'; isoCtx.lineWidth = 0.35; isoCtx.stroke();
+      }
+
+      // hit point = projected roof centroid
+      const c = project(b.cx, b.cy, b.h);
+      isoHits.push({i:item.i, x:T.X(c[0]), y:T.Y(c[1]), h:b.h, ci:b.ci});
+    }
+
+    // selection marker: ground ring + leader
+    if(state.selB >= 0){
+      const b = DATA.buildings[state.selB];
+      const g = project(b.cx, b.cy, 0), r = project(b.cx, b.cy, b.h);
+      const px = T.X(g[0]), py = T.Y(g[1]), rx = T.X(r[0]), ry = T.Y(r[1]);
+      // ground halo
+      isoCtx.beginPath();
+      isoCtx.ellipse(px, py, 8, 4, 0, 0, Math.PI*2);
+      isoCtx.strokeStyle = 'rgba(255,255,255,.95)'; isoCtx.lineWidth = 2.6; isoCtx.stroke();
+      isoCtx.strokeStyle = alpha(SIGNAL,.95); isoCtx.lineWidth = 1.6; isoCtx.stroke();
+      // reticle on the roof plus a pin above it: easy to spot in a dense block
+      isoCtx.beginPath();
+      isoCtx.ellipse(rx, ry, 11, 5.5, 0, 0, Math.PI*2);
+      isoCtx.strokeStyle = 'rgba(255,255,255,.95)'; isoCtx.lineWidth = 3.2; isoCtx.stroke();
+      isoCtx.strokeStyle = alpha(SIGNAL,.95); isoCtx.lineWidth = 1.8; isoCtx.stroke();
+      // pin above the roof
+      isoCtx.beginPath(); isoCtx.moveTo(rx, ry-5); isoCtx.lineTo(rx, ry-30);
+      isoCtx.strokeStyle = 'rgba(255,255,255,.95)'; isoCtx.lineWidth = 4; isoCtx.stroke();
+      isoCtx.strokeStyle = SIGNAL; isoCtx.lineWidth = 2; isoCtx.stroke();
+      isoCtx.beginPath(); isoCtx.arc(rx, ry-32, 3.8, 0, Math.PI*2);
+      isoCtx.fillStyle = SIGNAL; isoCtx.fill();
+      isoCtx.strokeStyle = 'rgba(255,255,255,.95)'; isoCtx.lineWidth = 1.8; isoCtx.stroke();
+    }
+
+    drawIsoDial();
+    drawIsoScale();
+    const el = document.getElementById('isoLegend');
+    if(state.mode === 'typology'){
+      el.innerHTML = '<h4>Urban typology</h4>' + DATA.meta.typologies.map((name,i) =>
+        '<div class="row"><span class="sw" style="background:'+TYPO_COLOURS[i%TYPO_COLOURS.length]+'"></span>'+name+'</div>').join('');
+      return;
+    }
+    const note = state.mode === 'hei'
+      ? '<div class="lg-note">ground tint = hotspot cell</div>' : '';
+    el.innerHTML = '<h4>Building height (m)</h4>' + HEIGHT_RAMP.map((c,i)=>
+      '<div class="row"><span class="sw" style="background:'+c+'"></span><span class="val">'+
+      (DATA.meta.height_range[0]+(DATA.meta.height_range[1]-DATA.meta.height_range[0])*i/HEIGHT_RAMP.length).toFixed(0)+
+      '</span></div>').join('') + note;
+  }
+
+  function drawIsoDial(){
+    const {ctx,w,h} = dialCanvas(ISO_COMPASS);
+    const cx = w/2, cy = h/2-2, r = Math.min(w,h)/2-13;
+    const ca = Math.cos(state.phi), sa = Math.sin(state.phi);
+    const dir = (bx, by) => {
+      const X = bx*ca - by*sa;
+      const Y = -(bx*sa + by*ca)*SIN_E;
+      const len = Math.hypot(X,Y)||1;
+      return [X/len, Y/len];
+    };
+    ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2);
+    ctx.fillStyle = '#fff'; ctx.fill();
+    ctx.strokeStyle = 'rgba(25,29,34,.22)'; ctx.lineWidth = 1; ctx.stroke();
+
+    for(let deg=0; deg<360; deg+=30){
+      const a = deg*Math.PI/180;
+      const [vx,vy] = dir(Math.sin(a), Math.cos(a));
+      const major = deg%90===0;
+      ctx.beginPath();
+      ctx.moveTo(cx+vx*r*0.78, cy+vy*r*0.78);
+      ctx.lineTo(cx+vx*r*0.96, cy+vy*r*0.96);
+      ctx.strokeStyle = major ? 'rgba(25,29,34,.42)' : 'rgba(25,29,34,.16)';
+      ctx.lineWidth = major ? 1.1 : 0.7;
+      ctx.stroke();
+    }
+
+    const [nx,ny] = dir(0,1);
+    ctx.beginPath();
+    ctx.moveTo(cx+nx*r*0.92, cy+ny*r*0.92);
+    ctx.lineTo(cx+nx*r*0.24 - ny*4.4, cy+ny*r*0.24 + nx*4.4);
+    ctx.lineTo(cx+nx*r*0.24 + ny*4.4, cy+ny*r*0.24 - nx*4.4);
+    ctx.closePath();
+    ctx.fillStyle = ACCENT; ctx.fill();
+
+    ctx.font = '600 7.5px -apple-system,Helvetica Neue,Inter,sans-serif';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    const letters = [['N',0,1,ACCENT],['E',1,0,'rgba(25,29,34,.5)'],
+                     ['S',0,-1,'rgba(25,29,34,.32)'],['W',-1,0,'rgba(25,29,34,.32)']];
+    for(const [ch,bx,by,fill] of letters){
+      const [vx,vy] = dir(bx,by);
+      ctx.fillStyle = fill;
+      ctx.fillText(ch, cx+vx*(r+7), cy+vy*(r+7));
+    }
+
+    const [bx,by] = dir(0,1);
+    const bearing = (Math.atan2(bx, -by)*180/Math.PI + 360) % 360;
+    document.getElementById('bearing').textContent =
+      'N ' + String(Math.round(bearing)).padStart(3,'0') + '°';
+  }
+
+  function drawIsoScale(){
+    const rect = ISO.getBoundingClientRect();
+    const T = isoTransform(rect.width, rect.height);
+    // ground scale along the screen-right axis; the projection foreshortens other directions
+    scaleBar(ISO_SCALE, T.s*0.99, true);
+  }
+
+  // ---------- selection / inspector ----------
+  function selectBuilding(i){
+    state.selB = i;
+    state.selC = i>=0 ? DATA.buildings[i].ci : -1;
+    updateInspector(); drawPlan(); drawIso();
+  }
+  function selectCell(c){
+    state.selC = c; state.selB = -1;
+    updateInspector(); drawPlan(); drawIso();
+  }
+  function clearSelection(){
+    state.selB = -1; state.selC = -1;
+    updateInspector(); drawPlan(); drawIso();
+  }
+  function cellBuildings(cellIndex){
+    return DATA.buildings.filter(b => b.ci === DATA.cells[cellIndex].i).length;
+  }
+  function updateInspector(){
+    const body = document.getElementById('inspectBody');
+    const clear = document.getElementById('clearSel');
+    document.getElementById('inspector').classList.toggle('sel', state.selB >= 0 || state.selC >= 0);
+    if(state.selB >= 0){
+      const b = DATA.buildings[state.selB];
+      clear.hidden = false;
+      body.innerHTML =
+        '<p class="inspect-id">Building '+b.id.slice(0,13)+'…<span>'+(b.s==='OpenStreetMap'?'OSM':b.s==='Microsoft ML Buildings'?'ML footprint':'Overture')+'</span></p>' +
+        '<ul class="facts">' +
+        '<li><span class="k">Height</span><span class="v"><strong>'+b.h.toFixed(1)+' m</strong> · '+b.p+'</span></li>' +
+        '<li><span class="k">Exposure</span><span class="v"><strong>'+(isFinite(b.hei)?b.hei.toFixed(0):'–')+'</strong> / 100</span></li>' +
+        '<li><span class="k">Cell</span><span class="v">'+b.cid+'</span></li>' +
+        '<li><span class="k">Typology</span><span class="v">'+b.tn+'</span></li>' +
+        '<li><span class="k">Class</span><span class="v">'+b.k+'</span></li>' +
+        '</ul>';
+      return;
+    }
+    if(state.selC >= 0){
+      const cell = DATA.cells[state.selC];
+      clear.hidden = false;
+      body.innerHTML =
+        '<p class="inspect-id">Cell '+cell.id+'<span>250 m grid</span></p>' +
+        '<ul class="facts">' +
+        '<li><span class="k">Exposure</span><span class="v"><strong>'+cell.hei.toFixed(0)+'</strong> / 100</span></li>' +
+        '<li><span class="k">Hotspot</span><span class="v">'+(isFinite(cell.hp)?Math.round(cell.hp*100)+'% of draws':'–')+'</span></li>' +
+        '<li><span class="k">Buildings</span><span class="v">'+cellBuildings(state.selC)+'</span></li>' +
+        '</ul>';
+      return;
+    }
+    clear.hidden = true;
+    body.innerHTML =
+      '<p class="empty-lead">Nothing selected yet</p>' +
+      '<ul class="hints">' +
+      '<li>Click a building in either map.</li>' +
+      '<li>Click a cell background to select the 250 m cell.</li>' +
+      '<li>Press <b>Esc</b>, or clear above, to reset.</li>' +
+      '</ul>';
+  }
+
+  function showTip(b, ev){
+    TIP.style.opacity = 1;
+    TIP.style.left = Math.min(ev.clientX+14, window.innerWidth-272)+'px';
+    TIP.style.top = (ev.clientY+14)+'px';
+    TIP.innerHTML = '<strong>'+b.id+'</strong> · '+b.k+
+      '<br>height <strong>'+b.h.toFixed(1)+' m</strong> <span class="t-dim">('+b.p+')</span>'+
+      '<br>exposure '+(isFinite(b.hei)?b.hei.toFixed(0):'–')+' · '+b.cid+
+      '<br><span class="t-dim">'+b.tn+'</span>';
+  }
+
+  // ---------- interaction: plan ----------
+  function planHit(px, py, T){
+    for(let i=0;i<DATA.buildings.length;i++){
+      const b = DATA.buildings[i], bb = b.bbox;
+      const x0=T.x(bb[0]), x1=T.x(bb[2]), y0=T.y(bb[3]), y1=T.y(bb[1]);
+      if(px<x0||px>x1||py>y0||py<y1) continue;
+      const ring = b.r.map(p=>[T.x(p[0]),T.y(p[1])]);
+      if(pointInRing(px,py,ring)) return i;
+    }
+    return -1;
+  }
+  function cellAt(wx, wy){
+    for(let c=0;c<DATA.cells.length;c++){
+      if(pointInRing(wx, wy, DATA.cells[c].r)) return c;
+    }
+    return -1;
+  }
+
+  let planDown = null;
+  PLAN.addEventListener('mousemove', ev => {
+    const rect = PLAN.getBoundingClientRect();
+    const T = planTransform(rect.width, rect.height);
+    const px = ev.clientX-rect.left, py = ev.clientY-rect.top;
+    const [wx, wy] = T.toWorld(px, py);
+    document.getElementById('coords').textContent =
+      'E '+fmtCoord(DATA.meta.origin[0]+wx)+'  ·  N '+fmtCoord(DATA.meta.origin[1]+wy)+'  ·  '+DATA.meta.crs_metric;
+    const found = planHit(px, py, T);
+    const cfound = found>=0 ? -1 : cellAt(wx, wy);
+    if(found !== state.hoverB || cfound !== state.hoverC){
+      state.hoverB = found; state.hoverC = cfound;
+      drawPlan(); drawIso();
+    }
+    if(found >= 0){
+      showTip(DATA.buildings[found], ev);
+    } else if(cfound >= 0){
+      const cell = DATA.cells[cfound];
+      TIP.style.opacity = 1;
+      TIP.style.left = Math.min(ev.clientX+14, window.innerWidth-272)+'px';
+      TIP.style.top = (ev.clientY+14)+'px';
+      TIP.innerHTML = '<strong>'+cell.id+'</strong> · 250 m cell'+
+        '<br>exposure <strong>'+cell.hei.toFixed(0)+'</strong> / 100'+
+        '<br>hotspot in '+(isFinite(cell.hp)?Math.round(cell.hp*100):'–')+'% of draws';
+    } else { TIP.style.opacity = 0; }
+    planDown = {x:px, y:py};
+  });
+  PLAN.addEventListener('mouseleave', ()=>{
+    TIP.style.opacity = 0; state.hoverB = -1; state.hoverC = -1; drawPlan(); drawIso();
+  });
+  PLAN.addEventListener('click', ev => {
+    if(planMoved >= 4) return;          // the end of a pan is not a pick
+    const rect = PLAN.getBoundingClientRect();
+    const T = planTransform(rect.width, rect.height);
+    const px = ev.clientX-rect.left, py = ev.clientY-rect.top;
+    const b = planHit(px, py, T);
+    if(b >= 0){ selectBuilding(b); return; }
+    const [wx, wy] = T.toWorld(px, py);
+    const c = cellAt(wx, wy);
+    if(c >= 0) selectCell(c); else clearSelection();
+  });
+
+  // ---------- interaction: iso ----------
+  function isoHit(px, py){
+    let best = -1, bestD = 11;
+    for(const hit of isoHits){
+      const d = Math.hypot(hit.x-px, hit.y-py);
+      if(d < bestD){ bestD = d; best = hit.i; }
+    }
+    return best;
+  }
+  ISO.addEventListener('mousemove', ev => {
+    const rect = ISO.getBoundingClientRect();
+    const px = ev.clientX-rect.left, py = ev.clientY-rect.top;
+    const found = isoHit(px, py);
+    if(found !== state.hoverB){ state.hoverB = found; drawPlan(); drawIso(); }
+    if(found >= 0) showTip(DATA.buildings[found], ev); else TIP.style.opacity = 0;
+  });
+  ISO.addEventListener('mouseleave', ()=>{ TIP.style.opacity = 0; state.hoverB=-1; drawPlan(); drawIso(); });
+  ISO.addEventListener('click', ev => {
+    const rect = ISO.getBoundingClientRect();
+    const b = isoHit(ev.clientX-rect.left, ev.clientY-rect.top);
+    if(b >= 0) selectBuilding(b);
+  });
+
+  let dragging = false, lastX = 0, moved = 0;
+  ISO.addEventListener('mousedown', e => { dragging = true; lastX = e.clientX; moved = 0; });
+  window.addEventListener('mouseup', ()=> dragging = false);
+  window.addEventListener('mousemove', e => {
+    if(!dragging) return;
+    const dx = e.clientX-lastX;
+    moved += Math.abs(dx);
+    state.phi += dx*0.01;
+    lastX = e.clientX;
+    drawIso();
+  });
+  function zoomBy(e){
+    return Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, state.zoom * (e.deltaY>0 ? 1/1.12 : 1.12)));
+  }
+  ISO.addEventListener('wheel', e => {
+    e.preventDefault();
+    state.zoom = zoomBy(e);
+    drawPlan(); drawIso();
+  }, {passive:false});
+  // plan: zoom about the cursor, drag to pan; both move the shared focus
+  PLAN.addEventListener('wheel', e => {
+    e.preventDefault();
+    const rect = PLAN.getBoundingClientRect();
+    const px = e.clientX-rect.left, py = e.clientY-rect.top;
+    const [wx, wy] = planTransform(rect.width, rect.height).toWorld(px, py);
+    state.zoom = zoomBy(e);
+    const s = planTransform(rect.width, rect.height).s;
+    state.fx = wx - (px-rect.width/2)/s;
+    state.fy = wy + (py-rect.height/2)/s;
+    drawPlan(); drawIso();
+  }, {passive:false});
+  let planDrag = null, planMoved = 0;
+  PLAN.addEventListener('mousedown', e => { planDrag = {x:e.clientX, y:e.clientY}; planMoved = 0; });
+  window.addEventListener('mouseup', ()=> planDrag = null);
+  window.addEventListener('mousemove', e => {
+    if(!planDrag) return;
+    const dx = e.clientX-planDrag.x, dy = e.clientY-planDrag.y;
+    planMoved += Math.abs(dx)+Math.abs(dy);
+    if(planMoved < 4) return;
+    const rect = PLAN.getBoundingClientRect();
+    const s = planTransform(rect.width, rect.height).s;
+    state.fx -= dx/s; state.fy += dy/s;
+    planDrag = {x:e.clientX, y:e.clientY};
+    drawPlan(); drawIso();
+  });
+
+  // ---------- controls ----------
+  const seg = document.getElementById('modeSeg');
+  seg.addEventListener('click', ev => {
+    const btn = ev.target.closest('button[data-mode]');
+    if(!btn) return;
+    state.mode = btn.dataset.mode;
+    [...seg.querySelectorAll('button')].forEach(b => b.setAttribute('aria-pressed', String(b===btn)));
+    drawPlan(); drawIso();
+  });
+  [...seg.querySelectorAll('button')].forEach(b =>
+    b.setAttribute('aria-pressed', String(b.dataset.mode === state.mode)));
+
+  document.getElementById('exag').addEventListener('input', e => {
+    state.exaggeration = parseFloat(e.target.value);
+    document.getElementById('exagVal').textContent = state.exaggeration.toFixed(1)+'×';
+    drawIso();
+  });
+  document.getElementById('reset').addEventListener('click', ()=>{
+    state.phi = -0.62; state.zoom = 1.0; state.exaggeration = 2.2; state.fx = CX; state.fy = CY;
+    document.getElementById('exag').value = state.exaggeration;
+    document.getElementById('exagVal').textContent = state.exaggeration.toFixed(1)+'×';
+    drawPlan(); drawIso();
+  });
+  document.getElementById('spin').addEventListener('click', ()=>{
+    const start = performance.now();
+    const tick = now => {
+      state.phi += 0.018;
+      drawIso();
+      if(now-start < 1600) requestAnimationFrame(tick); else drawIso();
+    };
+    requestAnimationFrame(tick);
+  });
+  document.getElementById('clearSel').addEventListener('click', clearSelection);
+  window.addEventListener('keydown', ev => { if(ev.key === 'Escape') clearSelection(); });
+  window.addEventListener('resize', ()=>{ drawPlan(); drawIso(); });
+
+  // ---------- header / footer ----------
+  document.getElementById('chips').innerHTML = [
+    '<b>'+DATA.meta.buildings.toLocaleString()+'</b> footprints',
+    '<b>'+DATA.meta.cells+'</b> grid cells',
+    '<b>'+DATA.meta.labelled+'</b> height labels ('+DATA.meta.label_coverage+'%)',
+    'interval <b>±'+DATA.meta.interval+' m</b> @ 80%',
+    DATA.meta.crs_metric,
+    DATA.meta.generated
+  ].map(t=>'<span class="chip">'+t+'</span>').join('');
+  document.getElementById('ledeFabric').textContent =
+    DATA.meta.buildings.toLocaleString()+' Overture footprints as LoD1; '+DATA.meta.label_coverage+
+    '% carry a floor count, the rest get a published rule, ±'+DATA.meta.interval+' m at 80%.';
+  document.getElementById('ledeExposure').textContent =
+    'heat index 0–100 on '+DATA.meta.cells+' × 250 m cells; hotspot = share of '+
+    (DATA.meta.draws||200)+' height redraws in the top decile.';
+  document.getElementById('release').textContent = DATA.meta.release || '';
+  document.getElementById('foot-left').innerHTML =
+    '<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© OpenStreetMap contributors</a>, Microsoft, Overture Maps' +
+    ' · ODbL 1.0 · CityJSON 1.1 · 3D Tiles 1.1 · heights: '+DATA.meta.strategy;
+  document.getElementById('foot-right').textContent =
+    'citytwin 0.5.0 · ' + (DATA.meta.provenance
+      ? 'provenance ' + DATA.meta.provenance.slice(0,16) + '…'
+      : 'PROV-JSON record in build/provenance.json');
+
+  // ---------- cartographic self-test (read by the build check) ----------
+  (function(){
+    const P0 = project(CX, CY, 0), PE = project(CX+10, CY, 0), PN = project(CX, CY+10, 0);
+    const eastRight = PE[0] > P0[0];
+    const northUp = PN[1] < P0[1];
+    const T = planTransform(900, 700);
+    const planNorthUp = T.y(CY+10) < T.y(CY);
+    const planEastRight = T.x(CX+10) > T.x(CX);
+    document.documentElement.dataset.cartography =
+      (eastRight && northUp && planNorthUp && planEastRight) ? 'ok' : 'fail';
+    document.documentElement.dataset.check = JSON.stringify({
+      projectEastRight: eastRight, projectNorthUp: northUp,
+      planEastRight: planEastRight, planNorthUp: planNorthUp
+    });
+  })();
+
+  document.getElementById('exag').value = state.exaggeration;
+  document.getElementById('exagVal').textContent = state.exaggeration.toFixed(1)+'×';
+  drawPlan(); drawIso(); updateInspector();
+  // the readout starts at the map centre, so the metric CRS frame is visible before any hover
+  (function(){
+    const cx=(DATA.bounds[0]+DATA.bounds[2])/2, cy=(DATA.bounds[1]+DATA.bounds[3])/2;
+    document.getElementById('coords').textContent =
+      'centre E '+fmtCoord(DATA.meta.origin[0]+cx)+'  ·  N '+fmtCoord(DATA.meta.origin[1]+cy)+
+      '  ·  '+DATA.meta.crs_metric;
+  })();
+})();
+</script>
+</body>
+</html>
