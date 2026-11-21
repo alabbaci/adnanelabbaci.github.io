@@ -1,0 +1,38 @@
+# Local stack: the read-only OGC API plus a PostGIS instance that mirrors
+# the store schema, for partners who need the twin in a shared database.
+services:
+  api:
+    build: .
+    image: citytwin:0.5.0
+    ports:
+      - "8000:8000"
+    environment:
+      CITYTWIN_STORE: /app/build/store/citytwin.sqlite
+    volumes:
+      - ./build:/app/build:ro
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8000/healthz"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+    restart: unless-stopped
+
+  postgis:
+    image: postgis/postgis:16-3.4
+    environment:
+      POSTGRES_DB: citytwin
+      POSTGRES_USER: citytwin
+      POSTGRES_PASSWORD: citytwin
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./deploy/postgis/init.sql:/docker-entrypoint-initdb.d/10-init.sql:ro
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U citytwin -d citytwin"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:

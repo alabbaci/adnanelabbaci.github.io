@@ -9,6 +9,11 @@
 > [⛰ One week in Toubkal National Park](toubkal/README.md), an animated 3D
 > view of the park hour by hour: walking conditions, model weather, river
 > flow and the sun from its true position ([dashboard](toubkal/index.html)).
+>
+> [🏙 citytwin · Dakhla](citytwin/README.md), an auditable digital twin of the
+> city: Overture footprints to a LoD1 model (CityJSON, 3D Tiles, OGC API),
+> building heights with stated uncertainty and a heat-exposure index
+> ([viewer](citytwin/index.html)).
 
 # 3D Heat Traps & Pedestrian Exposure in Dakhla
 
