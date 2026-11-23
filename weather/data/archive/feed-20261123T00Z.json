@@ -1,0 +1,1954 @@
+{
+ "generated_utc": "2026-11-23T14:05Z",
+ "run": "20261123T00Z",
+ "run_time": "2026-11-23T00:00Z",
+ "written_by": "rules",
+ "attribution": "Data: © ECMWF, CC BY 4.0. Cropped and unit-converted.",
+ "domain": [
+  -26.0,
+  -42.0,
+  64.0,
+  40.0
+ ],
+ "items": [
+  {
+   "title": "Unusual heat in South Sudan and Chad",
+   "where": {
+    "label": "South Sudan, Chad and Central African Republic",
+    "centre": [
+     8.0,
+     29.5
+    ],
+    "bbox": [
+     10.0,
+     -1.75,
+     42.5,
+     20.0
+    ]
+   },
+   "when": {
+    "start": "2026-11-23T12:00Z",
+    "peak": "2026-11-26T18:00Z",
+    "end": "2026-11-28T18:00Z"
+   },
+   "status": "ongoing",
+   "summary": "HRES has afternoon highs up to 43 °C about 130 km north of Rumbek, South Sudan on Thu 26 Nov. Temperatures of 40 °C or more cover about 377,000 km² between Mon 23 Nov and Sat 28 Nov. Up to 100 % of ensemble members put the air about 1.5 km up (850 hPa) more than two standard deviations warmer than normal for the time of year, so this is unusual heat, not just the hot season.",
+   "why_interesting": "Heat is one of Africa's deadliest weather hazards, but it is under-reported because its toll shows up later in health records. Hot nights and long spells matter as much as the highest afternoon temperature.",
+   "evidence": [
+    {
+     "kind": "field",
+     "text": "HRES highest 3-hourly maximum 42.9 °C near 8.0N 29.5E on Thu 26 Nov, 18 UTC (00 UTC Mon 23 Nov run)"
+    },
+    {
+     "kind": "field",
+     "text": "HRES highs: Sarh 41 °C, Wau 40 °C, Malakal 40 °C, Kadugli 39 °C"
+    },
+    {
+     "kind": "ensemble",
+     "text": "ENS: up to 100 % chance that 850 hPa temperature is more than 2 SD above normal"
+    }
+   ],
+   "talking_points": [
+    "Why do warm nights make a heatwave more dangerous?",
+    "How do the ensemble anomaly charts tell 'hot for the time of year' from simply 'hot'?",
+    "Why does dry ground let temperatures climb higher?"
+   ],
+   "confidence": "high: the ensemble strongly agrees the warmth is unusual",
+   "id": "2026-11-23-heat-rumbek",
+   "kind": "event",
+   "hazards": [
+    "heat"
+   ],
+   "score": 9.47,
+   "scenes": [
+    {
+     "title": "Afternoon heat",
+     "fill": "tmax",
+     "label": "Highest temperature in the past 6 h",
+     "units": "C",
+     "palette": "temp",
+     "kind": "past6",
+     "grid": {
+      "west": 10.0,
+      "north": 20.0,
+      "res": 0.25,
+      "nx": 131,
+      "ny": 88
+     },
+     "frames": [
+      "2026-11-23T06:00Z",
+      "2026-11-23T12:00Z",
+      "2026-11-23T18:00Z",
+      "2026-11-24T00:00Z",
+      "2026-11-24T06:00Z",
+      "2026-11-24T12:00Z",
+      "2026-11-24T18:00Z",
+      "2026-11-25T00:00Z",
+      "2026-11-25T06:00Z",
+      "2026-11-25T12:00Z",
+      "2026-11-25T18:00Z",
+      "2026-11-26T00:00Z",
+      "2026-11-26T06:00Z",
+      "2026-11-26T12:00Z",
+      "2026-11-26T18:00Z",
+      "2026-11-27T00:00Z",
+      "2026-11-27T06:00Z",
+      "2026-11-27T12:00Z",
+      "2026-11-27T18:00Z",
+      "2026-11-28T00:00Z",
+      "2026-11-28T06:00Z",
+      "2026-11-28T12:00Z",
+      "2026-11-28T18:00Z",
+      "2026-11-29T00:00Z"
+     ],
+     "layers": {
+      "fill": {
+       "file": "fill.webp",
+       "lo": -10,
+       "hi": 50,
+       "scale": "linear"
+      }
+     },
+     "isobars": false,
+     "particles": false,
+     "bbox": [
+      10.0,
+      -1.75,
+      42.5,
+      20.0
+     ],
+     "captions": [
+      {
+       "at": "2026-11-23T06:00Z",
+       "text": "Each frame shows the highest temperature in the past 6 hours"
+      },
+      {
+       "at": "2026-11-26T18:00Z",
+       "text": "Peak: 43 °C, about 130 km north of Rumbek"
+      }
+     ],
+     "focus": [
+      {
+       "lat": 9.15,
+       "lon": 18.39,
+       "label": "Sarh"
+      },
+      {
+       "lat": 9.537,
+       "lon": 31.656,
+       "label": "Malakal"
+      },
+      {
+       "lat": 7.7,
+       "lon": 27.99,
+       "label": "Wau"
+      }
+     ],
+     "package": "p/20261123T00Z/2026-11-23-heat-rumbek-0",
+     "bytes": 135132
+    },
+    {
+     "title": "Hot days, warm nights",
+     "fill": "t2",
+     "label": "Temperature (2 m)",
+     "units": "C",
+     "palette": "temp",
+     "kind": "instant",
+     "grid": {
+      "west": 10.0,
+      "north": 20.0,
+      "res": 0.25,
+      "nx": 131,
+      "ny": 88
+     },
+     "frames": [
+      "2026-11-23T00:00Z",
+      "2026-11-23T06:00Z",
+      "2026-11-23T12:00Z",
+      "2026-11-23T18:00Z",
+      "2026-11-24T00:00Z",
+      "2026-11-24T06:00Z",
+      "2026-11-24T12:00Z",
+      "2026-11-24T18:00Z",
+      "2026-11-25T00:00Z",
+      "2026-11-25T06:00Z",
+      "2026-11-25T12:00Z",
+      "2026-11-25T18:00Z",
+      "2026-11-26T00:00Z",
+      "2026-11-26T06:00Z",
+      "2026-11-26T12:00Z",
+      "2026-11-26T18:00Z",
+      "2026-11-27T00:00Z",
+      "2026-11-27T06:00Z",
+      "2026-11-27T12:00Z",
+      "2026-11-27T18:00Z",
+      "2026-11-28T00:00Z",
+      "2026-11-28T06:00Z",
+      "2026-11-28T12:00Z",
+      "2026-11-28T18:00Z",
+      "2026-11-29T00:00Z"
+     ],
+     "layers": {
+      "fill": {
+       "file": "fill.webp",
+       "lo": -10,
+       "hi": 50,
+       "scale": "linear"
+      },
+      "mslp": {
+       "file": "mslp.webp",
+       "lo": 1003,
+       "hi": 1029,
+       "scale": "linear"
+      },
+      "wind": {
+       "file": "wind.webp",
+       "amp": 15
+      }
+     },
+     "isobars": true,
+     "particles": true,
+     "bbox": [
+      10.0,
+      -1.75,
+      42.5,
+      20.0
+     ],
+     "captions": [
+      {
+       "at": "2026-11-23T00:00Z",
+       "text": "Watch the daily swing between hot afternoons and warm nights"
+      }
+     ],
+     "focus": [
+      {
+       "lat": 9.15,
+       "lon": 18.39,
+       "label": "Sarh"
+      },
+      {
+       "lat": 9.537,
+       "lon": 31.656,
+       "label": "Malakal"
+      },
+      {
+       "lat": 7.7,
+       "lon": 27.99,
+       "label": "Wau"
+      }
+     ],
+     "package": "p/20261123T00Z/2026-11-23-heat-rumbek-1",
+     "bytes": 613686
+    },
+    {
+     "title": "Ensemble: how unusual is the warmth?",
+     "fill": "ens_warm2",
+     "label": "Ensemble chance the 850 hPa temperature is 2 SD above normal",
+     "units": "pct",
+     "palette": "probwarm",
+     "kind": "instant",
+     "grid": {
+      "west": 10.0,
+      "north": 20.0,
+      "res": 0.25,
+      "nx": 131,
+      "ny": 88
+     },
+     "frames": [
+      "2026-11-23T12:00Z",
+      "2026-11-24T00:00Z",
+      "2026-11-24T12:00Z",
+      "2026-11-25T00:00Z",
+      "2026-11-25T12:00Z",
+      "2026-11-26T00:00Z",
+      "2026-11-26T12:00Z",
+      "2026-11-27T00:00Z",
+      "2026-11-27T12:00Z",
+      "2026-11-28T00:00Z",
+      "2026-11-28T12:00Z",
+      "2026-11-29T00:00Z"
+     ],
+     "layers": {
+      "fill": {
+       "file": "fill.webp",
+       "lo": 0,
+       "hi": 100,
+       "scale": "linear"
+      }
+     },
+     "isobars": false,
+     "particles": false,
+     "bbox": [
+      10.0,
+      -1.75,
+      42.5,
+      20.0
+     ],
+     "captions": [
+      {
+       "at": "2026-11-23T12:00Z",
+       "text": "Chance that the air 1.5 km up is far warmer than normal"
+      }
+     ],
+     "focus": [
+      {
+       "lat": 9.15,
+       "lon": 18.39,
+       "label": "Sarh"
+      },
+      {
+       "lat": 9.537,
+       "lon": 31.656,
+       "label": "Malakal"
+      },
+      {
+       "lat": 7.7,
+       "lon": 27.99,
+       "label": "Wau"
+      }
+     ],
+     "package": "p/20261123T00Z/2026-11-23-heat-rumbek-2",
+     "bytes": 67354
+    }
+   ],
+   "rank": 1
+  },
+  {
+   "title": "Unusual heat in Namibia and South Africa",
+   "where": {
+    "label": "Namibia and South Africa",
+    "centre": [
+     -28.75,
+     18.5
+    ],
+    "bbox": [
+     9.5,
+     -35.75,
+     30.5,
+     -19.75
+    ]
+   },
+   "when": {
+    "start": "2026-11-23T18:00Z",
+    "peak": "2026-11-26T18:00Z",
+    "end": "2026-11-29T00:00Z"
+   },
+   "status": "forecast",
+   "summary": "HRES has afternoon highs up to 43 °C about 80 km south of Karasburg, Namibia on Thu 26 Nov. Temperatures of 40 °C or more cover about 43,000 km² between Mon 23 Nov and Sun 29 Nov. Up to 96 % of ensemble members put the air about 1.5 km up (850 hPa) more than two standard deviations warmer than normal for the time of year, so this is unusual heat, not just the hot season.",
+   "why_interesting": "In much of southern Africa, October and November are the hottest months. The sun is high and the ground is still dry before the summer rains, so heat builds day after day until the first storms break it.",
+   "evidence": [
+    {
+     "kind": "field",
+     "text": "HRES highest 3-hourly maximum 43.1 °C near 28.8S 18.5E on Thu 26 Nov, 18 UTC (00 UTC Mon 23 Nov run)"
+    },
+    {
+     "kind": "ensemble",
+     "text": "ENS: up to 96 % chance that 850 hPa temperature is more than 2 SD above normal"
+    },
+    {
+     "kind": "field",
+     "text": "Also dust-raising winds, gusts to 24 m/s about 40 km east of Keetmanshoop, Namibia (Thu 26 Nov, 18 UTC)"
+    }
+   ],
+   "talking_points": [
+    "Why do warm nights make a heatwave more dangerous?",
+    "How do the ensemble anomaly charts tell 'hot for the time of year' from simply 'hot'?",
+    "Why does dry ground let temperatures climb higher?"
+   ],
+   "confidence": "high: the ensemble strongly agrees the warmth is unusual",
+   "id": "2026-11-23-heat-karasburg",
+   "kind": "event",
+   "hazards": [
+    "heat",
+    "dust"
+   ],
+   "score": 8.34,
+   "scenes": [
+    {
+     "title": "Afternoon heat",
+     "fill": "tmax",
+     "label": "Highest temperature in the past 6 h",
+     "units": "C",
+     "palette": "temp",
+     "kind": "past6",
+     "grid": {
+      "west": 9.5,
+      "north": -19.75,
+      "res": 0.25,
+      "nx": 85,
+      "ny": 65
+     },
+     "frames": [
+      "2026-11-23T06:00Z",
+      "2026-11-23T12:00Z",
+      "2026-11-23T18:00Z",
+      "2026-11-24T00:00Z",
+      "2026-11-24T06:00Z",
+      "2026-11-24T12:00Z",
+      "2026-11-24T18:00Z",
+      "2026-11-25T00:00Z",
+      "2026-11-25T06:00Z",
+      "2026-11-25T12:00Z",
+      "2026-11-25T18:00Z",
+      "2026-11-26T00:00Z",
+      "2026-11-26T06:00Z",
+      "2026-11-26T12:00Z",
+      "2026-11-26T18:00Z",
+      "2026-11-27T00:00Z",
+      "2026-11-27T06:00Z",
+      "2026-11-27T12:00Z",
+      "2026-11-27T18:00Z",
+      "2026-11-28T00:00Z",
+      "2026-11-28T06:00Z",
+      "2026-11-28T12:00Z",
+      "2026-11-28T18:00Z",
+      "2026-11-29T00:00Z"
+     ],
+     "layers": {
+      "fill": {
+       "file": "fill.webp",
+       "lo": -10,
+       "hi": 50,
+       "scale": "linear"
+      }
+     },
+     "isobars": false,
+     "particles": false,
+     "bbox": [
+      9.5,
+      -35.75,
+      30.5,
+      -19.75
+     ],
+     "captions": [
+      {
+       "at": "2026-11-23T06:00Z",
+       "text": "Each frame shows the highest temperature in the past 6 hours"
+      },
+      {
+       "at": "2026-11-26T18:00Z",
+       "text": "Peak: 43 °C, about 80 km south of Karasburg"
+      }
+     ],
+     "focus": [
+      {
+       "lat": -32.35,
+       "lon": 22.57,
+       "label": "Beaufort West"
+      }
+     ],
+     "package": "p/20261123T00Z/2026-11-23-heat-karasburg-0",
+     "bytes": 59058
+    },
+    {
+     "title": "Hot days, warm nights",
+     "fill": "t2",
+     "label": "Temperature (2 m)",
+     "units": "C",
+     "palette": "temp",
+     "kind": "instant",
+     "grid": {
+      "west": 9.5,
+      "north": -19.75,
+      "res": 0.25,
+      "nx": 85,
+      "ny": 65
+     },
+     "frames": [
+      "2026-11-23T06:00Z",
+      "2026-11-23T12:00Z",
+      "2026-11-23T18:00Z",
+      "2026-11-24T00:00Z",
+      "2026-11-24T06:00Z",
+      "2026-11-24T12:00Z",
+      "2026-11-24T18:00Z",
+      "2026-11-25T00:00Z",
+      "2026-11-25T06:00Z",
+      "2026-11-25T12:00Z",
+      "2026-11-25T18:00Z",
+      "2026-11-26T00:00Z",
+      "2026-11-26T06:00Z",
+      "2026-11-26T12:00Z",
+      "2026-11-26T18:00Z",
+      "2026-11-27T00:00Z",
+      "2026-11-27T06:00Z",
+      "2026-11-27T12:00Z",
+      "2026-11-27T18:00Z",
+      "2026-11-28T00:00Z",
+      "2026-11-28T06:00Z",
+      "2026-11-28T12:00Z",
+      "2026-11-28T18:00Z",
+      "2026-11-29T00:00Z"
+     ],
+     "layers": {
+      "fill": {
+       "file": "fill.webp",
+       "lo": -10,
+       "hi": 50,
+       "scale": "linear"
+      },
+      "mslp": {
+       "file": "mslp.webp",
+       "lo": 1000,
+       "hi": 1026,
+       "scale": "linear"
+      },
+      "wind": {
+       "file": "wind.webp",
+       "amp": 20
+      }
+     },
+     "isobars": true,
+     "particles": true,
+     "bbox": [
+      9.5,
+      -35.75,
+      30.5,
+      -19.75
+     ],
+     "captions": [
+      {
+       "at": "2026-11-23T06:00Z",
+       "text": "Watch the daily swing between hot afternoons and warm nights"
+      }
+     ],
+     "focus": [
+      {
+       "lat": -32.35,
+       "lon": 22.57,
+       "label": "Beaufort West"
+      }
+     ],
+     "package": "p/20261123T00Z/2026-11-23-heat-karasburg-1",
+     "bytes": 257222
+    },
+    {
+     "title": "Ensemble: how unusual is the warmth?",
+     "fill": "ens_warm2",
+     "label": "Ensemble chance the 850 hPa temperature is 2 SD above normal",
+     "units": "pct",
+     "palette": "probwarm",
+     "kind": "instant",
+     "grid": {
+      "west": 9.5,
+      "north": -19.75,
+      "res": 0.25,
+      "nx": 85,
+      "ny": 65
+     },
+     "frames": [
+      "2026-11-23T12:00Z",
+      "2026-11-24T00:00Z",
+      "2026-11-24T12:00Z",
+      "2026-11-25T00:00Z",
+      "2026-11-25T12:00Z",
+      "2026-11-26T00:00Z",
+      "2026-11-26T12:00Z",
+      "2026-11-27T00:00Z",
+      "2026-11-27T12:00Z",
+      "2026-11-28T00:00Z",
+      "2026-11-28T12:00Z",
+      "2026-11-29T00:00Z"
+     ],
+     "layers": {
+      "fill": {
+       "file": "fill.webp",
+       "lo": 0,
+       "hi": 100,
+       "scale": "linear"
+      }
+     },
+     "isobars": false,
+     "particles": false,
+     "bbox": [
+      9.5,
+      -35.75,
+      30.5,
+      -19.75
+     ],
+     "captions": [
+      {
+       "at": "2026-11-23T12:00Z",
+       "text": "Chance that the air 1.5 km up is far warmer than normal"
+      },
+      {
+       "at": "2026-11-26T12:00Z",
+       "text": "Up to 96 % of members"
+      }
+     ],
+     "focus": [
+      {
+       "lat": -32.35,
+       "lon": 22.57,
+       "label": "Beaufort West"
+      }
+     ],
+     "package": "p/20261123T00Z/2026-11-23-heat-karasburg-2",
+     "bytes": 4738
+    }
+   ],
+   "rank": 2
+  },
+  {
+   "title": "Unusual heat in Madagascar",
+   "where": {
+    "label": "Madagascar",
+    "centre": [
+     -22.25,
+     43.75
+    ],
+    "bbox": [
+     37.5,
+     -28.75,
+     52.5,
+     -17.75
+    ]
+   },
+   "when": {
+    "start": "2026-11-23T12:00Z",
+    "peak": "2026-11-24T12:00Z",
+    "end": "2026-11-24T18:00Z"
+   },
+   "status": "ongoing",
+   "summary": "HRES has afternoon highs up to 42 °C about 70 km south-east of Morombe, Madagascar on Tue 24 Nov. Temperatures of 40 °C or more cover about 17,000 km² between Mon 23 Nov and Tue 24 Nov. Up to 100 % of ensemble members put the air about 1.5 km up (850 hPa) more than two standard deviations warmer than normal for the time of year, so this is unusual heat, not just the hot season.",
+   "why_interesting": "Heat is one of Africa's deadliest weather hazards, but it is under-reported because its toll shows up later in health records. Hot nights and long spells matter as much as the highest afternoon temperature.",
+   "evidence": [
+    {
+     "kind": "field",
+     "text": "HRES highest 3-hourly maximum 42.2 °C near 22.2S 43.8E on Tue 24 Nov, 12 UTC (00 UTC Mon 23 Nov run)"
+    },
+    {
+     "kind": "field",
+     "text": "HRES highs: Toliara 38 °C"
+    },
+    {
+     "kind": "ensemble",
+     "text": "ENS: up to 100 % chance that 850 hPa temperature is more than 2 SD above normal"
+    }
+   ],
+   "talking_points": [
+    "Why do warm nights make a heatwave more dangerous?",
+    "How do the ensemble anomaly charts tell 'hot for the time of year' from simply 'hot'?",
+    "Why does dry ground let temperatures climb higher?"
+   ],
+   "confidence": "high: the ensemble strongly agrees the warmth is unusual",
+   "id": "2026-11-23-heat-morombe",
+   "kind": "event",
+   "hazards": [
+    "heat"
+   ],
+   "score": 6.99,
+   "scenes": [
+    {
+     "title": "Afternoon heat",
+     "fill": "tmax",
+     "label": "Highest temperature in the past 6 h",
+     "units": "C",
+     "palette": "temp",
+     "kind": "past6",
+     "grid": {
+      "west": 37.5,
+      "north": -17.75,
+      "res": 0.25,
+      "nx": 61,
+      "ny": 45
+     },
+     "frames": [
+      "2026-11-23T06:00Z",
+      "2026-11-23T12:00Z",
+      "2026-11-23T18:00Z",
+      "2026-11-24T00:00Z",
+      "2026-11-24T06:00Z",
+      "2026-11-24T12:00Z",
+      "2026-11-24T18:00Z",
+      "2026-11-25T00:00Z",
+      "2026-11-25T06:00Z"
+     ],
+     "layers": {
+      "fill": {
+       "file": "fill.webp",
+       "lo": -10,
+       "hi": 50,
+       "scale": "linear"
+      }
+     },
+     "isobars": false,
+     "particles": false,
+     "bbox": [
+      37.5,
+      -28.75,
+      52.5,
+      -17.75
+     ],
+     "captions": [
+      {
+       "at": "2026-11-23T06:00Z",
+       "text": "Each frame shows the highest temperature in the past 6 hours"
+      },
+      {
+       "at": "2026-11-24T12:00Z",
+       "text": "Peak: 42 °C, about 70 km south-east of Morombe"
+      },
+      {
+       "at": "2026-11-25T00:00Z",
+       "text": "Easing"
+      }
+     ],
+     "focus": [
+      {
+       "lat": -23.357,
+       "lon": 43.69,
+       "label": "Toliara"
+      }
+     ],
+     "package": "p/20261123T00Z/2026-11-23-heat-morombe-0",
+     "bytes": 8728
+    },
+    {
+     "title": "Hot days, warm nights",
+     "fill": "t2",
+     "label": "Temperature (2 m)",
+     "units": "C",
+     "palette": "temp",
+     "kind": "instant",
+     "grid": {
+      "west": 37.5,
+      "north": -17.75,
+      "res": 0.25,
+      "nx": 61,
+      "ny": 45
+     },
+     "frames": [
+      "2026-11-23T00:00Z",
+      "2026-11-23T06:00Z",
+      "2026-11-23T12:00Z",
+      "2026-11-23T18:00Z",
+      "2026-11-24T00:00Z",
+      "2026-11-24T06:00Z",
+      "2026-11-24T12:00Z",
+      "2026-11-24T18:00Z",
+      "2026-11-25T00:00Z",
+      "2026-11-25T06:00Z"
+     ],
+     "layers": {
+      "fill": {
+       "file": "fill.webp",
+       "lo": -10,
+       "hi": 50,
+       "scale": "linear"
+      },
+      "mslp": {
+       "file": "mslp.webp",
+       "lo": 1009,
+       "hi": 1026,
+       "scale": "linear"
+      },
+      "wind": {
+       "file": "wind.webp",
+       "amp": 15
+      }
+     },
+     "isobars": true,
+     "particles": true,
+     "bbox": [
+      37.5,
+      -28.75,
+      52.5,
+      -17.75
+     ],
+     "captions": [
+      {
+       "at": "2026-11-23T00:00Z",
+       "text": "Watch the daily swing between hot afternoons and warm nights"
+      }
+     ],
+     "focus": [
+      {
+       "lat": -23.357,
+       "lon": 43.69,
+       "label": "Toliara"
+      }
+     ],
+     "package": "p/20261123T00Z/2026-11-23-heat-morombe-1",
+     "bytes": 48540
+    },
+    {
+     "title": "Ensemble: how unusual is the warmth?",
+     "fill": "ens_warm2",
+     "label": "Ensemble chance the 850 hPa temperature is 2 SD above normal",
+     "units": "pct",
+     "palette": "probwarm",
+     "kind": "instant",
+     "grid": {
+      "west": 37.5,
+      "north": -17.75,
+      "res": 0.25,
+      "nx": 61,
+      "ny": 45
+     },
+     "frames": [
+      "2026-11-23T12:00Z",
+      "2026-11-24T00:00Z",
+      "2026-11-24T12:00Z",
+      "2026-11-25T00:00Z",
+      "2026-11-25T12:00Z"
+     ],
+     "layers": {
+      "fill": {
+       "file": "fill.webp",
+       "lo": 0,
+       "hi": 100,
+       "scale": "linear"
+      }
+     },
+     "isobars": false,
+     "particles": false,
+     "bbox": [
+      37.5,
+      -28.75,
+      52.5,
+      -17.75
+     ],
+     "captions": [
+      {
+       "at": "2026-11-23T12:00Z",
+       "text": "Chance that the air 1.5 km up is far warmer than normal"
+      },
+      {
+       "at": "2026-11-24T12:00Z",
+       "text": "Up to 100 % of members"
+      }
+     ],
+     "focus": [
+      {
+       "lat": -23.357,
+       "lon": 43.69,
+       "label": "Toliara"
+      }
+     ],
+     "package": "p/20261123T00Z/2026-11-23-heat-morombe-2",
+     "bytes": 4418
+    }
+   ],
+   "rank": 3
+  },
+  {
+   "title": "Heavy rain for South Africa and Lesotho",
+   "where": {
+    "label": "South Africa and Lesotho",
+    "centre": [
+     -27.75,
+     29.0
+    ],
+    "bbox": [
+     19.0,
+     -36.25,
+     35.25,
+     -24.5
+    ]
+   },
+   "when": {
+    "start": "2026-11-23T12:00Z",
+    "peak": "2026-11-24T00:00Z",
+    "end": "2026-11-28T12:00Z"
+   },
+   "status": "ongoing",
+   "summary": "HRES gives up to 68 mm of rain in 24 h about 90 km north-east of Bethlehem, South Africa, in the 24 hours to Tue 24 Nov, 00 UTC. Heavy rain covers about 16,000 km² between Mon 23 Nov and Sat 28 Nov. Up to 63 % of ensemble members give more than 50 mm in a day here. Flash flooding is possible, especially in towns and on steep ground.",
+   "why_interesting": "The summer rains are just starting over southern Africa. The first heavy storms of the season fall on hard, dry ground, so runoff and flash flooding can be worse than the totals suggest.",
+   "evidence": [
+    {
+     "kind": "field",
+     "text": "HRES 24 h rain up to 68 mm near 27.8S 29.0E ending Tue 24 Nov, 00 UTC (00 UTC Mon 23 Nov run)"
+    },
+    {
+     "kind": "field",
+     "text": "HRES wettest 24 h: Kroonstad 63 mm"
+    },
+    {
+     "kind": "ensemble",
+     "text": "ENS: 63 % chance of more than 50 mm in 24 h, 1 % of more than 100 mm"
+    },
+    {
+     "kind": "field",
+     "text": "Also strong gusts: up to 26 m/s (93 km/h) about 110 km west of Umtata, South Africa (Fri 27 Nov, 12 UTC)"
+    }
+   ],
+   "talking_points": [
+    "What lifts the moist air enough to make this much rain?",
+    "Why can a forecast be confident about heavy rain but not about exactly where it falls?",
+    "Why do cities flood more easily than the countryside?"
+   ],
+   "confidence": "medium: HRES heavy rain with some ensemble support",
+   "id": "2026-11-23-rain-bethlehem",
+   "kind": "event",
+   "hazards": [
+    "rain",
+    "wind"
+   ],
+   "score": 5.4,
+   "scenes": [
+    {
+     "title": "Where the rain falls",
+     "fill": "rain6",
+     "label": "Rain in the past 6 h",
+     "units": "mm",
+     "palette": "rain",
+     "kind": "past6",
+     "grid": {
+      "west": 19.0,
+      "north": -24.5,
+      "res": 0.25,
+      "nx": 66,
+      "ny": 48
+     },
+     "frames": [
+      "2026-11-23T06:00Z",
+      "2026-11-23T12:00Z",
+      "2026-11-23T18:00Z",
+      "2026-11-24T00:00Z",
+      "2026-11-24T06:00Z",
+      "2026-11-24T12:00Z",
+      "2026-11-24T18:00Z",
+      "2026-11-25T00:00Z",
+      "2026-11-25T06:00Z",
+      "2026-11-25T12:00Z",
+      "2026-11-25T18:00Z",
+      "2026-11-26T00:00Z",
+      "2026-11-26T06:00Z",
+      "2026-11-26T12:00Z",
+      "2026-11-26T18:00Z",
+      "2026-11-27T00:00Z",
+      "2026-11-27T06:00Z",
+      "2026-11-27T12:00Z",
+      "2026-11-27T18:00Z",
+      "2026-11-28T00:00Z",
+      "2026-11-28T06:00Z",
+      "2026-11-28T12:00Z",
+      "2026-11-28T18:00Z",
+      "2026-11-29T00:00Z"
+     ],
+     "layers": {
+      "fill": {
+       "file": "fill.webp",
+       "lo": 0,
+       "hi": 150,
+       "scale": "sqrt"
+      },
+      "mslp": {
+       "file": "mslp.webp",
+       "lo": 1000,
+       "hi": 1026,
+       "scale": "linear"
+      }
+     },
+     "isobars": true,
+     "particles": false,
+     "bbox": [
+      19.0,
+      -36.25,
+      35.25,
+      -24.5
+     ],
+     "captions": [
+      {
+       "at": "2026-11-23T06:00Z",
+       "text": "Rain in 6-hour steps; isobars every 4 hPa"
+      },
+      {
+       "at": "2026-11-24T00:00Z",
+       "text": "Peak: 68 mm in 24 h, about 90 km north-east of Bethlehem"
+      }
+     ],
+     "focus": [
+      {
+       "lat": -27.66,
+       "lon": 27.21,
+       "label": "Kroonstad"
+      },
+      {
+       "lat": -28.878,
+       "lon": 28.056,
+       "label": "Hlotse"
+      }
+     ],
+     "package": "p/20261123T00Z/2026-11-23-rain-bethlehem-0",
+     "bytes": 58066
+    },
+    {
+     "title": "Moisture feeding the rain",
+     "fill": "tcwv",
+     "label": "Total column water vapour",
+     "units": "kgm2",
+     "palette": "moisture",
+     "kind": "instant",
+     "grid": {
+      "west": 19.0,
+      "north": -24.5,
+      "res": 0.25,
+      "nx": 66,
+      "ny": 48
+     },
+     "frames": [
+      "2026-11-23T00:00Z",
+      "2026-11-23T06:00Z",
+      "2026-11-23T12:00Z",
+      "2026-11-23T18:00Z",
+      "2026-11-24T00:00Z",
+      "2026-11-24T06:00Z",
+      "2026-11-24T12:00Z",
+      "2026-11-24T18:00Z",
+      "2026-11-25T00:00Z",
+      "2026-11-25T06:00Z",
+      "2026-11-25T12:00Z",
+      "2026-11-25T18:00Z",
+      "2026-11-26T00:00Z",
+      "2026-11-26T06:00Z",
+      "2026-11-26T12:00Z",
+      "2026-11-26T18:00Z",
+      "2026-11-27T00:00Z",
+      "2026-11-27T06:00Z",
+      "2026-11-27T12:00Z",
+      "2026-11-27T18:00Z",
+      "2026-11-28T00:00Z",
+      "2026-11-28T06:00Z",
+      "2026-11-28T12:00Z",
+      "2026-11-28T18:00Z",
+      "2026-11-29T00:00Z"
+     ],
+     "layers": {
+      "fill": {
+       "file": "fill.webp",
+       "lo": 0,
+       "hi": 75,
+       "scale": "linear"
+      },
+      "mslp": {
+       "file": "mslp.webp",
+       "lo": 1000,
+       "hi": 1026,
+       "scale": "linear"
+      },
+      "wind": {
+       "file": "wind.webp",
+       "amp": 20
+      }
+     },
+     "isobars": true,
+     "particles": true,
+     "bbox": [
+      19.0,
+      -36.25,
+      35.25,
+      -24.5
+     ],
+     "captions": [
+      {
+       "at": "2026-11-23T00:00Z",
+       "text": "Purple and red: deep moisture that can fuel heavy rain"
+      }
+     ],
+     "focus": [
+      {
+       "lat": -27.66,
+       "lon": 27.21,
+       "label": "Kroonstad"
+      },
+      {
+       "lat": -28.878,
+       "lon": 28.056,
+       "label": "Hlotse"
+      }
+     ],
+     "package": "p/20261123T00Z/2026-11-23-rain-bethlehem-1",
+     "bytes": 167956
+    },
+    {
+     "title": "Ensemble: chance of more than 50 mm in a day",
+     "fill": "ens_rain50",
+     "label": "Ensemble chance of more than 50 mm in 24 h",
+     "units": "pct",
+     "palette": "prob",
+     "kind": "window24",
+     "grid": {
+      "west": 19.0,
+      "north": -24.5,
+      "res": 0.25,
+      "nx": 66,
+      "ny": 48
+     },
+     "frames": [
+      "2026-11-24T00:00Z",
+      "2026-11-24T12:00Z",
+      "2026-11-25T00:00Z",
+      "2026-11-25T12:00Z",
+      "2026-11-26T00:00Z",
+      "2026-11-26T12:00Z",
+      "2026-11-27T00:00Z",
+      "2026-11-27T12:00Z",
+      "2026-11-28T00:00Z",
+      "2026-11-28T12:00Z",
+      "2026-11-29T00:00Z",
+      "2026-11-29T12:00Z"
+     ],
+     "layers": {
+      "fill": {
+       "file": "fill.webp",
+       "lo": 0,
+       "hi": 100,
+       "scale": "linear"
+      }
+     },
+     "isobars": false,
+     "particles": false,
+     "bbox": [
+      19.0,
+      -36.25,
+      35.25,
+      -24.5
+     ],
+     "captions": [
+      {
+       "at": "2026-11-24T00:00Z",
+       "text": "Each frame is the 24 hours ending at the time shown"
+      },
+      {
+       "at": "2026-11-24T12:00Z",
+       "text": "Highest: 63 % of 51 members"
+      }
+     ],
+     "focus": [
+      {
+       "lat": -27.66,
+       "lon": 27.21,
+       "label": "Kroonstad"
+      },
+      {
+       "lat": -28.878,
+       "lon": 28.056,
+       "label": "Hlotse"
+      }
+     ],
+     "package": "p/20261123T00Z/2026-11-23-rain-bethlehem-2",
+     "bytes": 2824
+    }
+   ],
+   "rank": 4
+  },
+  {
+   "title": "Unusual heat in Somalia",
+   "where": {
+    "label": "Somalia",
+    "centre": [
+     3.25,
+     42.5
+    ],
+    "bbox": [
+     35.75,
+     -3.25,
+     49.75,
+     7.75
+    ]
+   },
+   "when": {
+    "start": "2026-11-24T12:00Z",
+    "peak": "2026-11-28T12:00Z",
+    "end": "2026-11-28T18:00Z"
+   },
+   "status": "forecast",
+   "summary": "HRES has afternoon highs up to 39 °C about 30 km east of Garbahaarey, Somalia on Sat 28 Nov. The heat covers about 44,000 km² between Tue 24 Nov and Sat 28 Nov. Up to 95 % of ensemble members put the air about 1.5 km up (850 hPa) more than two standard deviations warmer than normal for the time of year, so this is unusual heat, not just the hot season.",
+   "why_interesting": "Heat is one of Africa's deadliest weather hazards, but it is under-reported because its toll shows up later in health records. Hot nights and long spells matter as much as the highest afternoon temperature.",
+   "evidence": [
+    {
+     "kind": "field",
+     "text": "HRES highest 3-hourly maximum 39.5 °C near 3.2N 42.5E on Sat 28 Nov, 12 UTC (00 UTC Mon 23 Nov run)"
+    },
+    {
+     "kind": "ensemble",
+     "text": "ENS: up to 95 % chance that 850 hPa temperature is more than 2 SD above normal"
+    }
+   ],
+   "talking_points": [
+    "Why do warm nights make a heatwave more dangerous?",
+    "How do the ensemble anomaly charts tell 'hot for the time of year' from simply 'hot'?",
+    "Why does dry ground let temperatures climb higher?"
+   ],
+   "confidence": "high: the ensemble strongly agrees the warmth is unusual",
+   "id": "2026-11-23-heat-garbahaarey",
+   "kind": "event",
+   "hazards": [
+    "heat"
+   ],
+   "score": 5.09,
+   "scenes": [
+    {
+     "title": "Afternoon heat",
+     "fill": "tmax",
+     "label": "Highest temperature in the past 6 h",
+     "units": "C",
+     "palette": "temp",
+     "kind": "past6",
+     "grid": {
+      "west": 35.75,
+      "north": 7.75,
+      "res": 0.25,
+      "nx": 57,
+      "ny": 45
+     },
+     "frames": [
+      "2026-11-24T00:00Z",
+      "2026-11-24T06:00Z",
+      "2026-11-24T12:00Z",
+      "2026-11-24T18:00Z",
+      "2026-11-25T00:00Z",
+      "2026-11-25T06:00Z",
+      "2026-11-25T12:00Z",
+      "2026-11-25T18:00Z",
+      "2026-11-26T00:00Z",
+      "2026-11-26T06:00Z",
+      "2026-11-26T12:00Z",
+      "2026-11-26T18:00Z",
+      "2026-11-27T00:00Z",
+      "2026-11-27T06:00Z",
+      "2026-11-27T12:00Z",
+      "2026-11-27T18:00Z",
+      "2026-11-28T00:00Z",
+      "2026-11-28T06:00Z",
+      "2026-11-28T12:00Z",
+      "2026-11-28T18:00Z",
+      "2026-11-29T00:00Z"
+     ],
+     "layers": {
+      "fill": {
+       "file": "fill.webp",
+       "lo": -10,
+       "hi": 50,
+       "scale": "linear"
+      }
+     },
+     "isobars": false,
+     "particles": false,
+     "bbox": [
+      35.75,
+      -3.25,
+      49.75,
+      7.75
+     ],
+     "captions": [
+      {
+       "at": "2026-11-24T00:00Z",
+       "text": "Each frame shows the highest temperature in the past 6 hours"
+      },
+      {
+       "at": "2026-11-28T12:00Z",
+       "text": "Peak: 39 °C, about 30 km east of Garbahaarey"
+      }
+     ],
+     "focus": [
+      {
+       "lat": 3.327,
+       "lon": 42.227,
+       "label": "Garbahaarey"
+      }
+     ],
+     "package": "p/20261123T00Z/2026-11-23-heat-garbahaarey-0",
+     "bytes": 26504
+    },
+    {
+     "title": "Hot days, warm nights",
+     "fill": "t2",
+     "label": "Temperature (2 m)",
+     "units": "C",
+     "palette": "temp",
+     "kind": "instant",
+     "grid": {
+      "west": 35.75,
+      "north": 7.75,
+      "res": 0.25,
+      "nx": 57,
+      "ny": 45
+     },
+     "frames": [
+      "2026-11-24T00:00Z",
+      "2026-11-24T06:00Z",
+      "2026-11-24T12:00Z",
+      "2026-11-24T18:00Z",
+      "2026-11-25T00:00Z",
+      "2026-11-25T06:00Z",
+      "2026-11-25T12:00Z",
+      "2026-11-25T18:00Z",
+      "2026-11-26T00:00Z",
+      "2026-11-26T06:00Z",
+      "2026-11-26T12:00Z",
+      "2026-11-26T18:00Z",
+      "2026-11-27T00:00Z",
+      "2026-11-27T06:00Z",
+      "2026-11-27T12:00Z",
+      "2026-11-27T18:00Z",
+      "2026-11-28T00:00Z",
+      "2026-11-28T06:00Z",
+      "2026-11-28T12:00Z",
+      "2026-11-28T18:00Z",
+      "2026-11-29T00:00Z"
+     ],
+     "layers": {
+      "fill": {
+       "file": "fill.webp",
+       "lo": -10,
+       "hi": 50,
+       "scale": "linear"
+      },
+      "mslp": {
+       "file": "mslp.webp",
+       "lo": 1003,
+       "hi": 1029,
+       "scale": "linear"
+      },
+      "wind": {
+       "file": "wind.webp",
+       "amp": 15
+      }
+     },
+     "isobars": true,
+     "particles": true,
+     "bbox": [
+      35.75,
+      -3.25,
+      49.75,
+      7.75
+     ],
+     "captions": [
+      {
+       "at": "2026-11-24T00:00Z",
+       "text": "Watch the daily swing between hot afternoons and warm nights"
+      }
+     ],
+     "focus": [
+      {
+       "lat": 3.327,
+       "lon": 42.227,
+       "label": "Garbahaarey"
+      }
+     ],
+     "package": "p/20261123T00Z/2026-11-23-heat-garbahaarey-1",
+     "bytes": 113008
+    },
+    {
+     "title": "Ensemble: how unusual is the warmth?",
+     "fill": "ens_warm2",
+     "label": "Ensemble chance the 850 hPa temperature is 2 SD above normal",
+     "units": "pct",
+     "palette": "probwarm",
+     "kind": "instant",
+     "grid": {
+      "west": 35.75,
+      "north": 7.75,
+      "res": 0.25,
+      "nx": 57,
+      "ny": 45
+     },
+     "frames": [
+      "2026-11-23T12:00Z",
+      "2026-11-24T00:00Z",
+      "2026-11-24T12:00Z",
+      "2026-11-25T00:00Z",
+      "2026-11-25T12:00Z",
+      "2026-11-26T00:00Z",
+      "2026-11-26T12:00Z",
+      "2026-11-27T00:00Z",
+      "2026-11-27T12:00Z",
+      "2026-11-28T00:00Z",
+      "2026-11-28T12:00Z",
+      "2026-11-29T00:00Z"
+     ],
+     "layers": {
+      "fill": {
+       "file": "fill.webp",
+       "lo": 0,
+       "hi": 100,
+       "scale": "linear"
+      }
+     },
+     "isobars": false,
+     "particles": false,
+     "bbox": [
+      35.75,
+      -3.25,
+      49.75,
+      7.75
+     ],
+     "captions": [
+      {
+       "at": "2026-11-23T12:00Z",
+       "text": "Chance that the air 1.5 km up is far warmer than normal"
+      },
+      {
+       "at": "2026-11-29T00:00Z",
+       "text": "Up to 95 % of members"
+      }
+     ],
+     "focus": [
+      {
+       "lat": 3.327,
+       "lon": 42.227,
+       "label": "Garbahaarey"
+      }
+     ],
+     "package": "p/20261123T00Z/2026-11-23-heat-garbahaarey-2",
+     "bytes": 15018
+    }
+   ],
+   "rank": 5
+  },
+  {
+   "title": "Severe thunderstorm risk for Mozambique and Zimbabwe",
+   "where": {
+    "label": "Mozambique, Zimbabwe and Botswana",
+    "centre": [
+     -18.75,
+     34.75
+    ],
+    "bbox": [
+     10.25,
+     -31.25,
+     44.75,
+     -10.75
+    ]
+   },
+   "when": {
+    "start": "2026-11-23T12:00Z",
+    "peak": "2026-11-26T12:00Z",
+    "end": "2026-11-28T18:00Z"
+   },
+   "status": "ongoing",
+   "summary": "HRES has thunderstorm energy (MUCAPE) up to 4600 J/kg about 120 km north of Beira, Mozambique around Thu 26 Nov, 12 UTC, with up to 38 mm of rain in 6 h. That is enough fuel for intense storms with hail, lightning and strong gusts where they form.",
+   "why_interesting": "Spring is the season for severe thunderstorms on South Africa's Highveld, where moist air and strong winds aloft combine to produce large hail.",
+   "evidence": [
+    {
+     "kind": "field",
+     "text": "HRES MUCAPE 4600 J/kg near 18.8S 34.8E at Thu 26 Nov, 12 UTC (00 UTC Mon 23 Nov run)"
+    },
+    {
+     "kind": "field",
+     "text": "Also heavy rain: up to 63 mm in 24 h about 200 km south-east of Chiredzi, Zimbabwe (Thu 26 Nov, 06 UTC)"
+    }
+   ],
+   "talking_points": [
+    "What is CAPE and why doesn't high CAPE always mean storms?",
+    "Where do the triggers for these storms come from?"
+   ],
+   "confidence": "medium: high storm energy in HRES; individual storms are hit and miss",
+   "id": "2026-11-23-storms-beira",
+   "kind": "event",
+   "hazards": [
+    "storms",
+    "rain"
+   ],
+   "score": 4.46,
+   "scenes": [
+    {
+     "title": "Thunderstorm fuel",
+     "fill": "cape",
+     "label": "Thunderstorm energy (MUCAPE)",
+     "units": "jkg",
+     "palette": "cape",
+     "kind": "instant",
+     "grid": {
+      "west": 10.25,
+      "north": -10.75,
+      "res": 0.25,
+      "nx": 139,
+      "ny": 83
+     },
+     "frames": [
+      "2026-11-23T00:00Z",
+      "2026-11-23T06:00Z",
+      "2026-11-23T12:00Z",
+      "2026-11-23T18:00Z",
+      "2026-11-24T00:00Z",
+      "2026-11-24T06:00Z",
+      "2026-11-24T12:00Z",
+      "2026-11-24T18:00Z",
+      "2026-11-25T00:00Z",
+      "2026-11-25T06:00Z",
+      "2026-11-25T12:00Z",
+      "2026-11-25T18:00Z",
+      "2026-11-26T00:00Z",
+      "2026-11-26T06:00Z",
+      "2026-11-26T12:00Z",
+      "2026-11-26T18:00Z",
+      "2026-11-27T00:00Z",
+      "2026-11-27T06:00Z",
+      "2026-11-27T12:00Z",
+      "2026-11-27T18:00Z",
+      "2026-11-28T00:00Z",
+      "2026-11-28T06:00Z",
+      "2026-11-28T12:00Z",
+      "2026-11-28T18:00Z",
+      "2026-11-29T00:00Z"
+     ],
+     "layers": {
+      "fill": {
+       "file": "fill.webp",
+       "lo": 0,
+       "hi": 6000,
+       "scale": "sqrt"
+      },
+      "wind": {
+       "file": "wind.webp",
+       "amp": 20
+      }
+     },
+     "isobars": false,
+     "particles": true,
+     "bbox": [
+      10.25,
+      -31.25,
+      44.75,
+      -10.75
+     ],
+     "captions": [
+      {
+       "at": "2026-11-23T00:00Z",
+       "text": "High values (purple) mean fuel for strong storms"
+      },
+      {
+       "at": "2026-11-26T12:00Z",
+       "text": "Peak: 4600 J/kg, about 120 km north of Beira"
+      }
+     ],
+     "focus": [
+      {
+       "lat": -17.86,
+       "lon": 25.86,
+       "label": "Livingstone"
+      },
+      {
+       "lat": -22.39,
+       "lon": 26.71,
+       "label": "Serowe"
+      }
+     ],
+     "package": "p/20261123T00Z/2026-11-23-storms-beira-0",
+     "bytes": 458390
+    },
+    {
+     "title": "Storm rain",
+     "fill": "rain6",
+     "label": "Rain in the past 6 h",
+     "units": "mm",
+     "palette": "rain",
+     "kind": "past6",
+     "grid": {
+      "west": 10.25,
+      "north": -10.75,
+      "res": 0.25,
+      "nx": 139,
+      "ny": 83
+     },
+     "frames": [
+      "2026-11-23T06:00Z",
+      "2026-11-23T12:00Z",
+      "2026-11-23T18:00Z",
+      "2026-11-24T00:00Z",
+      "2026-11-24T06:00Z",
+      "2026-11-24T12:00Z",
+      "2026-11-24T18:00Z",
+      "2026-11-25T00:00Z",
+      "2026-11-25T06:00Z",
+      "2026-11-25T12:00Z",
+      "2026-11-25T18:00Z",
+      "2026-11-26T00:00Z",
+      "2026-11-26T06:00Z",
+      "2026-11-26T12:00Z",
+      "2026-11-26T18:00Z",
+      "2026-11-27T00:00Z",
+      "2026-11-27T06:00Z",
+      "2026-11-27T12:00Z",
+      "2026-11-27T18:00Z",
+      "2026-11-28T00:00Z",
+      "2026-11-28T06:00Z",
+      "2026-11-28T12:00Z",
+      "2026-11-28T18:00Z",
+      "2026-11-29T00:00Z"
+     ],
+     "layers": {
+      "fill": {
+       "file": "fill.webp",
+       "lo": 0,
+       "hi": 150,
+       "scale": "sqrt"
+      },
+      "mslp": {
+       "file": "mslp.webp",
+       "lo": 1000,
+       "hi": 1026,
+       "scale": "linear"
+      }
+     },
+     "isobars": true,
+     "particles": false,
+     "bbox": [
+      10.25,
+      -31.25,
+      44.75,
+      -10.75
+     ],
+     "captions": [
+      {
+       "at": "2026-11-23T06:00Z",
+       "text": "Rain in 6-hour steps; isobars every 4 hPa"
+      }
+     ],
+     "focus": [
+      {
+       "lat": -17.86,
+       "lon": 25.86,
+       "label": "Livingstone"
+      },
+      {
+       "lat": -22.39,
+       "lon": 26.71,
+       "label": "Serowe"
+      }
+     ],
+     "package": "p/20261123T00Z/2026-11-23-storms-beira-1",
+     "bytes": 187326
+    },
+    {
+     "title": "Ensemble: chance of more than 50 mm in a day",
+     "fill": "ens_rain50",
+     "label": "Ensemble chance of more than 50 mm in 24 h",
+     "units": "pct",
+     "palette": "prob",
+     "kind": "window24",
+     "grid": {
+      "west": 10.25,
+      "north": -10.75,
+      "res": 0.25,
+      "nx": 139,
+      "ny": 83
+     },
+     "frames": [
+      "2026-11-24T00:00Z",
+      "2026-11-24T12:00Z",
+      "2026-11-25T00:00Z",
+      "2026-11-25T12:00Z",
+      "2026-11-26T00:00Z",
+      "2026-11-26T12:00Z",
+      "2026-11-27T00:00Z",
+      "2026-11-27T12:00Z",
+      "2026-11-28T00:00Z",
+      "2026-11-28T12:00Z",
+      "2026-11-29T00:00Z",
+      "2026-11-29T12:00Z"
+     ],
+     "layers": {
+      "fill": {
+       "file": "fill.webp",
+       "lo": 0,
+       "hi": 100,
+       "scale": "linear"
+      }
+     },
+     "isobars": false,
+     "particles": false,
+     "bbox": [
+      10.25,
+      -31.25,
+      44.75,
+      -10.75
+     ],
+     "captions": [
+      {
+       "at": "2026-11-24T00:00Z",
+       "text": "Each frame is the 24 hours ending at the time shown"
+      },
+      {
+       "at": "2026-11-25T12:00Z",
+       "text": "Highest: 12 % of 51 members"
+      }
+     ],
+     "focus": [
+      {
+       "lat": -17.86,
+       "lon": 25.86,
+       "label": "Livingstone"
+      },
+      {
+       "lat": -22.39,
+       "lon": 26.71,
+       "label": "Serowe"
+      }
+     ],
+     "package": "p/20261123T00Z/2026-11-23-storms-beira-2",
+     "bytes": 5100
+    }
+   ],
+   "rank": 6
+  },
+  {
+   "kind": "explainer",
+   "title": "Africa's rain belt this week",
+   "hazards": [
+    "explainer"
+   ],
+   "where": {
+    "label": "Africa",
+    "centre": [
+     1.0,
+     17.0
+    ],
+    "bbox": [
+     -20.0,
+     -36.0,
+     54.0,
+     38.0
+    ]
+   },
+   "when": {
+    "start": "2026-11-23T00:00Z",
+    "peak": "2026-11-26T00:00Z",
+    "end": "2026-11-29T00:00Z"
+   },
+   "status": "forecast",
+   "summary": "Over the next six days (Mon 23 Nov to Sun 29 Nov), most of Africa's rain falls between about 24°S and 0°N. The wettest spot in HRES is about 40 km south-east of Beni, Congo (Kinshasa), with about 124 mm in total. The largest areas with more than 50 mm are in DR Congo, Angola, Zimbabwe and Zambia. Rain of 25 mm or more covers about 5.8 million km² of land.",
+   "why_interesting": "In October and November the tropical rain belt follows the sun south. The rains are ending in the Sahel and Sudan, the 'short rains' are starting in East Africa, and the first summer storms are reaching southern Africa.",
+   "evidence": [
+    {
+     "kind": "field",
+     "text": "HRES total rain Mon 23 Nov to Sun 29 Nov; 25 mm or more over 5.8 million km² of African land"
+    }
+   ],
+   "talking_points": [
+    "What is the tropical rain belt (the ITCZ), and why does it follow the sun?",
+    "Why do some places get two rainy seasons a year and others only one?",
+    "Where does the moisture for Africa's rain come from?"
+   ],
+   "confidence": "high for the broad pattern; individual storms are less certain",
+   "id": "2026-11-23-rain-belt",
+   "scenes": [
+    {
+     "title": "The rain belt in 6-hour steps",
+     "fill": "rain6",
+     "label": "Rain in the past 6 h",
+     "units": "mm",
+     "palette": "rain",
+     "kind": "past6",
+     "grid": {
+      "west": -20.0,
+      "north": 38.0,
+      "res": 0.5,
+      "nx": 149,
+      "ny": 149
+     },
+     "frames": [
+      "2026-11-23T06:00Z",
+      "2026-11-23T12:00Z",
+      "2026-11-23T18:00Z",
+      "2026-11-24T00:00Z",
+      "2026-11-24T06:00Z",
+      "2026-11-24T12:00Z",
+      "2026-11-24T18:00Z",
+      "2026-11-25T00:00Z",
+      "2026-11-25T06:00Z",
+      "2026-11-25T12:00Z",
+      "2026-11-25T18:00Z",
+      "2026-11-26T00:00Z",
+      "2026-11-26T06:00Z",
+      "2026-11-26T12:00Z",
+      "2026-11-26T18:00Z",
+      "2026-11-27T00:00Z",
+      "2026-11-27T06:00Z",
+      "2026-11-27T12:00Z",
+      "2026-11-27T18:00Z",
+      "2026-11-28T00:00Z",
+      "2026-11-28T06:00Z",
+      "2026-11-28T12:00Z",
+      "2026-11-28T18:00Z",
+      "2026-11-29T00:00Z"
+     ],
+     "layers": {
+      "fill": {
+       "file": "fill.webp",
+       "lo": 0,
+       "hi": 150,
+       "scale": "sqrt"
+      },
+      "mslp": {
+       "file": "mslp.webp",
+       "lo": 988,
+       "hi": 1034,
+       "scale": "linear"
+      }
+     },
+     "isobars": true,
+     "particles": false,
+     "bbox": [
+      -20.0,
+      -36.0,
+      54.0,
+      38.0
+     ],
+     "captions": [
+      {
+       "at": "2026-11-23T06:00Z",
+       "text": "Rain falls in a broad belt that follows the sun"
+      },
+      {
+       "at": "2026-11-26T00:00Z",
+       "text": "Afternoon storms flare up over land each day"
+      }
+     ],
+     "focus": [],
+     "package": "p/20261123T00Z/2026-11-23-rain-belt-0",
+     "bytes": 290674
+    },
+    {
+     "title": "Moist tropical air and dry desert air",
+     "fill": "tcwv",
+     "label": "Total column water vapour",
+     "units": "kgm2",
+     "palette": "moisture",
+     "kind": "instant",
+     "grid": {
+      "west": -20.0,
+      "north": 38.0,
+      "res": 0.5,
+      "nx": 149,
+      "ny": 149
+     },
+     "frames": [
+      "2026-11-23T00:00Z",
+      "2026-11-23T06:00Z",
+      "2026-11-23T12:00Z",
+      "2026-11-23T18:00Z",
+      "2026-11-24T00:00Z",
+      "2026-11-24T06:00Z",
+      "2026-11-24T12:00Z",
+      "2026-11-24T18:00Z",
+      "2026-11-25T00:00Z",
+      "2026-11-25T06:00Z",
+      "2026-11-25T12:00Z",
+      "2026-11-25T18:00Z",
+      "2026-11-26T00:00Z",
+      "2026-11-26T06:00Z",
+      "2026-11-26T12:00Z",
+      "2026-11-26T18:00Z",
+      "2026-11-27T00:00Z",
+      "2026-11-27T06:00Z",
+      "2026-11-27T12:00Z",
+      "2026-11-27T18:00Z",
+      "2026-11-28T00:00Z",
+      "2026-11-28T06:00Z",
+      "2026-11-28T12:00Z",
+      "2026-11-28T18:00Z",
+      "2026-11-29T00:00Z"
+     ],
+     "layers": {
+      "fill": {
+       "file": "fill.webp",
+       "lo": 0,
+       "hi": 75,
+       "scale": "linear"
+      },
+      "mslp": {
+       "file": "mslp.webp",
+       "lo": 988,
+       "hi": 1034,
+       "scale": "linear"
+      },
+      "wind": {
+       "file": "wind.webp",
+       "amp": 25
+      }
+     },
+     "isobars": true,
+     "particles": true,
+     "bbox": [
+      -20.0,
+      -36.0,
+      54.0,
+      38.0
+     ],
+     "captions": [
+      {
+       "at": "2026-11-23T00:00Z",
+       "text": "Purple and red: deep moisture. Grey and green: dry air"
+      }
+     ],
+     "focus": [],
+     "package": "p/20261123T00Z/2026-11-23-rain-belt-1",
+     "bytes": 1075190
+    },
+    {
+     "title": "Day and night across the continent",
+     "fill": "t2",
+     "label": "Temperature (2 m)",
+     "units": "C",
+     "palette": "temp",
+     "kind": "instant",
+     "grid": {
+      "west": -20.0,
+      "north": 38.0,
+      "res": 0.5,
+      "nx": 149,
+      "ny": 149
+     },
+     "frames": [
+      "2026-11-23T00:00Z",
+      "2026-11-23T06:00Z",
+      "2026-11-23T12:00Z",
+      "2026-11-23T18:00Z",
+      "2026-11-24T00:00Z",
+      "2026-11-24T06:00Z",
+      "2026-11-24T12:00Z",
+      "2026-11-24T18:00Z",
+      "2026-11-25T00:00Z",
+      "2026-11-25T06:00Z",
+      "2026-11-25T12:00Z",
+      "2026-11-25T18:00Z",
+      "2026-11-26T00:00Z",
+      "2026-11-26T06:00Z",
+      "2026-11-26T12:00Z",
+      "2026-11-26T18:00Z",
+      "2026-11-27T00:00Z",
+      "2026-11-27T06:00Z",
+      "2026-11-27T12:00Z",
+      "2026-11-27T18:00Z",
+      "2026-11-28T00:00Z",
+      "2026-11-28T06:00Z",
+      "2026-11-28T12:00Z",
+      "2026-11-28T18:00Z",
+      "2026-11-29T00:00Z"
+     ],
+     "layers": {
+      "fill": {
+       "file": "fill.webp",
+       "lo": -10,
+       "hi": 50,
+       "scale": "linear"
+      }
+     },
+     "isobars": false,
+     "particles": false,
+     "bbox": [
+      -20.0,
+      -36.0,
+      54.0,
+      38.0
+     ],
+     "captions": [
+      {
+       "at": "2026-11-23T00:00Z",
+       "text": "Watch the deserts heat up by day and cool at night"
+      }
+     ],
+     "focus": [],
+     "package": "p/20261123T00Z/2026-11-23-rain-belt-2",
+     "bytes": 259514
+    }
+   ],
+   "rank": 7
+  }
+ ]
+}
