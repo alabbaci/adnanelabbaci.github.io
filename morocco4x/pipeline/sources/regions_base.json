@@ -1,0 +1,62 @@
+[
+ {
+  "id": "tta",
+  "iso": "MA-01",
+  "name": "Tanger-Tétouan-Al Hoceïma"
+ },
+ {
+  "id": "ori",
+  "iso": "MA-02",
+  "name": "L'Oriental"
+ },
+ {
+  "id": "fm",
+  "iso": "MA-03",
+  "name": "Fès-Meknès"
+ },
+ {
+  "id": "rsk",
+  "iso": "MA-04",
+  "name": "Rabat-Salé-Kénitra"
+ },
+ {
+  "id": "bmk",
+  "iso": "MA-05",
+  "name": "Béni Mellal-Khénifra"
+ },
+ {
+  "id": "cs",
+  "iso": "MA-06",
+  "name": "Casablanca-Settat"
+ },
+ {
+  "id": "ms",
+  "iso": "MA-07",
+  "name": "Marrakech-Safi"
+ },
+ {
+  "id": "dt",
+  "iso": "MA-08",
+  "name": "Drâa-Tafilalet"
+ },
+ {
+  "id": "sm",
+  "iso": "MA-09",
+  "name": "Souss-Massa"
+ },
+ {
+  "id": "gon",
+  "iso": "MA-10",
+  "name": "Guelmim-Oued Noun"
+ },
+ {
+  "id": "lsh",
+  "iso": "MA-11",
+  "name": "Laâyoune-Sakia El Hamra"
+ },
+ {
+  "id": "dod",
+  "iso": "MA-12",
+  "name": "Dakhla-Oued Ed-Dahab"
+ }
+]

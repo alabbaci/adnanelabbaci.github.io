@@ -1,0 +1,6 @@
+numpy
+pillow
+shapely>=2.0
+rasterio
+pyarrow
+s3fs
