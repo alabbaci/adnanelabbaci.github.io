@@ -21,3 +21,6 @@ ourika/pipeline/.cache/
 
 # Toubkal DEM tiles and Overture extracts (re-downloaded by the pipeline)
 toubkal/pipeline/.cache/
+
+# Morocco 4X pipeline downloads (terrain tiles, land cover, Overture extracts)
+morocco4x/pipeline/.cache/

@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Morocco 4X — the Kingdom as a strategy map</title>
+  <meta name="description" content="The real Morocco drawn like a 4X strategy map: hex terrain, cities, national yields, data lenses and resources, all from public data (HCP census and accounts, ESA WorldCover, SRTM, Overture Maps).">
+  <meta name="theme-color" content="#111826">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='31' fill='%23140d08'/%3E%3Ccircle cx='32' cy='32' r='29' fill='%23c59b5b'/%3E%3Ccircle cx='32' cy='32' r='24' fill='%23b3262c'/%3E%3Cpath fill='none' stroke='%231f7a4a' stroke-width='3.4' stroke-linejoin='round' d='M32 13l11.2 34.4L13.9 26.1h36.2L20.8 47.4z'/%3E%3C/svg%3E">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Morocco as a strategy-game map">
+  <meta property="og:description" content="Hex terrain, cities, yields, lenses and resources of the real Morocco, from public data.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header id="topbar">
+    <button class="brand" id="brand" type="button" title="Morocco: back to the full map">
+      <span class="brand-emblem" aria-hidden="true"><svg viewBox="0 0 64 64" width="26" height="26"><circle cx="32" cy="32" r="30" fill="#c59b5b"/><circle cx="32" cy="32" r="25.5" fill="#b3262c"/><path fill="none" stroke="#2a8a56" stroke-width="3.2" stroke-linejoin="round" d="M32 13l11.2 34.4L13.9 26.1h36.2L20.8 47.4z"/></svg></span>
+      <span class="brand-text">Morocco</span>
+    </button>
+    <div id="yields" class="yields" aria-label="National yields"></div>
+    <div class="spacer"></div>
+    <div class="search" role="search">
+      <span class="search-ic" aria-hidden="true" data-icon="search"></span>
+      <input id="search-input" type="search" placeholder="Search cities and regions" autocomplete="off" spellcheck="false"
+             role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="search-results"
+             aria-label="Search cities, provinces, regions and resources (/ or Ctrl K)">
+      <kbd class="search-kbd" aria-hidden="true">/</kbd>
+    </div>
+    <div id="turn" class="turn"></div>
+    <div class="tb-buttons">
+      <button id="btn-share" class="btn" type="button" aria-haspopup="dialog" aria-expanded="false" title="Share: copy a link or download an image"><span data-icon="share"></span><span class="lbl">Share</span></button>
+      <button id="btn-help" class="btn btn-icon" type="button" aria-label="Keyboard and mouse help" title="Help (?)"><span data-icon="help"></span></button>
+      <button id="btn-pedia" class="btn" type="button" title="What every number means and where it comes from"><span data-icon="book"></span><span class="lbl">Almanac</span></button>
+    </div>
+  </header>
+
+  <canvas id="map" role="img" aria-label="Hex map of Morocco showing terrain"></canvas>
+  <div id="loading" class="loading"><div class="loading-card"><div class="loading-star" aria-hidden="true"></div><div id="loading-text">Surveying the realm…</div></div></div>
+
+  <div id="tooltip" class="tooltip" role="tooltip"></div>
+  <aside id="panel" class="panel side-panel" aria-label="Details"></aside>
+
+  <div id="lens-area">
+    <div id="layers-pop" class="panel pop layers-pop" role="dialog" aria-label="Map layers"></div>
+    <div id="lens-picker" class="panel pop lens-picker" role="dialog" aria-label="Choose a lens"></div>
+    <div id="legend" class="panel legend" role="group" aria-label="Lens legend"></div>
+    <div id="lens-dock" class="panel lens-dock" role="toolbar" aria-label="Map lenses">
+      <button id="btn-res" class="lens-btn toggle" type="button" aria-pressed="true" title="Show or hide resources on tiles (R)"><span data-icon="gem"></span><span>Resources</span></button>
+      <button id="btn-layers" class="lens-btn toggle" type="button" aria-haspopup="dialog" aria-expanded="false" title="Map layers: borders, rivers, roads, rail"><span data-icon="map"></span><span>Map</span><b class="ml-count" id="ml-count"></b></button>
+      <div id="lens-quick" class="lens-quick"></div>
+      <button id="btn-lenses" class="lens-btn" type="button" aria-haspopup="dialog" aria-expanded="false" title="All lenses (L cycles)"><span data-icon="layers"></span><span>Lenses</span><span class="caret" aria-hidden="true">▾</span></button>
+    </div>
+  </div>
+
+  <div id="minimap-wrap" class="panel"><canvas id="minimap" role="img" aria-label="Minimap: click to jump"></canvas></div>
+  <button id="btn-minimap" class="panel minimap-toggle" type="button" aria-pressed="false" aria-label="Show the minimap"><span data-icon="map"></span></button>
+
+  <div id="search-results" class="panel pop search-results" role="listbox" aria-label="Search results"></div>
+  <div id="share-pop" class="panel pop share-pop" role="dialog" aria-label="Share">
+    <div class="pop-title">Share this view</div>
+    <button class="pop-item" type="button" data-act="copy"><span data-icon="share"></span><span>Copy link</span></button>
+    <button class="pop-item" type="button" data-act="image"><span data-icon="map"></span><span>Download image <span class="muted">1600×900 PNG</span></span></button>
+    <div class="pop-status" role="status" aria-live="polite"></div>
+    <input class="pop-url" type="text" readonly aria-label="Link to this view">
+  </div>
+  <div id="yield-report" class="panel pop yield-report" role="dialog" aria-label="National report" tabindex="-1"></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <div id="pedia" class="modal" hidden>
+    <div class="modal-card panel" role="dialog" aria-modal="true" aria-label="Almanac">
+      <button class="close icon-btn" type="button" data-close aria-label="Close the Almanac">✕</button>
+      <nav id="pedia-nav" aria-label="Almanac pages"></nav>
+      <article id="pedia-body" tabindex="-1"></article>
+    </div>
+  </div>
+
+  <div id="help" class="modal" hidden>
+    <div class="help-card panel" role="dialog" aria-modal="true" aria-labelledby="help-title">
+      <button class="close icon-btn" type="button" data-close aria-label="Close help">✕</button>
+      <h2 id="help-title">Controls</h2>
+      <div class="help-cols">
+        <section><h3>Move</h3>
+          <div class="help-row"><span class="keys"><kbd>Drag</kbd><kbd>←↑→↓</kbd><kbd>WASD</kbd></span><span>Pan the map</span></div>
+          <div class="help-row"><span class="keys"><kbd>Scroll</kbd><kbd>+</kbd><kbd>–</kbd></span><span>Zoom in and out</span></div>
+          <div class="help-row"><span class="keys"><kbd>Double-click</kbd></span><span>Zoom in on a spot</span></div>
+          <div class="help-row"><span class="keys"><kbd>Two fingers</kbd></span><span>Pinch to zoom, drag to pan</span></div>
+          <div class="help-row"><span class="keys"><kbd>Minimap</kbd></span><span>Click or drag to jump</span></div>
+          <div class="help-row"><span class="keys"><kbd>0</kbd></span><span>Back to the whole country</span></div>
+        </section>
+        <section><h3>Explore</h3>
+          <div class="help-row"><span class="keys"><kbd>Click city</kbd></span><span>Open the city screen</span></div>
+          <div class="help-row"><span class="keys"><kbd>Click land</kbd></span><span>Open that region and province</span></div>
+          <div class="help-row"><span class="keys"><kbd>Click icon</kbd></span><span>Open a resource</span></div>
+          <div class="help-row"><span class="keys"><kbd>/</kbd><kbd>Ctrl K</kbd></span><span>Search</span></div>
+          <div class="help-row"><span class="keys"><kbd>L</kbd><kbd>Shift L</kbd></span><span>Next / previous lens</span></div>
+          <div class="help-row"><span class="keys"><kbd>Legend</kbd></span><span>Drag across the scale to show only that range</span></div>
+          <div class="help-row"><span class="keys"><kbd>R</kbd></span><span>Show or hide resources</span></div>
+        </section>
+        <section><h3>Panels</h3>
+          <div class="help-row"><span class="keys"><kbd>?</kbd></span><span>This help</span></div>
+          <div class="help-row"><span class="keys"><kbd>Esc</kbd></span><span>Close help, search, Almanac, then the panel</span></div>
+        </section>
+      </div>
+      <p class="help-foot">Every number traces back to public data: open the <b>Almanac</b> for definitions and sources.
+        The link in the address bar always reopens this exact view.</p>
+    </div>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

@@ -15,6 +15,11 @@
 > building heights with stated uncertainty and a heat-exposure index
 > ([viewer](citytwin/index.html)).
 
+> [♜ Morocco 4X](morocco4x/README.md), the whole country drawn as a
+> strategy-game map: hex terrain from satellite land cover and elevation,
+> 166 cities, national yields, 20 data lenses and 134 resources, all from
+> public data ([map](morocco4x/index.html)).
+
 # 3D Heat Traps & Pedestrian Exposure in Dakhla
 
 A spatial analysis pipeline that maps Dakhla's 3D urban geometry to find
