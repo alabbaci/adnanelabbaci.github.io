@@ -1,0 +1,9 @@
+{
+  "sedan": { "file": "sedan.glb", "flip": true },
+  "suv": { "file": "suv.glb", "flip": true },
+  "taxi": { "file": "sedan.glb", "flip": true, "paint": true },
+  "van": { "file": "van.glb", "flip": true },
+  "truck": { "file": "truck.glb", "flip": true },
+  "bus": { "file": "bus.glb", "flip": true },
+  "pickup": { "file": "pickup.glb", "flip": true }
+}

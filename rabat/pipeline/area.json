@@ -1,0 +1,42 @@
+{
+  "name": "Rabat",
+  "bbox": {
+    "south": 33.9975,
+    "west": -6.8625,
+    "north": 34.0455,
+    "east": -6.7925
+  },
+  "spawn": {
+    "lat": 34.0318,
+    "lon": -6.8158,
+    "alt": 190,
+    "yaw": 238
+  },
+  "low_districts": [
+    {
+      "name": "Médina de Rabat",
+      "lat": 34.0263,
+      "lon": -6.837,
+      "radius": 520,
+      "height": 9.5
+    },
+    {
+      "name": "Kasbah des Oudayas",
+      "lat": 34.0312,
+      "lon": -6.8362,
+      "radius": 190,
+      "height": 7.5
+    },
+    {
+      "name": "Médina de Salé",
+      "lat": 34.0385,
+      "lon": -6.8225,
+      "radius": 650,
+      "height": 9.5
+    }
+  ],
+  "sea": {
+    "bearing": 322,
+    "from": 3300
+  }
+}

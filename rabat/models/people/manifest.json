@@ -1,0 +1,53 @@
+{
+  "player": {
+    "base": "player.glb",
+    "clips": {
+      "idle": "player.glb",
+      "walk": "player.glb",
+      "run": "player.glb",
+      "jump": "player.glb"
+    }
+  },
+  "suit": {
+    "base": "suit.glb",
+    "clips": {
+      "idle": "suit.glb",
+      "walk": "suit.glb"
+    }
+  },
+  "coat": {
+    "base": "coat.glb",
+    "clips": {
+      "idle": "coat.glb",
+      "walk": "coat.glb"
+    }
+  },
+  "hoodie": {
+    "base": "hoodie.glb",
+    "clips": {
+      "idle": "hoodie.glb",
+      "walk": "hoodie.glb"
+    }
+  },
+  "worker": {
+    "base": "worker.glb",
+    "clips": {
+      "idle": "worker.glb",
+      "walk": "worker.glb"
+    }
+  },
+  "elder": {
+    "base": "elder.glb",
+    "clips": {
+      "idle": "elder.glb",
+      "walk": "elder.glb"
+    }
+  },
+  "jogger": {
+    "base": "jogger.glb",
+    "clips": {
+      "idle": "jogger.glb",
+      "walk": "jogger.glb"
+    }
+  }
+}

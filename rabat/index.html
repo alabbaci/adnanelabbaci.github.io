@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Rabat free roam</title>
+    <meta name="description" content="An open Rabat you can fly over, walk and drive through in the browser: 20,000 real building footprints, the medina, the Kasbah of the Udayas, the Hassan Tower and the Bouregreg, day and night." />
+    <link rel="stylesheet" href="src/style.css" />
+    <script type="importmap">
+      {"imports": {"three": "../vendor/three/three-0.170.0.module.min.js", "three/addons/": "../vendor/three/addons/"}}
+    </script>
+  </head>
+  <body>
+    <canvas id="scene"></canvas>
+
+    <div id="hud">
+      <div id="brand" class="panel">
+        <b>Rabat free roam · الرباط</b>
+        <span><span id="area">—</span> · real footprints and streets</span>
+        <span id="counts"></span>
+      </div>
+
+      <div id="status" class="panel">
+        <div><i>Mode</i><b id="s-mode">—</b></div>
+        <div><i>Position</i><b id="s-pos">—</b></div>
+        <div><i>Height</i><b id="s-alt">—</b></div>
+        <div><i>Speed</i><b id="s-speed">—</b></div>
+        <div><i>Near</i><b id="s-place">—</b></div>
+        <div><i>Frame rate</i><b id="s-fps">—</b></div>
+        <div id="row-dest" hidden><i>Going to</i><b id="s-dest"></b></div>
+      </div>
+
+      <canvas id="minimap"></canvas>
+
+      <div id="help" class="panel">
+        <span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> move</span>
+        <span><kbd>Mouse</kbd> <span id="mouse-hint">look</span></span>
+        <span><kbd>Shift</kbd> faster</span>
+        <span><kbd>Space</kbd>/<kbd>E</kbd> up · on foot <kbd>Space</kbd> jumps</span>
+        <span><kbd>Q</kbd>/<kbd>C</kbd> down</span>
+        <span><kbd>V</kbd> fly / land and walk</span>
+        <span><kbd>C</kbd> on foot: first / third person</span>
+        <span><kbd>E</kbd> on foot: get in / out of a car</span>
+        <span>Driving: <kbd>W</kbd> gas <kbd>S</kbd> brake, reverse <kbd>A</kbd><kbd>D</kbd> steer <kbd>Space</kbd> handbrake</span>
+        <span><kbd>F</kbd> find a place and get a route</span>
+        <span><kbd>T</kbd> day / night</span>
+        <span><kbd>G</kbd> fire a ball of light: the light show</span>
+        <span><kbd>M</kbd> mute</span>
+        <span><kbd>H</kbd> hide the interface</span>
+        <span><kbd>B</kbd> camera shots</span>
+        <span><kbd>Esc</kbd> release the mouse</span>
+      </div>
+
+      <div id="prompt"></div>
+
+      <div id="attribution">© OpenStreetMap contributors · Overture Maps Foundation</div>
+    </div>
+
+    <div id="search">
+      <input id="search-input" type="text" placeholder="Find a place: Tour Hassan, Oudayas, Chellah, Bab Rouah…" autocomplete="off" spellcheck="false" />
+      <ul id="search-results"></ul>
+      <p><kbd>↑</kbd><kbd>↓</kbd> choose　<kbd>Enter</kbd> set as destination　<kbd>Esc</kbd> cancel</p>
+    </div>
+
+    <div id="overlay">
+      <div class="card">
+        <h1 id="overlay-title">Loading Rabat…</h1>
+        <p id="overlay-text">Getting ready…</p>
+      </div>
+    </div>
+
+    <script type="module" src="src/main.js"></script>
+  </body>
+</html>

@@ -14,6 +14,11 @@
 > city: Overture footprints to a LoD1 model (CityJSON, 3D Tiles, OGC API),
 > building heights with stated uncertainty and a heat-exposure index
 > ([viewer](citytwin/index.html)).
+>
+> [🕌 Rabat free roam](rabat/README.md), an open Rabat to fly over, walk and
+> drive through in the browser: 20,000 real footprints, the medina, the Kasbah
+> of the Udayas, the Hassan Tower and the Bouregreg, day and night
+> ([open it](rabat/index.html)).
 
 # 3D Heat Traps & Pedestrian Exposure in Dakhla
 

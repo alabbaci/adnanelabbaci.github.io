@@ -21,3 +21,6 @@ ourika/pipeline/.cache/
 
 # Toubkal DEM tiles and Overture extracts (re-downloaded by the pipeline)
 toubkal/pipeline/.cache/
+
+# Rabat free roam: Overture extracts and raw JSON (re-downloaded by the pipeline)
+rabat/pipeline/.cache/
